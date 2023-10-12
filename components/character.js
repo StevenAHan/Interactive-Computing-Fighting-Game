@@ -1,5 +1,5 @@
 export class Character {
-    constructor(name, speed, jumpHeight, jumpSpeed, x, y, hitboxes, sprite) {
+    constructor(name, speed, jumpHeight, jumpSpeed, x, y, hitboxes, sprite, spriteWidth, spriteHeight, playerNumber, opponent=null) {
         this.name = name;
         this.speed = speed;
         this.jumpHeight = jumpHeight;
@@ -8,10 +8,45 @@ export class Character {
         this.y = y;
         this.hitboxes = hitboxes;
         this.sprite = sprite;
+        this.spriteWidth = spriteWidth;
+        this.spriteHeight = spriteHeight;
+        this.playerNumber = playerNumber;
+        // This is the object of the opponent character
+        this.opponent = opponent;
+        this.gravity = 5;
+    }
+
+    display() {
+        // All sprites will start out looking right
+        image(this.sprite, this.x, this.y, this.sprite.width, this.sprite.height);
+        if(this.opponent?.x < this.x) {
+            // If the opponent is to the left of this character, flip the sprite
+            push();
+            translate(this.sprite.width, 0);
+            scale(-1, 1);
+            image(this.sprite, this.x, this.y, this.sprite.width, this.sprite.height);
+            pop();
+        }
     }
 
     move() {
-        // TODO
+        // Player 1 - WASD
+        if(this.playerNumber == 0) {
+            if(keyIsDown("a")) {
+                this.x -= this.speed;
+            } else if (keyIsDown("d")) {
+                this.x += this.speed;
+            }
+        }
+
+        // Player 2 - IJKL
+        if(this.playerNumber == 1) {
+            if(keyIsDown("j")) {
+                this.x -= this.speed;
+            } else if (keyIsDown("l")) {
+                this.x += this.speed;
+            }
+        }
     }
 
     jump() {
@@ -19,6 +54,10 @@ export class Character {
     }
 
     basicAttack() {
+        // TODO
+    }
+
+    heavyAttack() {
         // TODO
     }
 

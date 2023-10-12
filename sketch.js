@@ -1,7 +1,8 @@
-import character from "./components/character.js";
+import { character } from "./components/character.js";
+import { homeScreen } from "./components/homeScreen.js";
 
 function preload() {
-
+    
 }
 
 function setup() {
