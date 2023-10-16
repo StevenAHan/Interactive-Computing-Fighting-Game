@@ -1,6 +1,7 @@
 let kitsuneIdle;
 let testCharAnimations;
 let theParticles = [];
+let kitsune;
 
 function preload() {
   kitsuneIdle = loadImage("./characters/testKitsune/Idle.png")

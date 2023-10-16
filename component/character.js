@@ -19,12 +19,11 @@ class Character {
 
     // Sets up the character, should only run once in the beginning
     setup() {
-
+        let idleAni = new Sprite(this.spriteAnimations.idle, this.x, this.y, this.sprite.width, this.sprite.height);
     }
 
     display() {
         // All sprites will start out looking right, and be in idle animation
-        let idleAni = new Sprite(this.spriteAnimations.idle, this.x, this.y, this.sprite.width, this.sprite.height);
         if(this.currAnimation == "idle") {
             idleAni.display();
         }
