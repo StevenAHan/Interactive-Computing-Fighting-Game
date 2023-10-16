@@ -1,5 +1,5 @@
-export class Character {
-    constructor(name, speed, jumpHeight, jumpSpeed, x, y, hitboxes, sprite, spriteWidth, spriteHeight, playerNumber, opponent=null) {
+class Character {
+    constructor(name, speed, jumpHeight, jumpSpeed, x, y, hitboxes, spriteAnimations, spriteWidth, spriteHeight, playerNumber, opponent=null) {
         this.name = name;
         this.speed = speed;
         this.jumpHeight = jumpHeight;
@@ -14,11 +14,20 @@ export class Character {
         // This is the object of the opponent character
         this.opponent = opponent;
         this.gravity = 5;
+        this.currAnimation = "idle";
+    }
+
+    // Sets up the character, should only run once in the beginning
+    setup() {
+
     }
 
     display() {
-        // All sprites will start out looking right
-        image(this.sprite, this.x, this.y, this.sprite.width, this.sprite.height);
+        // All sprites will start out looking right, and be in idle animation
+        let idleAni = new Sprite(this.spriteAnimations.idle, this.x, this.y, this.sprite.width, this.sprite.height);
+        if(this.currAnimation == "idle") {
+            idleAni.display();
+        }
         if(this.opponent?.x < this.x) {
             // If the opponent is to the left of this character, flip the sprite
             push();
