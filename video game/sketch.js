@@ -63,7 +63,7 @@ function titleScreen() {
     titleVideo = createVideo("titlescreen.mp4");
     titleVideo.size(width, height);
     titleVideo.volume(0.9);
-    titleVideo.play();
+    titleVideo.loop();
     titleVideo.hide();
     isPlaying = true;
 
@@ -143,7 +143,7 @@ function menu() {
   image(backgroundImage, -backgroundOffset, y, backgroundImage.width, backgroundImage.height);
   image(backgroundImage, backgroundImage.width - backgroundOffset, y, backgroundImage.width, backgroundImage.height);
 
-  // Your other drawing and animation code goes here
+
 }
 
 function arena() {
