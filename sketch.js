@@ -7,6 +7,7 @@ let kitsune;
 let ground = 250;
 
 function preload() {
+  //Test Kitsune Animations
   kitsuneIdle = loadImage("./characters/testKitsune/Idle.png");
   kitsuneRun = loadImage("./characters/testKitsune/Run.png");
   kitsuneJump = loadImage("./characters/testKitsune/Jump.png");
@@ -22,6 +23,7 @@ function preload() {
 function setup() {
   createCanvas(1200, 800);
   background(0);
+  // Test Kitsune Animation Object
   testCharAnimations = {
     "idle": kitsuneIdle,
     "run": kitsuneRun,
@@ -34,6 +36,7 @@ function setup() {
     "block": kitsuneBlock,
     "walk": kitsuneWalk
   }
+  // Initializing Kitsune
   kitsune = new Character("kitsune", 5, 15, 250, ground, [], testCharAnimations, 128, 128, 0, null);
   kitsune.setup();
 }
@@ -49,6 +52,7 @@ function draw() {
     textAlign(CENTER);
     text("Kitsune", kitsune.x, kitsune.y - 25);
     text("Test Env: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 100);
+    // Letting kitsune object move
     kitsune.displayAndMove();
 }
   
