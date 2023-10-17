@@ -55,5 +55,10 @@ class Sprite {
     resetFrames() {
         this.currentFrame = 0;
     }
+
+    actionEnd() {
+        return this.currentFrame == this.totalFrames - 1;
+    }
+
 }
   

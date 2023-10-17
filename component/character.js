@@ -19,6 +19,13 @@ class Character {
         // 0 - facing right, 1 - facing left
         this.direction == playerNumber;
         this.jumping = false;
+        this.state = false;
+
+        // Temp
+        this.basicAttackSpeed = 3;
+        this.heavyAttackSpeed = 5;
+        this.specialAttackSpeed = 10;
+        this.dead = false;
     }
 
     // Sets up the character, should only run once in the beginning
@@ -28,49 +35,70 @@ class Character {
         this.spriteAnimations.walk = new Sprite(this.spriteAnimations.walk, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
         let jumpTiming = (60 / ((this.jumpSpeed ) / this.gravity));
         this.spriteAnimations.jump = new Sprite(this.spriteAnimations.jump, this.x, this.y, this.spriteWidth, this.spriteHeight, jumpTiming);
-        this.spriteAnimations.basicAttack = new Sprite(this.spriteAnimations.basicAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
-        this.spriteAnimations.heavyAttack = new Sprite(this.spriteAnimations.heavyAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
-        this.spriteAnimations.specialAttack = new Sprite(this.spriteAnimations.specialAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
+        this.spriteAnimations.basicAttack = new Sprite(this.spriteAnimations.basicAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.basicAttackSpeed);
+        this.spriteAnimations.heavyAttack = new Sprite(this.spriteAnimations.heavyAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.heavyAttackSpeed);
+        this.spriteAnimations.specialAttack = new Sprite(this.spriteAnimations.specialAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.specialAttackSpeed);
         this.spriteAnimations.hurt = new Sprite(this.spriteAnimations.hurt, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
         this.spriteAnimations.block = new Sprite(this.spriteAnimations.block, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
-        this.spriteAnimations.die = new Sprite(this.spriteAnimations.die, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
+        this.spriteAnimations.die = new Sprite(this.spriteAnimations.die, this.x, this.y, this.spriteWidth, this.spriteHeight, 10);
     }
 
     displayAndMove() {
-        this.spriteAnimations[this.currAnimation].display(this.x, this.y, this.direction);
-        if(this.direction == 1) {
-            // If the opponent is to the left of this character, flip the sprite
-            
+        if(!this.dead) {
+            this.spriteAnimations[this.currAnimation].display(this.x, this.y, this.direction);
         }
-
         // Player 1 Controls
         if(this.playerNumber == 0) {
             let xPrev = this.x
-            // a - move left
-            if(keyIsDown(65)) {
-                this.currAnimation = "run";
-                this.x -= this.speed;
-            }
-            // d - move right
-            if (keyIsDown(68)) {
-                this.currAnimation = "run";
-                this.x += this.speed;
-            }
-
-            // based on velocity, change animation and direction
-            if(xPrev == this.x) {
-                this.currAnimation = "idle";
-            } else if(xPrev > this.x) {
-                this.direction = 1;
-            } else {
-                this.direction = 0;
-            }
-
-            // w - jump
-            if(keyIsDown(87)) {
-                if(!this.jumping) {
-                    this.jumping = true;
+            // can only move if you aren't attacking
+            if(!this.state) {
+                // a - move left
+                if(keyIsDown(65)) {
+                    this.currAnimation = "run";
+                    this.x -= this.speed;
                 }
+                // d - move right
+                if (keyIsDown(68)) {
+                    this.currAnimation = "run";
+                    this.x += this.speed;
+                }
+
+                // based on velocity, change animation and direction
+                if(xPrev == this.x) {
+                    this.currAnimation = "idle";
+                } else if(xPrev > this.x) {
+                    this.direction = 1;
+                } else {
+                    this.direction = 0;
+                }
+
+                // w - jump
+                if(keyIsDown(87)) {
+                    if(!this.jumping) {
+                        this.jumping = true;
+                    }
+                }
+            }
+
+            // e - basic attack
+            if(keyIsDown(69)) {
+                this.state = "basicAttack";
+            }
+
+            // q - heavy attack
+            if(keyIsDown(81)) {
+                this.state = "heavyAttack";
+            }
+
+            // r - special attack
+            if(keyIsDown(82)) {
+                this.state = "specialAttack";
+            }
+
+
+            // y - TEST DIE
+            if(keyIsDown(89)) {
+                this.state = "die";
             }
         }
 
@@ -95,7 +123,20 @@ class Character {
             this.jumping = false;
             this.currJumpSpeed = this.jumpSpeed;
             this.spriteAnimations[this.currAnimation].resetFrames();
+        }
 
+        // check states
+        if(this.state == "basicAttack") {
+            this.basicAttack();
+        }
+        if(this.state == "heavyAttack") {
+            this.heavyAttack();
+        }
+        if(this.state == "specialAttack") {
+            this.specialAttack();
+        }
+        if(this.state == "die") {
+            this.die();
         }
     }
 
@@ -105,15 +146,27 @@ class Character {
     }
 
     basicAttack() {
-        // TODO
+        this.currAnimation = "basicAttack";
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
     }
 
     heavyAttack() {
-        // TODO
+        this.currAnimation = "heavyAttack";
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
     }
 
     specialAttack() {
-        // TODO
+        this.currAnimation = "specialAttack";
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
     }
 
     block() {
@@ -125,6 +178,11 @@ class Character {
     }
 
     die() {
-        // TODO
+        this.currAnimation = "die";
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+            this.dead = true;
+        }
     }
 }

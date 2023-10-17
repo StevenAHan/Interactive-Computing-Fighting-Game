@@ -42,8 +42,13 @@ function setup() {
 function draw() {
     imageMode(CENTER);
     background(0);
-    fill(0, 255, 0);
+    fill(0, 128, 0);
     rect(0, ground + 128 / 2, width, height);
+    fill(255);
+    textSize(12);
+    textAlign(CENTER);
+    text("Kitsune", kitsune.x, kitsune.y - 25);
+    text("Test Env: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die (Reload to reget character)", 600, 100);
     kitsune.displayAndMove();
 }
   
