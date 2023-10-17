@@ -102,9 +102,9 @@ function warning() {
   textAlign(CENTER);
 
   let warningText = "WARNING";
-  let subtext1 = "This video game is rated M for Mature:";
-  let subtext2 = "Includes, blood violence, extensive gore,";
-  let subtext3 = "strong language, and sexual themes.";
+  let subtext1 = "This video game is NOT for Everyone:";
+  let subtext2 = "Includes violence, blood, and";
+  let subtext3 = "possible dark themes.";
   let continueText = "Press Enter to Start";
 
   // Display "WARNING" in big red text
