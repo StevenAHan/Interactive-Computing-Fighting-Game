@@ -78,28 +78,34 @@ class Character {
                         this.jumping = true;
                     }
                 }
-            }
+                // e - basic attack
+                if(keyIsDown(69)) {
+                    this.state = "basicAttack";
+                }
 
-            // e - basic attack
-            if(keyIsDown(69)) {
-                this.state = "basicAttack";
-            }
+                // q - heavy attack
+                if(keyIsDown(81)) {
+                    this.state = "heavyAttack";
+                }
 
-            // q - heavy attack
-            if(keyIsDown(81)) {
-                this.state = "heavyAttack";
-            }
-
-            // r - special attack
-            if(keyIsDown(82)) {
-                this.state = "specialAttack";
-            }
+                // r - special attack
+                if(keyIsDown(82)) {
+                    this.state = "specialAttack";
+                }
 
 
-            // y - TEST DIE
-            if(keyIsDown(89)) {
-                this.state = "die";
+                // y - TEST DIE
+                if(keyIsDown(89)) {
+                    this.state = "die";
+                }
+
+                // u - respawn
+                if(keyIsDown(85)) {
+                    this.dead = false;
+                }
             }
+
+            
         }
 
         // TODO - Player 2 Controls - copy from player one once done

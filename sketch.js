@@ -48,7 +48,7 @@ function draw() {
     textSize(12);
     textAlign(CENTER);
     text("Kitsune", kitsune.x, kitsune.y - 25);
-    text("Test Env: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die (Reload to reget character)", 600, 100);
+    text("Test Env: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 100);
     kitsune.displayAndMove();
 }
   
