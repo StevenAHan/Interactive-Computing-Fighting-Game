@@ -78,22 +78,10 @@ function draw() {
     // } else if (mode === 3) {
     //   arena();
     } else if (mode === 2) { // Testing Environment
-      fill(0, 128, 0);
-      rect(0, ground + 128 / 2, width, height);
-      fill(255);
-      textSize(12);
-      textAlign(CENTER);
-      text("Kitsune", kitsune.x, kitsune.y - 25);
-      text("Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
-      textSize(30);
-      text("Test Environment", 600, 150);
-      // Letting kitsune object move
-      kitsune.displayAndMove();
+      testEnv();
     }
 }
-  
 
-// Following are functions for title screen
 function keyPressed() {
 
   //Increment Mode on Enter
@@ -116,6 +104,7 @@ function keyPressed() {
   }
 }
 
+// Following are functions for different screens
 function titleScreen() {
   
   if (!isPlaying && titleScreenOpacityDirection === 1) {
@@ -204,4 +193,18 @@ function menu() {
 
 function arena() {
   image(arenaImage, 0, 0);
+}
+
+function testEnv() {
+  fill(0, 128, 0);
+  rect(0, ground + 128 / 2, width, height);
+  fill(255);
+  textSize(12);
+  textAlign(CENTER);
+  text("Kitsune", kitsune.x, kitsune.y - 25);
+  text("Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
+  textSize(30);
+  text("Test Environment", 600, 150);
+  // Letting kitsune object move
+  kitsune.displayAndMove();
 }
