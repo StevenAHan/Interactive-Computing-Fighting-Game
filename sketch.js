@@ -22,7 +22,7 @@ let kitsuneIdle, kitsuneRun, kitsuneJump,
 let testCharAnimations;
 let theParticles = [];
 let kitsune;
-let ground = 250;
+let ground = 600;
 
 function preload() {
   // Load the background images
@@ -84,9 +84,9 @@ function draw() {
       textSize(12);
       textAlign(CENTER);
       text("Kitsune", kitsune.x, kitsune.y - 25);
-      text("Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 100);
+      text("Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
       textSize(30);
-      text("Test Environment", 600, 50);
+      text("Test Environment", 600, 150);
       // Letting kitsune object move
       kitsune.displayAndMove();
     }
@@ -162,8 +162,7 @@ function warning() {
 
   let warningText = "WARNING";
   let subtext1 = "This video game is NOT for Everyone:";
-  let subtext2 = "Includes violence and";
-  let subtext3 = "possible dark themes.";
+  let subtext2 = "Includes violence and possible dark themes.";
   let continueText = "Press Enter to Start";
 
   // Display "WARNING" in big red text
@@ -176,8 +175,6 @@ function warning() {
   textSize(16);
   text(subtext1, width / 2, height / 2);
   text(subtext2, width / 2, height / 2 + 30);
-  text(subtext3, width / 2, height / 2 + 60);
-
   fill(65, 253, 254, opacity);
 
   opacity += 2 * opacityDirection;
@@ -187,7 +184,7 @@ function warning() {
   }
 
   // Display "Press Enter to Start" in white
-  text(continueText, width / 2, height / 2 + 100);
+  text(continueText, width / 2, height / 2 + 70);
 }
 
 function menu() {
