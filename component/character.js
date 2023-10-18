@@ -20,12 +20,13 @@ class Character {
         this.direction == playerNumber;
         this.jumping = false;
         this.state = false;
+        this.dead = false;
 
-        // Temp
+        // Temp initializations
         this.basicAttackSpeed = 3;
         this.heavyAttackSpeed = 5;
         this.specialAttackSpeed = 10;
-        this.dead = false;
+        this.health = 100;
     }
 
     // Sets up the character, should only run once in the beginning
@@ -93,6 +94,11 @@ class Character {
                     this.state = "specialAttack";
                 }
 
+                // f- block
+                if(keyIsDown(70)) {
+                    this.state = "block";
+                }
+
 
                 // y - TEST DIE
                 if(keyIsDown(89)) {
@@ -144,6 +150,9 @@ class Character {
         if(this.state == "die") {
             this.die();
         }
+        if(this.state == "block") {
+            this.block();
+        }
     }
 
     jump() {
@@ -176,7 +185,11 @@ class Character {
     }
 
     block() {
-        // TODO
+        this.currAnimation = "block";
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
     }
 
     takeDamage() {
