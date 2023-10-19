@@ -9,7 +9,7 @@ let arenaImage;
 let titleVideo;
 let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
-let mode = 0;
+let mode = 2; // TEMP MODE SET FOR TESTING
 let isPlaying = false; // Initialize isPlaying
 let backgroundMusic;
 let instruction = false;
@@ -61,7 +61,7 @@ function setup() {
     "walk": kitsuneWalk
   }
   // Initializing Kitsune
-  kitsune = new Character("kitsune", 5, 15, 250, ground, [], testCharAnimations, 128, 128, 0, null);
+  kitsune = new Character("kitsune", 5, 15, 250, ground, testCharAnimations, 128, 128, 0, null);
   kitsune.setup();
 }
 
@@ -100,7 +100,7 @@ function keyPressed() {
   } else if (mode === 2 && keyCode === ENTER) {
     mode = 3;
   } else if(mode === 3 && keyCode === ENTER) {
-    mode++;
+    mode=0;
   }
 }
 
