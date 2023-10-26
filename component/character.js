@@ -1,5 +1,5 @@
 class Character {
-    constructor(name, speed, jumpSpeed, x, y, hitboxes, spriteAnimations, spriteWidth, spriteHeight, playerNumber, opponent=null) {
+    constructor(name, speed, jumpSpeed, x, y, spriteAnimations, spriteWidth, spriteHeight, playerNumber, opponent=null) {
         this.name = name;
         this.speed = speed;
         this.jumpSpeed = jumpSpeed;
@@ -8,7 +8,7 @@ class Character {
         this.gravity = 1;
         this.x = x;
         this.y = y;
-        this.hitboxes = hitboxes;
+        this.hitboxes = new HitBoxes(this);
         this.spriteAnimations = spriteAnimations;
         this.spriteWidth = spriteWidth;
         this.spriteHeight = spriteHeight;
@@ -17,12 +17,10 @@ class Character {
         this.opponent = opponent;
         this.currAnimation = "idle";
         // 0 - facing right, 1 - facing left
-        this.direction == playerNumber;
+        this.direction = playerNumber;
         this.jumping = false;
         this.state = false;
         this.dead = false;
-
-       
     }
 
     // Sets up the character, should only run once in the beginning
@@ -149,6 +147,11 @@ class Character {
         if(this.state == "block") {
             this.block();
         }
+
+        
+        // hitbox work
+        this.hitboxes.draw();
+
     }
 
     jump() {
@@ -249,5 +252,68 @@ class Projectile {
         } else {
             this.x -= this.speed;
         }
+
+    }
+}
+
+// class to represent a hitbox for a character.
+// Takes 4 params: min/max x and min.max y
+// which define the 'box'
+class HitBox {
+    constructor(left, right, top, bottom) {
+        this.left = left;
+        this.right = right;
+        this.top = top;
+        this.bottom = bottom;
+    }
+}
+
+// holds all the hitboxes for each character
+// two options: per-state hitboxes (tedious), or just per direction (easier)
+class HitBoxes {
+    constructor(father) {
+        this.char = father;
+
+        // this.states = {};
+        // this.states.idle = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
+        // this.states.run = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
+        // this.states.walk = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
+        // this.states.jump = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
+        // this.states.basicAttack = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
+        // this.states.heavyAttack = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
+        // this.states.specialAttack = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
+        // this.states.hurt = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
+        // this.states.block = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
+        // this.states.die = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
+
+        this.direction = [ [new HitBox(-25, 5, -5, 46), new HitBox(-10, 5, 45, 63)], 
+                           [new HitBox(-5, 25, -5, 46), new HitBox(-5, 10, 45, 63)]];
+    }
+
+    // check if the attack passed in hit the char's hitbox, or if blocked
+    checkHit(attack) {
+        // TODO
+    }
+
+    draw() {
+        stroke('red');
+        strokeWeight(3);
+
+        // this.states[this.char.currAnimation].forEach(h => {
+        //     line(h.left+this.char.x, h.top+this.char.y, h.left+this.char.x, h.bottom+this.char.y);
+        //     line(h.right+this.char.x, h.top+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
+        //     line(h.left+this.char.x, h.top+this.char.y, h.right+this.char.x, h.top+this.char.y);
+        //     line(h.left+this.char.x, h.bottom+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
+        // });
+
+        this.direction[this.char.direction].forEach(h => {
+                line(h.left+this.char.x, h.top+this.char.y, h.left+this.char.x, h.bottom+this.char.y);
+                line(h.right+this.char.x, h.top+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
+                line(h.left+this.char.x, h.top+this.char.y, h.right+this.char.x, h.top+this.char.y);
+                line(h.left+this.char.x, h.bottom+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
+            });
+
+
+        noStroke();
     }
 }
