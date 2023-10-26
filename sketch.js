@@ -14,11 +14,14 @@ let isPlaying = false; // Initialize isPlaying
 let backgroundMusic;
 let instruction = false;
 
+// Game Vars to Keep Track of Game State
+let projectiles = [];
+
 
 // Test Env Vars
 let kitsuneIdle, kitsuneRun, kitsuneJump, 
   kitsuneBasicAttack, kitsuneHeavyAttack, kitsuneSpecialAttack,
-  kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk;
+  kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk, kitsuneFireball;
 let testCharAnimations;
 let theParticles = [];
 let kitsune;
@@ -42,6 +45,7 @@ function preload() {
   kitsuneDeath = loadImage("./assets/characters/testKitsune/Dead.png");
   kitsuneBlock = loadImage("./assets/characters/testKitsune/Fire_1.png");
   kitsuneWalk = loadImage("./assets/characters/testKitsune/Walk.png");
+  kitsuneFireball = loadImage("./assets/characters/testKitsune/Fire_1_cropped.png");
 }
 
 function setup() {
@@ -58,10 +62,11 @@ function setup() {
     "hurt": kitsuneHurt,
     "die": kitsuneDeath,
     "block": kitsuneBlock,
-    "walk": kitsuneWalk
+    "walk": kitsuneWalk,
+    "fireball": kitsuneFireball,
   }
   // Initializing Kitsune
-  kitsune = new Character("kitsune", 5, 15, 250, ground, [], testCharAnimations, 128, 128, 0, null);
+  kitsune = new Kitsune("kitsune", 5, 15, 250, ground, [], testCharAnimations, 128, 128, 0, null);
   kitsune.setup();
 }
 
@@ -97,11 +102,13 @@ function keyPressed() {
     }
     mode = 2;
     isPlaying = false; // Reset isPlaying
-  } else if (mode === 2 && keyCode === ENTER) {
-    mode = 3;
-  } else if(mode === 3 && keyCode === ENTER) {
-    mode++;
-  }
+  } 
+  // else if (mode === 2 && keyCode === ENTER) {
+  //   mode = 3;
+  // } 
+  // else if(mode === 3 && keyCode === ENTER) {
+  //   mode++;
+  // }
 }
 
 // Following are functions for different screens
@@ -207,4 +214,10 @@ function testEnv() {
   text("Test Environment", 600, 150);
   // Letting kitsune object move
   kitsune.displayAndMove();
+  for(let i = 0; i < projectiles.length; i++) {
+    projectiles[i].move();
+    if(projectiles[i].x > width || projectiles[i].x < 0) {
+      projectiles.splice(i, 1);
+    }
+  }
 }

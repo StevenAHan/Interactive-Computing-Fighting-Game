@@ -22,11 +22,7 @@ class Character {
         this.state = false;
         this.dead = false;
 
-        // Temp initializations
-        this.basicAttackSpeed = 3;
-        this.heavyAttackSpeed = 5;
-        this.specialAttackSpeed = 10;
-        this.health = 100;
+       
     }
 
     // Sets up the character, should only run once in the beginning
@@ -202,6 +198,56 @@ class Character {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
             this.dead = true;
+        }
+    }
+}
+
+
+class Kitsune extends Character {
+    constructor(name, speed, jumpSpeed, x, y, hitboxes, spriteAnimations, spriteWidth, spriteHeight, playerNumber, opponent=null) {
+        super(name, speed, jumpSpeed, x, y, hitboxes, spriteAnimations, spriteWidth, spriteHeight, playerNumber, opponent=null);
+         // Kitsune initializations
+         this.basicAttackSpeed = 3;
+         this.heavyAttackSpeed = 5;
+         this.specialAttackSpeed = 10;
+         this.health = 100;
+         this.fireball = false;
+    }
+    
+    heavyAttack() {
+        this.currAnimation = "heavyAttack";
+        if(this.spriteAnimations[this.currAnimation].currentFrame == 3 && this.fireball == false) {
+            projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 10, 5));
+            this.fireball = true;
+        }
+
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.fireball = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+    
+}
+
+class Projectile {
+    constructor(x,y, animation, direction, damage, speed) {
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.animation = new Sprite(animation, this.x, this.y, 64, 128, 10);
+        this.direction = direction;
+        this.damage = damage;
+        
+    }
+
+    move() {
+        imageMode(CENTER);
+        this.animation.display(this.x, this.y, this.direction);
+        if(this.direction == 0) {
+            this.x += this.speed;
+        } else {
+            this.x -= this.speed;
         }
     }
 }
