@@ -66,7 +66,7 @@ function setup() {
     "fireball": kitsuneFireball,
   }
   // Initializing Kitsune
-  kitsune = new Kitsune("kitsune", 5, 15, 250, ground, [], testCharAnimations, 128, 128, 0, null);
+  kitsune = new Kitsune("kitsune", 5, 15, 250, ground, testCharAnimations, 128, 128, 0, null);
   kitsune.setup();
 }
 
