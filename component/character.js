@@ -1,3 +1,16 @@
+/* Default Character class which all characters will inherit from
+    Params:
+        name - name of the Player
+        speed - movement speed of the character
+        jumpSpeed - jump speed of the character
+        x - starting x position of the character
+        y - starting y position of the character
+        spriteAnimations - object containing all the sprite animations for the character
+        spriteWidth - width of each frame of the sprite sheets
+        spriteHeight - height of each frame of the sprite sheets
+        playerNumber - 0 for player 1, 1 for player 2
+        opponent - object of the opponent character
+*/
 class Character {
     constructor(name, speed, jumpSpeed, x, y, spriteAnimations, spriteWidth, spriteHeight, playerNumber, opponent=null) {
         this.name = name;
@@ -207,14 +220,29 @@ class Character {
 
 
 class Kitsune extends Character {
-    constructor(name, speed, jumpSpeed, x, y, spriteAnimations, spriteWidth, spriteHeight, playerNumber, opponent=null) {
-        super(name, speed, jumpSpeed, x, y, spriteAnimations, spriteWidth, spriteHeight, playerNumber, opponent=null);
+    constructor(name, x, y, playerNumber, opponent=null) {
+        // Kitsune Animation Object
+        let kitsuneAnimations = {
+            "idle": kitsuneIdle,
+            "run": kitsuneRun,
+            "jump": kitsuneJump,
+            "basicAttack": kitsuneBasicAttack,
+            "heavyAttack": kitsuneHeavyAttack,
+            "specialAttack": kitsuneSpecialAttack,
+            "hurt": kitsuneHurt,
+            "die": kitsuneDeath,
+            "block": kitsuneBlock,
+            "walk": kitsuneWalk,
+            "fireball": kitsuneFireball,
+        };
+        super(name, 5, 15, x, y, kitsuneAnimations, 128, 128, playerNumber, opponent);
          // Kitsune initializations
          this.basicAttackSpeed = 3;
          this.heavyAttackSpeed = 5;
          this.specialAttackSpeed = 10;
          this.health = 100;
          this.fireball = false;
+         
     }
     
     heavyAttack() {

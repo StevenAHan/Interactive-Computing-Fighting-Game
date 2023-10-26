@@ -51,22 +51,9 @@ function preload() {
 function setup() {
   createCanvas(1200, 800);
   background(0);
-  // Test Kitsune Animation Object
-  testCharAnimations = {
-    "idle": kitsuneIdle,
-    "run": kitsuneRun,
-    "jump": kitsuneJump,
-    "basicAttack": kitsuneBasicAttack,
-    "heavyAttack": kitsuneHeavyAttack,
-    "specialAttack": kitsuneSpecialAttack,
-    "hurt": kitsuneHurt,
-    "die": kitsuneDeath,
-    "block": kitsuneBlock,
-    "walk": kitsuneWalk,
-    "fireball": kitsuneFireball,
-  }
+  
   // Initializing Kitsune
-  kitsune = new Kitsune("kitsune", 5, 15, 250, ground, testCharAnimations, 128, 128, 0, null);
+  kitsune = new Kitsune("kitsune", 250, ground, 0, null);
   kitsune.setup();
 }
 
