@@ -218,7 +218,15 @@ class Character {
     }
 }
 
-
+/*
+    Premade Kitsune class
+    Params:
+        name - name of the Player
+        x - starting x position of the character
+        y - starting y position of the character
+        playerNumber - 0 for player 1, 1 for player 2
+        opponent - object of the opponent character
+*/
 class Kitsune extends Character {
     constructor(name, x, y, playerNumber, opponent=null) {
         // Kitsune Animation Object
@@ -244,7 +252,7 @@ class Kitsune extends Character {
          this.fireball = false;
          
     }
-    
+    // Projectile attack
     heavyAttack() {
         this.currAnimation = "heavyAttack";
         if(this.spriteAnimations[this.currAnimation].currentFrame == 3 && this.fireball == false) {
@@ -261,6 +269,16 @@ class Kitsune extends Character {
     
 }
 
+/*
+    Creates a Projectile Object
+    Params:
+        x - starting x position of the projectile
+        y - starting y position of the projectile
+        animation - sprite animation of the projectile
+        direction - 0 for right, 1 for left
+        damage - damage the projectile does
+        speed - speed of the projectile
+*/
 class Projectile {
     constructor(x,y, animation, direction, damage, speed) {
         this.x = x;
