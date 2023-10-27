@@ -35,17 +35,17 @@ function preload() {
   // backgroundMusic = loadSound("./assets/environments/background_music.mp3");
 
   //Test Kitsune Animations
-  kitsuneIdle = loadImage("./assets/characters/testKitsune/Idle.png");
-  kitsuneRun = loadImage("./assets/characters/testKitsune/Run.png");
-  kitsuneJump = loadImage("./assets/characters/testKitsune/Jump.png");
-  kitsuneBasicAttack = loadImage("./assets/characters/testKitsune/Attack_1.png");
-  kitsuneHeavyAttack = loadImage("./assets/characters/testKitsune/Attack_2.png");
-  kitsuneSpecialAttack = loadImage("./assets/characters/testKitsune/Attack_3.png");
-  kitsuneHurt = loadImage("./assets/characters/testKitsune/Hurt.png");
-  kitsuneDeath = loadImage("./assets/characters/testKitsune/Dead.png");
-  kitsuneBlock = loadImage("./assets/characters/testKitsune/Fire_1.png");
-  kitsuneWalk = loadImage("./assets/characters/testKitsune/Walk.png");
-  kitsuneFireball = loadImage("./assets/characters/testKitsune/Fire_1_cropped.png");
+  kitsuneIdle = loadImage("./assets/characters/Kitsune/Idle.png");
+  kitsuneRun = loadImage("./assets/characters/Kitsune/Run.png");
+  kitsuneJump = loadImage("./assets/characters/Kitsune/Jump.png");
+  kitsuneBasicAttack = loadImage("./assets/characters/Kitsune/Attack_1.png");
+  kitsuneHeavyAttack = loadImage("./assets/characters/Kitsune/Attack_2.png");
+  kitsuneSpecialAttack = loadImage("./assets/characters/Kitsune/Attack_3.png");
+  kitsuneHurt = loadImage("./assets/characters/Kitsune/Hurt.png");
+  kitsuneDeath = loadImage("./assets/characters/Kitsune/Dead.png");
+  kitsuneBlock = loadImage("./assets/characters/Kitsune/Fire_1.png");
+  kitsuneWalk = loadImage("./assets/characters/Kitsune/Walk.png");
+  kitsuneFireball = loadImage("./assets/characters/Kitsune/Fire_1_cropped.png");
 }
 
 function setup() {
