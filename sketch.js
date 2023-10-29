@@ -9,7 +9,7 @@ let arenaImage;
 let titleVideo;
 let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
-let mode = 2; // TEMP MODE SET FOR TESTING
+let mode = 2; // FOR TESTING
 let isPlaying = false; // Initialize isPlaying
 let backgroundMusic;
 let instruction = false;
@@ -17,6 +17,11 @@ let instruction = false;
 // Game Vars to Keep Track of Game State
 let projectiles = [];
 
+// char select data
+let charSelect = {};
+
+// arena state
+let arenaState = {};
 
 // Test Env Vars
 let kitsuneIdle, kitsuneRun, kitsuneJump, 
@@ -55,6 +60,9 @@ function setup() {
   // Initializing Kitsune
   kitsune = new Kitsune("kitsune", 250, ground, 0, null);
   kitsune.setup();
+
+  // init charselect
+  charSelectSetup(charSelect);
 }
 
 
@@ -65,11 +73,14 @@ function draw() {
       warning();
     } else if (mode === 1) {
       titleScreen();
-    // } else if (mode === 2) {
-    //   menu();
-    // } else if (mode === 3) {
-    //   arena();
-    } else if (mode === 2) { // Testing Environment
+    } else if (mode === 2) {
+      menu();
+    } else if (mode === 3) {
+      arenaSetup();
+    } else if (mode === 4) { // Testing Environment
+      arena();
+    }
+    else if (mode === 5) { 
       testEnv();
     }
 }
@@ -90,12 +101,12 @@ function keyPressed() {
     mode = 2;
     isPlaying = false; // Reset isPlaying
   } 
-  // else if (mode === 2 && keyCode === ENTER) {
-  //   mode = 3;
-  // } 
-  // else if(mode === 3 && keyCode === ENTER) {
-  //   mode++;
-  // }
+  else {
+    mode++;
+  }
+  if ( mode > 5) {
+    mode = 0;
+  }
 }
 
 // Following are functions for different screens
@@ -171,6 +182,7 @@ function warning() {
 }
 
 function menu() {
+  imageMode(CORNER);
   // Draw the background image
   backgroundOffset += 0.2; // Change this value to control the speed of the movement
   backgroundOffset %= backgroundImage.width; // Ensure the offset loops
@@ -183,10 +195,147 @@ function menu() {
   image(backgroundImage, backgroundImage.width - backgroundOffset, y, backgroundImage.width, backgroundImage.height);
 
 
+
+  // character select
+  textSize(80);
+  fill(255);
+  noStroke();
+  // TODO: font?
+  text("Choose your characters", 100, 100);
+  
+  // char boxes
+  textSize(50);
+  fill(255, 0, 0);
+  text("Player One", 100, 180);
+  text("Player Two", width/2+100, 180);
+
+  stroke(255, 0, 0);
+  strokeWeight(10);
+  noFill();
+  // P1
+  rect(100, 200, 400, 400);
+  charSelect.chars.kitsune.display(120, 160, 0); 
+  charSelect.chars.kitsune.display(300, 160, 0); 
+  charSelect.chars.kitsune.display(120, 350, 0); 
+  charSelect.chars.kitsune.display(300, 350, 0); 
+
+  
+  // P2 
+  rect(width/2+100, 200, 400, 400);
+  charSelect.chars.kitsune.display(width/2+120, 160, 0); 
+  charSelect.chars.kitsune.display(width/2+300, 160, 0); 
+  charSelect.chars.kitsune.display(width/2+120, 350, 0);
+  charSelect.chars.kitsune.display(width/2+300, 350, 0); 
+  
+  stroke(255);
+  strokeWeight(5);
+  
+  // P1
+  rect(charSelect.spots[charSelect.selectors.p1].x, charSelect.spots[charSelect.selectors.p1].y+60, 160, 160);
+  if(keyIsDown(68)) { // d
+    if ( charSelect.selectors.p1 == 1 ) {
+      charSelect.selectors.p1 = 2;
+    }
+    else if ( charSelect.selectors.p1 == 3 ) {
+      charSelect.selectors.p1 = 4;
+    }
+  }
+  if(keyIsDown(65)) { // a
+    if ( charSelect.selectors.p1 == 2 ) {
+      charSelect.selectors.p1 = 1;
+    }
+    else if ( charSelect.selectors.p1 == 4 ) {
+      charSelect.selectors.p1 = 3;
+    }
+  }
+  if(keyIsDown(83)) { // s
+    if ( charSelect.selectors.p1 == 1 ) {
+      charSelect.selectors.p1 = 3;
+    }
+    else if ( charSelect.selectors.p1 == 2 ) {
+      charSelect.selectors.p1 = 4;
+    }
+  }
+  if(keyIsDown(87)) { // w
+    if ( charSelect.selectors.p1 == 3 ) {
+      charSelect.selectors.p1 = 1;
+    }
+    else if ( charSelect.selectors.p1 == 4 ) {
+      charSelect.selectors.p1 = 2;
+    }
+  }
+
+  // P2
+  rect(width/2+charSelect.spots[charSelect.selectors.p2].x, charSelect.spots[charSelect.selectors.p2].y+60, 160, 160);
+  if(keyIsDown(76)) { // l
+    console.log('a')
+    if ( charSelect.selectors.p2 == 1 ) {
+      charSelect.selectors.p2 = 2;
+    }
+    else if ( charSelect.selectors.p2 == 3 ) {
+      charSelect.selectors.p2 = 4;
+    }
+  }
+  if(keyIsDown(74)) { // j
+    if ( charSelect.selectors.p2 == 2 ) {
+      charSelect.selectors.p2 = 1;
+    }
+    else if ( charSelect.selectors.p2 == 4 ) {
+      charSelect.selectors.p2 = 3;
+    }
+  }
+  if(keyIsDown(75)) { // k
+    if ( charSelect.selectors.p2 == 1 ) {
+      charSelect.selectors.p2 = 3;
+    }
+    else if ( charSelect.selectors.p2 == 2 ) {
+      charSelect.selectors.p2 = 4;
+    }
+  }
+  if(keyIsDown(73)) { // i
+    if ( charSelect.selectors.p2 == 3 ) {
+      charSelect.selectors.p2 = 1;
+    }
+    else if ( charSelect.selectors.p2 == 4 ) {
+      charSelect.selectors.p2 = 2;
+    }
+  }
+
+  // list selected character
+  noStroke();
+  fill(0, 255, 155);
+  text(charSelect.spots[charSelect.selectors.p1].name, 110, 660);
+  text(charSelect.spots[charSelect.selectors.p2].name, width/2+110, 660);
+
+  // then user presses enter to move to game, and these chars are used
+  text("Press Enter to continue", 300, 740);
+}
+
+// sets up game state before playing
+function arenaSetup() {
+  // grabs the class for the character to construct an instance
+  arenaState.p1 = new charSelect.spots[charSelect.selectors.p1].factory(charSelect.spots[charSelect.selectors.p1].name, 250, ground, 0, null);
+  arenaState.p1.setup();
+
+  arenaState.p2 = new charSelect.spots[charSelect.selectors.p2].factory(charSelect.spots[charSelect.selectors.p2].name, 750, ground, 1, null);
+  arenaState.p2.setup();
+
+  mode++;
 }
 
 function arena() {
-  image(arenaImage, 0, 0);
+  imageMode(CENTER);
+  image(arenaImage, width/2, height/2, width, height);
+
+  arenaState.p1.displayAndMove();
+  arenaState.p2.displayAndMove();
+
+  for(let i = 0; i < projectiles.length; i++) {
+    projectiles[i].move();
+    if(projectiles[i].x > width || projectiles[i].x < 0) {
+      projectiles.splice(i, 1);
+    }
+  }
 }
 
 function testEnv() {
@@ -208,3 +357,33 @@ function testEnv() {
     }
   }
 }
+
+function charSelectSetup(charSelect) {
+  charSelect.chars = {
+    kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
+    char2: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40), // set all to kitsune for now
+    char3: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
+    char4: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40)
+  };
+  charSelect.selectors = {
+    p1: 1,
+    p2: 1
+  };
+  charSelect.spots = {
+    1: {
+      x: 120, y: 160, name: "kitsune", factory: Kitsune
+    },
+    2: {
+      x: 300, y: 160, name: "char2", factory: Kitsune
+    },
+    3: {
+      x: 120, y: 350, name: "char3", factory: Kitsune
+    },
+    4: {
+      x: 300, y:350, name: "char4", factory: Kitsune
+    }
+  };
+}
+
+
+  
