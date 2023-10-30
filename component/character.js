@@ -34,6 +34,9 @@ class Character {
         this.jumping = false;
         this.state = false;
         this.dead = false;
+
+        // list of character's projectiles in existence
+        this.projectiles = [];
     }
 
     // Sets up the character, should only run once in the beginning
@@ -229,6 +232,7 @@ class Character {
 
     basicAttack() {
         this.currAnimation = "basicAttack";
+        this.hitboxes.attack('light');
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
@@ -237,6 +241,7 @@ class Character {
 
     heavyAttack() {
         this.currAnimation = "heavyAttack";
+        this.hitboxes.attack('heavy');
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
@@ -245,6 +250,7 @@ class Character {
 
     specialAttack() {
         this.currAnimation = "specialAttack";
+        this.hitboxes.attack('special');
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
@@ -310,8 +316,9 @@ class Kitsune extends Character {
     // Projectile attack
     heavyAttack() {
         this.currAnimation = "heavyAttack";
+        this.hitboxes.attack('heavy');
         if(this.spriteAnimations[this.currAnimation].currentFrame == 3 && this.fireball == false) {
-            projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 10, 5));
+            projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 10, 5, this.opponent));
             this.fireball = true;
         }
 
@@ -335,18 +342,24 @@ class Kitsune extends Character {
         speed - speed of the projectile
 */
 class Projectile {
-    constructor(x,y, animation, direction, damage, speed) {
+    constructor(x,y, animation, direction, damage, speed, opponent) {
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.animation = new Sprite(animation, this.x, this.y, 64, 128, 10);
         this.direction = direction;
         this.damage = damage;
-        
+        this.opponent = opponent;
+        this.hitrad = 8;
     }
 
     move() {
         imageMode(CENTER);
+
+        // hitbox work
+        fill('green');
+        rect(this.x-this.hitrad, this.y-this.hitrad, this.hitrad*2, this.hitrad*2);
+
         this.animation.display(this.x, this.y, this.direction);
         if(this.direction == 0) {
             this.x += this.speed;
@@ -354,6 +367,11 @@ class Projectile {
             this.x -= this.speed;
         }
 
+    }
+
+    // checks if projectile hit opponent
+    check() {
+        this.opponent.hitboxes.checkHitProjectile(this);
     }
 }
 
@@ -375,20 +393,14 @@ class HitBoxes {
     constructor(father) {
         this.char = father;
 
-        // this.states = {};
-        // this.states.idle = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
-        // this.states.run = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
-        // this.states.walk = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
-        // this.states.jump = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
-        // this.states.basicAttack = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
-        // this.states.heavyAttack = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
-        // this.states.specialAttack = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
-        // this.states.hurt = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
-        // this.states.block = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
-        // this.states.die = [new HitBox(-25, 5, -5, 46), new HitBox(-5, 5, 45, 63)];
-
         this.direction = [ [new HitBox(-25, 5, -5, 46), new HitBox(-10, 5, 45, 63)], 
                            [new HitBox(-5, 25, -5, 46), new HitBox(-5, 10, 45, 63)]];
+
+        this.attacks = {
+            light: [new HitBox(15, 40, 0, 25)],
+            heavy: [new HitBox(15, 40, 0, 25)],
+            special: [new HitBox(15, 40, 0, 25)]
+        }
     }
 
     // check if the attack passed in hit the char's hitbox, or if blocked
@@ -396,16 +408,23 @@ class HitBoxes {
         // TODO
     }
 
+    checkHitProjectile(proj) {
+        
+        this.direction[this.char.direction].forEach(h => {
+            if ( (proj.x-proj.hitrad <= h.right) && 
+                 (proj.x+proj.hitrad >= h.left) && 
+                 (proj.y-proj.hitrad >= h.top) && 
+                 (proj.y+proj.hitrad <= h.bottom) ) 
+            {
+                // it's a hit!
+                
+            }
+        })
+    }
+
     draw() {
         stroke('red');
         strokeWeight(3);
-
-        // this.states[this.char.currAnimation].forEach(h => {
-        //     line(h.left+this.char.x, h.top+this.char.y, h.left+this.char.x, h.bottom+this.char.y);
-        //     line(h.right+this.char.x, h.top+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
-        //     line(h.left+this.char.x, h.top+this.char.y, h.right+this.char.x, h.top+this.char.y);
-        //     line(h.left+this.char.x, h.bottom+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
-        // });
 
         this.direction[this.char.direction].forEach(h => {
                 line(h.left+this.char.x, h.top+this.char.y, h.left+this.char.x, h.bottom+this.char.y);
@@ -414,6 +433,21 @@ class HitBoxes {
                 line(h.left+this.char.x, h.bottom+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
             });
 
+
+
+        noStroke();
+    }
+
+    // draws attack hitbox
+    attack(type) {
+        stroke('green');
+        console.log(type);
+        this.attacks[type].forEach(h => {
+            line(h.left+this.char.x, h.top+this.char.y, h.left+this.char.x, h.bottom+this.char.y);
+            line(h.right+this.char.x, h.top+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
+            line(h.left+this.char.x, h.top+this.char.y, h.right+this.char.x, h.top+this.char.y);
+            line(h.left+this.char.x, h.bottom+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
+        });
 
         noStroke();
     }

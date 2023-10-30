@@ -62,7 +62,7 @@ class Sprite {
 }
 
 
-// Taken from day10 source code Interactive Computing and Adjusted for Our Project
+// Copy of class Sprite for use on the char select screen (changes character display size)
 class CharSelect {
     constructor(img, x, y, w, h, pause) {
         // each Sprite knows its position, size of the animation cell

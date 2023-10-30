@@ -9,7 +9,7 @@ let arenaImage;
 let titleVideo;
 let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
-let mode = 2; // FOR TESTING
+let mode = 5; // FOR TESTING
 let isPlaying = false; // Initialize isPlaying
 let backgroundMusic;
 let instruction = false;
@@ -77,10 +77,10 @@ function draw() {
       menu();
     } else if (mode === 3) {
       arenaSetup();
-    } else if (mode === 4) { // Testing Environment
+    } else if (mode === 4) { 
       arena();
     }
-    else if (mode === 5) { 
+    else if (mode === 5) { // Testing Environment
       testEnv();
     }
 }
@@ -103,7 +103,7 @@ function keyPressed() {
   } 
   else if(keyCode === ENTER) {
     mode++;
-    if(keyCode === 5) {
+    if(mode === 6) {
       mode = 0;
     }
   }
@@ -197,6 +197,7 @@ function menu() {
 
 
   // character select
+  textAlign(LEFT);
   textSize(80);
   fill(255);
   noStroke();
@@ -331,6 +332,7 @@ function arena() {
 
   for(let i = 0; i < projectiles.length; i++) {
     projectiles[i].move();
+    projectiles[i].check();
     if(projectiles[i].x > width || projectiles[i].x < 0) {
       projectiles.splice(i, 1);
     }
