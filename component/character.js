@@ -303,7 +303,7 @@ class Kitsune extends Character {
          // Kitsune initializations
          this.basicAttackSpeed = 3;
          this.heavyAttackSpeed = 5;
-         this.specialAttackSpeed = 5;
+         this.specialAttackSpeed = 8;
          this.health = 100;
          this.fireball = false;
          this.bigBall = false;
@@ -332,8 +332,13 @@ class Kitsune extends Character {
             if(this.bigBall == false) {
                 if(this.direction == 0) {
                     projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+
                 } else {
                     projectiles.push(new Projectile(this.x - 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
                 }
             }
             this.state = false;
