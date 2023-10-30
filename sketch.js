@@ -63,7 +63,7 @@ function setup() {
   background(0);
   
   // Initializing Kitsune
-  kitsune = new Kitsune("kitsune", 250, ground, 0, null);
+  kitsune = new Kitsune("Kitsune", 250, ground, 0, null);
   kitsune.setup();
 
   // init charselect
@@ -206,13 +206,14 @@ function menu() {
   fill(255);
   noStroke();
   // TODO: font?
-  text("Choose your characters", 100, 100);
+  textAlign(CENTER);
+  text("Choose your characters", 600, 100);
   
   // char boxes
   textSize(50);
   fill(255, 0, 0);
-  text("Player One", 100, 180);
-  text("Player Two", width/2+100, 180);
+  text("Player One", 250, 180);
+  text("Player Two", width/2+250, 180);
 
   stroke(255, 0, 0);
   strokeWeight(10);
@@ -308,11 +309,13 @@ function menu() {
   // list selected character
   noStroke();
   fill(0, 255, 155);
-  text(charSelect.spots[charSelect.selectors.p1].name, 110, 660);
-  text(charSelect.spots[charSelect.selectors.p2].name, width/2+110, 660);
+  text(charSelect.spots[charSelect.selectors.p1].name, 250, 660);
+  text(charSelect.spots[charSelect.selectors.p2].name, width/2+250, 660);
+
+  fill(255);
 
   // then user presses enter to move to game, and these chars are used
-  text("Press Enter to continue", 300, 740);
+  text("Press Enter to continue", 600, 740);
 }
 
 // sets up game state before playing
@@ -330,8 +333,12 @@ function arenaSetup() {
 function arena() {
   imageMode(CENTER);
   image(arenaImage, width, height, width * 2, height * 2);
-  textSize(12);
+  fill(0, 150);
+  rect(200, 130, 800, 150);
   fill(255);
+  textSize(20);
+  text("Controls:", 600, 170);
+  textSize(12);
   text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
   text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, m - test die, n - respawn", 600, 230);
 
@@ -380,7 +387,7 @@ function charSelectSetup(charSelect) {
   };
   charSelect.spots = {
     1: {
-      x: 120, y: 160, name: "kitsune", factory: Kitsune
+      x: 120, y: 160, name: "Kitsune", factory: Kitsune
     },
     2: {
       x: 300, y: 160, name: "char2", factory: Kitsune
