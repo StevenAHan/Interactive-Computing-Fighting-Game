@@ -32,11 +32,6 @@ let theParticles = [];
 let kitsune;
 let ground = 600;
 
-//Test Env Vars
-let kitsune1, kitsune2;
-
-
-
 function preload() {
   // Load the background images
   backgroundImage = loadImage("./assets/environments/char_background.png");
@@ -85,13 +80,9 @@ function draw() {
     } else if (mode === 4) {
       arena();
     }
-    else if (mode === 5) { 
-      testEnv();
-    }
 }
 
 function keyPressed() {
-
   //Increment Mode on Enter
   if (mode === 0 && keyCode === ENTER) {
     mode = 1;
@@ -106,9 +97,11 @@ function keyPressed() {
     mode = 2;
     isPlaying = false; // Reset isPlaying
   } 
+
+  // TEMP for testing
   else if(keyCode === ENTER) {
     mode++;
-    if(keyCode === 5) {
+    if(mode >= 5) {
       mode = 0;
     }
   }
@@ -345,27 +338,6 @@ function arena() {
   arenaState.p1.displayAndMove();
   arenaState.p2.displayAndMove();
 
-  for(let i = 0; i < projectiles.length; i++) {
-    projectiles[i].move();
-    if(projectiles[i].x > width || projectiles[i].x < 0) {
-      projectiles.splice(i, 1);
-    }
-  }
-}
-
-function testEnv() {
-  fill(0, 128, 0);
-  rect(0, ground + 128 / 2, width, height);
-  fill(255);
-  textSize(12);
-  textAlign(CENTER);
-  text("Kitsune", kitsune.x, kitsune.y - 25);
-  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
-  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, m - test die, n - respawn", 600, 230);
-  textSize(30);
-  text("Test Environment", 600, 150);
-  // Letting kitsune object move
-  kitsune.displayAndMove();
   for(let i = 0; i < projectiles.length; i++) {
     projectiles[i].move();
     if(projectiles[i].x > width || projectiles[i].x < 0) {
