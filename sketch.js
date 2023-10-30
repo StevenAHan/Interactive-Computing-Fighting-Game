@@ -29,7 +29,7 @@ let kitsuneIdle, kitsuneRun, kitsuneJump,
   kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk, kitsuneFireball;
 let testCharAnimations;
 let theParticles = [];
-let kitsune1, kitsune2;
+let kitsune;
 let ground = 600;
 
 function preload() {
@@ -58,11 +58,11 @@ function setup() {
   background(0);
   
   // Initializing Kitsune
-  kitsune1 = new Kitsune("Player1", 250, ground, 0, kitsune2);
-  kitsune2 = new Kitsune("Player2", 800, ground, 1, kitsune1);
+  kitsune = new Kitsune("kitsune", 250, ground, 0, null);
+  kitsune.setup();
 
-  kitsune1.setup();
-  kitsune2.setup();
+  // init charselect
+  charSelectSetup(charSelect);
 }
 
 
@@ -101,11 +101,11 @@ function keyPressed() {
     mode = 2;
     isPlaying = false; // Reset isPlaying
   } 
-  else {
+  else if(keyCode === ENTER) {
     mode++;
-  }
-  if ( mode > 5) {
-    mode = 0;
+    if(keyCode === 5) {
+      mode = 0;
+    }
   }
 }
 
@@ -268,7 +268,6 @@ function menu() {
   // P2
   rect(width/2+charSelect.spots[charSelect.selectors.p2].x, charSelect.spots[charSelect.selectors.p2].y+60, 160, 160);
   if(keyIsDown(76)) { // l
-    console.log('a')
     if ( charSelect.selectors.p2 == 1 ) {
       charSelect.selectors.p2 = 2;
     }
@@ -344,15 +343,12 @@ function testEnv() {
   fill(255);
   textSize(12);
   textAlign(CENTER);
-  text(kitsune1.name, kitsune1.x, kitsune1.y - 25);
-  text(kitsune2.name, kitsune2.x, kitsune2.y - 25);
-  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, x - test die, z - respawn", 600, 200);
-  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, m - test die, n - respawn", 600, 230);
+  text("Kitsune", kitsune.x, kitsune.y - 25);
+  text("Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
   textSize(30);
   text("Test Environment", 600, 150);
   // Letting kitsune object move
-  kitsune1.displayAndMove();
-  kitsune2.displayAndMove();
+  kitsune.displayAndMove();
   for(let i = 0; i < projectiles.length; i++) {
     projectiles[i].move();
     if(projectiles[i].x > width || projectiles[i].x < 0) {
