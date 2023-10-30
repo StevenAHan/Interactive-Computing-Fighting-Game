@@ -319,8 +319,10 @@ function arenaSetup() {
   arenaState.p1 = new charSelect.spots[charSelect.selectors.p1].factory(charSelect.spots[charSelect.selectors.p1].name, 250, ground, 0, null);
   arenaState.p1.setup();
 
-  arenaState.p2 = new charSelect.spots[charSelect.selectors.p2].factory(charSelect.spots[charSelect.selectors.p2].name, 750, ground, 1, null);
+  arenaState.p2 = new charSelect.spots[charSelect.selectors.p2].factory(charSelect.spots[charSelect.selectors.p2].name, 750, ground, 1, arenaState.p1);
   arenaState.p2.setup();
+  arenaState.p1.opponent = arenaState.p2;
+
 
   mode++;
 }
