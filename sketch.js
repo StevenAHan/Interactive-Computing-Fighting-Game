@@ -26,7 +26,7 @@ let arenaState = {};
 // Arena Vars
 let kitsuneIdle, kitsuneRun, kitsuneJump, 
   kitsuneBasicAttack, kitsuneHeavyAttack, kitsuneSpecialAttack,
-  kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk, kitsuneFireball;
+  kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk, kitsuneFireball, kitsuneBigFireball;
 let testCharAnimations;
 let theParticles = [];
 let kitsune;
@@ -39,7 +39,7 @@ function preload() {
   arenaImage = loadImage("./assets/environments/game_background_1.png")
   // backgroundMusic = loadSound("./assets/environments/background_music.mp3");
 
-  //Test Kitsune Animations
+  // Kitsune Animations
   kitsuneIdle = loadImage("./assets/characters/Kitsune/Idle.png");
   kitsuneRun = loadImage("./assets/characters/Kitsune/Run.png");
   kitsuneJump = loadImage("./assets/characters/Kitsune/Jump.png");
@@ -51,6 +51,7 @@ function preload() {
   kitsuneBlock = loadImage("./assets/characters/Kitsune/Fire_1.png");
   kitsuneWalk = loadImage("./assets/characters/Kitsune/Walk.png");
   kitsuneFireball = loadImage("./assets/characters/Kitsune/Fire_1_cropped.png");
+  kitsuneBigFireball = loadImage("./assets/characters/Kitsune/Fire_2_cropped.png");
 }
 
 function setup() {
