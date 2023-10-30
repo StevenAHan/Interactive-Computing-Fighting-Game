@@ -9,7 +9,7 @@ let arenaImage;
 let titleVideo;
 let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
-let mode = 2; // FOR TESTING
+let mode = 0; // FOR TESTING
 let isPlaying = false; // Initialize isPlaying
 let backgroundMusic;
 let instruction = false;
@@ -23,7 +23,7 @@ let charSelect = {};
 // arena state
 let arenaState = {};
 
-// Test Env Vars
+// Arena Vars
 let kitsuneIdle, kitsuneRun, kitsuneJump, 
   kitsuneBasicAttack, kitsuneHeavyAttack, kitsuneSpecialAttack,
   kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk, kitsuneFireball;
@@ -31,6 +31,11 @@ let testCharAnimations;
 let theParticles = [];
 let kitsune;
 let ground = 600;
+
+//Test Env Vars
+let kitsune1, kitsune2;
+
+
 
 function preload() {
   // Load the background images
@@ -77,7 +82,7 @@ function draw() {
       menu();
     } else if (mode === 3) {
       arenaSetup();
-    } else if (mode === 4) { // Testing Environment
+    } else if (mode === 4) {
       arena();
     }
     else if (mode === 5) { 
@@ -325,6 +330,10 @@ function arenaSetup() {
 function arena() {
   imageMode(CENTER);
   image(arenaImage, width/2, height/2, width, height);
+  textSize(12);
+  fill(255);
+  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
+  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, m - test die, n - respawn", 600, 230);
 
   arenaState.p1.displayAndMove();
   arenaState.p2.displayAndMove();
@@ -344,7 +353,8 @@ function testEnv() {
   textSize(12);
   textAlign(CENTER);
   text("Kitsune", kitsune.x, kitsune.y - 25);
-  text("Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
+  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
+  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, m - test die, n - respawn", 600, 230);
   textSize(30);
   text("Test Environment", 600, 150);
   // Letting kitsune object move
