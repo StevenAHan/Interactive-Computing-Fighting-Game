@@ -41,7 +41,7 @@ function preload() {
   // Load the background images
   backgroundImage = loadImage("./assets/environments/char_background.png");
   foregroundImage = loadImage("./assets/environments/foreground.png");
-  arenaImage = loadImage("./assets/environments/arena.png")
+  arenaImage = loadImage("./assets/environments/game_background_1.png")
   // backgroundMusic = loadSound("./assets/environments/background_music.mp3");
 
   //Test Kitsune Animations
@@ -329,7 +329,7 @@ function arenaSetup() {
 
 function arena() {
   imageMode(CENTER);
-  image(arenaImage, width/2, height/2, width, height);
+  image(arenaImage, width, height, width * 2, height * 2);
   textSize(12);
   fill(255);
   text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
