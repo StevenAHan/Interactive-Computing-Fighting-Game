@@ -34,6 +34,7 @@ class Character {
         this.jumping = false;
         this.state = false;
         this.dead = false;
+        this.hitpoints = 100;
 
         // list of character's projectiles in existence
         this.projectiles = [];
@@ -361,6 +362,24 @@ class Kitsune extends Character {
         this.state = false;
     }
     
+}
+
+class BlackRaven extends Character{
+    constructor(name, x, y, playerNumber, opponent=null) {
+        let ravenAnimations = {
+            "idle": ravenIdle,
+            "run": ravenRun,
+            "jump": ravenJump,
+            "basicAttack": ravenBasicAttack,
+            "heavyAttack": ravenHeavyAttack,
+            "specialAttack": ravenSpecialAttack,
+            "hurt": ravenHurt,
+            "die": ravenDeath,
+            "block": ravenBlock,
+        };
+        super(name, 5, 15, x, y, ravenAnimations, 128, 128, playerNumber, opponent);
+         
+    }
 }
 
 /*
