@@ -107,13 +107,13 @@ class Character {
                 }
 
 
-                // y - TEST DIE
-                if(keyIsDown(89)) {
+                // x - TEST DIE
+                if(keyIsDown(88)) {
                     this.state = "die";
                 }
 
-                // u - respawn
-                if(keyIsDown(85)) {
+                // z - respawn
+                if(keyIsDown(90)) {
                     this.dead = false;
                 }
             }
@@ -123,15 +123,70 @@ class Character {
 
         // TODO - Player 2 Controls - copy from player one once done
         if(this.playerNumber == 1) {
-            if(keyIsDown(74)) {
-                this.direction = 1;
-                this.x -= this.speed;
-            }
-            if (keyIsDown(76)) {
-                this.direction = 0;
-                this.x += this.speed;
+            let xPrev = this.x
+            // can only move if you aren't attacking
+            if(!this.state) {
+                // j - move left
+                if(keyIsDown(74)) {
+                    this.currAnimation = "run";
+                    this.x -= this.speed;
+                }
+
+                // l - move right
+                if (keyIsDown(76)) {
+                    this.currAnimation = "run";
+                    this.x += this.speed;
+                }
+
+                // based on velocity, change animation and direction
+                if(xPrev == this.x) {
+                    this.currAnimation = "idle";
+                } else if(xPrev > this.x) {
+                    this.direction = 1;
+                } else {
+                    this.direction = 0;
+                }
+
+                // i - jump
+                if(keyIsDown(73)) {
+                    if(!this.jumping) {
+                        this.jumping = true;
+                    }
+                }
+                // u - basic attack
+                if(keyIsDown(85)) {
+                    this.state = "basicAttack";
+                }
+
+                // o - heavy attack
+                if(keyIsDown(79)) {
+                    this.state = "heavyAttack";
+                }
+
+                // y - special attack
+                if(keyIsDown(89)) {
+                    this.state = "specialAttack";
+                }
+
+                // h - block
+                if(keyIsDown(72)) {
+                    this.state = "block";
+                }
+
+
+                // m - TEST DIE
+                if(keyIsDown(77)) {
+                    this.state = "die";
+                }
+
+                // n - respawn
+                if(keyIsDown(78)) {
+                    this.dead = false;
+                }
             }
         }
+
+
         // Jump once triggered
         if(this.jumping) {
             this.jump();

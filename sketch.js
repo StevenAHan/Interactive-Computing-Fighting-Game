@@ -24,7 +24,7 @@ let kitsuneIdle, kitsuneRun, kitsuneJump,
   kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk, kitsuneFireball;
 let testCharAnimations;
 let theParticles = [];
-let kitsune;
+let kitsune1, kitsune2;
 let ground = 600;
 
 function preload() {
@@ -53,8 +53,11 @@ function setup() {
   background(0);
   
   // Initializing Kitsune
-  kitsune = new Kitsune("kitsune", 250, ground, 0, null);
-  kitsune.setup();
+  kitsune1 = new Kitsune("Player1", 250, ground, 0, kitsune2);
+  kitsune2 = new Kitsune("Player2", 800, ground, 1, kitsune1);
+
+  kitsune1.setup();
+  kitsune2.setup();
 }
 
 
@@ -195,12 +198,15 @@ function testEnv() {
   fill(255);
   textSize(12);
   textAlign(CENTER);
-  text("Kitsune", kitsune.x, kitsune.y - 25);
-  text("Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
+  text(kitsune1.name, kitsune1.x, kitsune1.y - 25);
+  text(kitsune2.name, kitsune2.x, kitsune2.y - 25);
+  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, x - test die, z - respawn", 600, 200);
+  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, m - test die, n - respawn", 600, 230);
   textSize(30);
   text("Test Environment", 600, 150);
   // Letting kitsune object move
-  kitsune.displayAndMove();
+  kitsune1.displayAndMove();
+  kitsune2.displayAndMove();
   for(let i = 0; i < projectiles.length; i++) {
     projectiles[i].move();
     if(projectiles[i].x > width || projectiles[i].x < 0) {
