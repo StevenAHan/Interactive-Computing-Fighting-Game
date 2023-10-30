@@ -333,9 +333,10 @@ function arena() {
   textSize(20);
   text("Controls:", 600, 170);
   textSize(12);
-  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
-  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, m - test die, n - respawn", 600, 230);
-
+  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, f - block, y - test die, u - respawn", 600, 200);
+  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, h - block, m - test die, n - respawn", 600, 230);
+  fill(255, 128, 128);
+  text("Note: Kitsune cannot block", 600, 260);
   arenaState.p1.displayAndMove();
   arenaState.p2.displayAndMove();
 

@@ -309,7 +309,9 @@ class Kitsune extends Character {
          this.bigBall = false;
          
     }
-    // Projectile attack
+    // Kitsune Basic Attack - Swipes tail and deals damage directly in front
+
+    // Kitsune Heavy Attack - fires a small fireball after a delay
     heavyAttack() {
         this.currAnimation = "heavyAttack";
         if(this.spriteAnimations[this.currAnimation].currentFrame == 3 && this.fireball == false) {
@@ -324,7 +326,7 @@ class Kitsune extends Character {
         }
     }
 
-    // Kitsune Special Attack
+    // Kitsune Special Attack - floats for the animation and fires 3 big fireballs
     specialAttack() {
         this.currJumpSpeed = 0;
         this.currAnimation = "specialAttack";
