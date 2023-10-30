@@ -9,7 +9,7 @@ let arenaImage;
 let titleVideo;
 let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
-let mode = 5; // FOR TESTING
+let mode = 0; // FOR TESTING
 let isPlaying = false; // Initialize isPlaying
 let backgroundMusic;
 let instruction = false;
@@ -23,10 +23,10 @@ let charSelect = {};
 // arena state
 let arenaState = {};
 
-// Test Env Vars
+// Arena Vars
 let kitsuneIdle, kitsuneRun, kitsuneJump, 
   kitsuneBasicAttack, kitsuneHeavyAttack, kitsuneSpecialAttack,
-  kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk, kitsuneFireball;
+  kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk, kitsuneFireball, kitsuneBigFireball;
 let testCharAnimations;
 let theParticles = [];
 let kitsune;
@@ -36,10 +36,10 @@ function preload() {
   // Load the background images
   backgroundImage = loadImage("./assets/environments/char_background.png");
   foregroundImage = loadImage("./assets/environments/foreground.png");
-  arenaImage = loadImage("./assets/environments/arena.png")
+  arenaImage = loadImage("./assets/environments/game_background_1.png")
   // backgroundMusic = loadSound("./assets/environments/background_music.mp3");
 
-  //Test Kitsune Animations
+  // Kitsune Animations
   kitsuneIdle = loadImage("./assets/characters/Kitsune/Idle.png");
   kitsuneRun = loadImage("./assets/characters/Kitsune/Run.png");
   kitsuneJump = loadImage("./assets/characters/Kitsune/Jump.png");
@@ -51,6 +51,7 @@ function preload() {
   kitsuneBlock = loadImage("./assets/characters/Kitsune/Fire_1.png");
   kitsuneWalk = loadImage("./assets/characters/Kitsune/Walk.png");
   kitsuneFireball = loadImage("./assets/characters/Kitsune/Fire_1_cropped.png");
+  kitsuneBigFireball = loadImage("./assets/characters/Kitsune/Fire_2_cropped.png");
 }
 
 function setup() {
@@ -58,7 +59,7 @@ function setup() {
   background(0);
   
   // Initializing Kitsune
-  kitsune = new Kitsune("kitsune", 250, ground, 0, null);
+  kitsune = new Kitsune("Kitsune", 250, ground, 0, null);
   kitsune.setup();
 
   // init charselect
@@ -80,13 +81,9 @@ function draw() {
     } else if (mode === 4) { 
       arena();
     }
-    else if (mode === 5) { // Testing Environment
-      testEnv();
-    }
 }
 
 function keyPressed() {
-
   //Increment Mode on Enter
   if (mode === 0 && keyCode === ENTER) {
     mode = 1;
@@ -101,9 +98,11 @@ function keyPressed() {
     mode = 2;
     isPlaying = false; // Reset isPlaying
   } 
+
+  // TEMP for testing
   else if(keyCode === ENTER) {
     mode++;
-    if(mode === 6) {
+    if(mode >= 5) {
       mode = 0;
     }
   }
@@ -202,13 +201,14 @@ function menu() {
   fill(255);
   noStroke();
   // TODO: font?
-  text("Choose your characters", 100, 100);
+  textAlign(CENTER);
+  text("Choose your characters", 600, 100);
   
   // char boxes
   textSize(50);
   fill(255, 0, 0);
-  text("Player One", 100, 180);
-  text("Player Two", width/2+100, 180);
+  text("Player One", 250, 180);
+  text("Player Two", width/2+250, 180);
 
   stroke(255, 0, 0);
   strokeWeight(10);
@@ -304,11 +304,13 @@ function menu() {
   // list selected character
   noStroke();
   fill(0, 255, 155);
-  text(charSelect.spots[charSelect.selectors.p1].name, 110, 660);
-  text(charSelect.spots[charSelect.selectors.p2].name, width/2+110, 660);
+  text(charSelect.spots[charSelect.selectors.p1].name, 250, 660);
+  text(charSelect.spots[charSelect.selectors.p2].name, width/2+250, 660);
+
+  fill(255);
 
   // then user presses enter to move to game, and these chars are used
-  text("Press Enter to continue", 300, 740);
+  text("Press Enter to continue", 600, 740);
 }
 
 // sets up game state before playing
@@ -325,34 +327,23 @@ function arenaSetup() {
 
 function arena() {
   imageMode(CENTER);
-  image(arenaImage, width/2, height/2, width, height);
-
+  image(arenaImage, width, height, width * 2, height * 2);
+  fill(0, 150);
+  rect(200, 130, 800, 150);
+  fill(255);
+  textSize(20);
+  text("Controls:", 600, 170);
+  textSize(12);
+  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, f - block, y - test die, u - respawn", 600, 200);
+  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, h - block, m - test die, n - respawn", 600, 230);
+  fill(255, 128, 128);
+  text("Note: Kitsune cannot block", 600, 260);
   arenaState.p1.displayAndMove();
   arenaState.p2.displayAndMove();
 
   for(let i = 0; i < projectiles.length; i++) {
     projectiles[i].move();
     projectiles[i].check();
-    if(projectiles[i].x > width || projectiles[i].x < 0) {
-      projectiles.splice(i, 1);
-    }
-  }
-}
-
-function testEnv() {
-  fill(0, 128, 0);
-  rect(0, ground + 128 / 2, width, height);
-  fill(255);
-  textSize(12);
-  textAlign(CENTER);
-  text("Kitsune", kitsune.x, kitsune.y - 25);
-  text("Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, y - test die, u - respawn", 600, 200);
-  textSize(30);
-  text("Test Environment", 600, 150);
-  // Letting kitsune object move
-  kitsune.displayAndMove();
-  for(let i = 0; i < projectiles.length; i++) {
-    projectiles[i].move();
     if(projectiles[i].x > width || projectiles[i].x < 0) {
       projectiles.splice(i, 1);
     }
@@ -372,7 +363,7 @@ function charSelectSetup(charSelect) {
   };
   charSelect.spots = {
     1: {
-      x: 120, y: 160, name: "kitsune", factory: Kitsune
+      x: 120, y: 160, name: "Kitsune", factory: Kitsune
     },
     2: {
       x: 300, y: 160, name: "char2", factory: Kitsune

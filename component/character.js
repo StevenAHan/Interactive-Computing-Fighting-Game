@@ -303,22 +303,26 @@ class Kitsune extends Character {
             "block": kitsuneBlock,
             "walk": kitsuneWalk,
             "fireball": kitsuneFireball,
+            "big_fireball": kitsuneBigFireball,
         };
         super(name, 5, 15, x, y, kitsuneAnimations, 128, 128, playerNumber, opponent);
          // Kitsune initializations
          this.basicAttackSpeed = 3;
          this.heavyAttackSpeed = 5;
-         this.specialAttackSpeed = 10;
+         this.specialAttackSpeed = 8;
          this.health = 100;
          this.fireball = false;
+         this.bigBall = false;
          
     }
-    // Projectile attack
+    // Kitsune Basic Attack - Swipes tail and deals damage directly in front
+
+    // Kitsune Heavy Attack - fires a small fireball after a delay
     heavyAttack() {
         this.currAnimation = "heavyAttack";
         this.hitboxes.attack('heavy');
         if(this.spriteAnimations[this.currAnimation].currentFrame == 3 && this.fireball == false) {
-            projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 10, 5, this.opponent));
+            projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 64, 64, 10, 5, this.opponent));
             this.fireball = true;
         }
 
@@ -327,6 +331,34 @@ class Kitsune extends Character {
             this.fireball = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
         }
+    }
+
+    // Kitsune Special Attack - floats for the animation and fires 3 big fireballs
+    specialAttack() {
+        this.currJumpSpeed = 0;
+        this.currAnimation = "specialAttack";
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            if(this.bigBall == false) {
+                if(this.direction == 0) {
+                    projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+
+                } else {
+                    projectiles.push(new Projectile(this.x - 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                }
+            }
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+
+    // Kitsune Cannot Block
+    block() {
+        this.currAnimation = "idle";
+        this.state = false;
     }
     
 }
@@ -342,11 +374,11 @@ class Kitsune extends Character {
         speed - speed of the projectile
 */
 class Projectile {
-    constructor(x,y, animation, direction, damage, speed, opponent) {
+    constructor(x,y, animation, direction, width, height, damage, speed, opponent) {
         this.x = x;
         this.y = y;
         this.speed = speed;
-        this.animation = new Sprite(animation, this.x, this.y, 64, 128, 10);
+        this.animation = new Sprite(animation, this.x, this.y, width, height, 10);
         this.direction = direction;
         this.damage = damage;
         this.opponent = opponent;
