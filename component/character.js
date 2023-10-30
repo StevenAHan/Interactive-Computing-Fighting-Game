@@ -44,7 +44,6 @@ class Character {
     setup() {
         this.spriteAnimations.idle = new Sprite(this.spriteAnimations.idle, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
         this.spriteAnimations.run = new Sprite(this.spriteAnimations.run, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
-        this.spriteAnimations.walk = new Sprite(this.spriteAnimations.walk, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
         let jumpTiming = (60 / ((this.jumpSpeed ) / this.gravity));
         this.spriteAnimations.jump = new Sprite(this.spriteAnimations.jump, this.x, this.y, this.spriteWidth, this.spriteHeight, jumpTiming);
         this.spriteAnimations.basicAttack = new Sprite(this.spriteAnimations.basicAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.basicAttackSpeed);
@@ -378,7 +377,9 @@ class BlackRaven extends Character{
             "block": ravenBlock,
         };
         super(name, 5, 15, x, y, ravenAnimations, 128, 128, playerNumber, opponent);
-         
+        this.basicAttackSpeed = 5;
+        this.heavyAttackSpeed = 10;
+        this.specialAttackSpeed = 20;
     }
 }
 
