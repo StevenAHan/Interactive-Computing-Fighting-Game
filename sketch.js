@@ -81,7 +81,8 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(1200, 800);
+  let cnv = createCanvas(1200, 800);
+  cnv.parent('center');
   background(0);
   
   // Initializing Kitsune
@@ -237,7 +238,7 @@ function menu() {
   text("Player One", 300, 180);
   text("Player Two", width/2+300, 180);
 
-  stroke(51, 102, 0);
+  stroke(10, 0, 120);
   strokeWeight(10);
   //noFill();
   // P1
@@ -256,8 +257,8 @@ function menu() {
   charSelect.chars.char3.display(width/2+120, 350, 0);
   charSelect.chars.char4.display(width/2+300, 350, 0); 
   
-  stroke(255);
-  fill(250,250,250, 50);
+  stroke(175);
+  fill(170, 170,170, 50);
   strokeWeight(3);
   
   // P1
