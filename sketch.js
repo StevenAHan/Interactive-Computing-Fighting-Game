@@ -41,12 +41,15 @@ let kitsuneIdle, kitsuneRun, kitsuneJump,
 let ravenIdle, ravenRun, ravenJump,
   ravenBasicAttack, ravenHeavyAttack, ravenSpecialAttack,
   ravenHurt, ravenDeath, ravenBlock;
+let ravenStrike = [];
+let ravenSpecial = [];
 
 
 let testCharAnimations;
 let theParticles = [];
 let kitsune;
 let ground = 600;
+
 
 function preload() {
   // Load the background images
@@ -73,13 +76,26 @@ function preload() {
   ravenIdle = loadImage("./assets/characters/Raven/Idle.png");
   ravenRun = loadImage("./assets/characters/Raven/Run.png");
   ravenJump = loadImage("./assets/characters/Raven/Jump.png");
-  ravenBasicAttack = loadImage("./assets/characters/Raven/Attack_1.png");
-  ravenHeavyAttack = loadImage("./assets/characters/Raven/Attack_2.png");
-  ravenSpecialAttack = loadImage("./assets/characters/Raven/Attack_3.png");
+  ravenBasicAttack = loadImage("./assets/characters/Raven/Attack_2.png");
+  ravenHeavyAttack = loadImage("./assets/characters/Raven/Attack_3.png");
+  ravenSpecialAttack = loadImage("./assets/characters/Raven/Attack_1.png");
   ravenHurt = loadImage("./assets/characters/Raven/Hurt.png");
   ravenDeath = loadImage("./assets/characters/Raven/Dead.png");
   //TODO
   ravenBlock = loadImage("./assets/characters/Raven/Idle_2.png");
+
+  // Raven Strike Setup
+  for (let i = 1; i <= 8; i++) {
+    let filename = './assets/characters/Raven/ravenStrike/' + nf(i) + '.png';
+    ravenStrike.push(loadImage(filename));
+  }
+  for (let i = 1; i <= 10; i++) {
+    let filename = './assets/characters/Raven/SpecialAttack/' + nf(i) + '.png';
+    ravenSpecial.push(loadImage(filename));
+  }
+  
+
+
 }
 
 function setup() {
@@ -377,6 +393,11 @@ function arena() {
     if(projectiles[i].x > width || projectiles[i].x < 0) {
       projectiles.splice(i, 1);
     }
+
+    // For Temp Projectiles
+    if(projectiles[i].delete()) {
+      projectiles.splice(i, 1);
+    }
   }
 }
 
@@ -396,7 +417,7 @@ function charSelectSetup(charSelect) {
       x: 120, y: 160, name: "Kitsune", factory: Kitsune
     },
     2: {
-      x: 300, y: 160, name: "Black Raven", factory: BlackRaven
+      x: 300, y: 160, name: "Raven", factory: Raven
     },
     3: {
       x: 120, y: 350, name: "char3", factory: Kitsune

@@ -125,4 +125,31 @@ class CharSelect {
 
 }
   
+// Taken from Interactive Computing Day 10 and Adjusted for our use
+class Sequence {
+    constructor(images, x, y, delay, h, w) {
+        this.x = x;
+        this.y = y;
+        this.index = 0;
+        this.paused = false;
+        this.images = images;
+        this.delay = delay;
+        this.timing = 0;
+        this.h = h;
+        this.w = w;
+    }
+    display() {
+        // display the current image in the sequence
+        image(this.images[this.index], this.x, this.y, this.h, this.w);
+        // cycle to the next image in the sequence if we are not paused
+        if (this.paused == false && this.timing % this.delay == 0) {
+            this.index++;
+        }
+        this.timing++;
+    }
+
+    checkEnd() {
+        return this.index >= this.images.length - 1;
+    }
+  }
   

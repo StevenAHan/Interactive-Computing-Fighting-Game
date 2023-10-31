@@ -277,6 +277,15 @@ class Character {
             this.dead = true;
         }
     }
+
+
+    dirMultiplier() {
+        if(this.direction == 0) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
 }
 
 /*
@@ -363,7 +372,7 @@ class Kitsune extends Character {
     
 }
 
-class BlackRaven extends Character{
+class Raven extends Character{
     constructor(name, x, y, playerNumber, opponent=null) {
         let ravenAnimations = {
             "idle": ravenIdle,
@@ -375,12 +384,70 @@ class BlackRaven extends Character{
             "hurt": ravenHurt,
             "die": ravenDeath,
             "block": ravenBlock,
+            "ravenStrike": ravenStrike,
+            "ravenSpecial": ravenSpecial,
         };
         super(name, 5, 15, x, y, ravenAnimations, 128, 128, playerNumber, opponent);
         this.basicAttackSpeed = 5;
-        this.heavyAttackSpeed = 10;
-        this.specialAttackSpeed = 20;
+        this.heavyAttackSpeed = 20;
+        this.specialAttackSpeed = 12;
+        this.strike = false;
+        this.special = false;
     }
+
+    heavyAttack() {
+        this.currAnimation = "heavyAttack";
+        this.hitboxes.attack('heavy');
+        if(this.strike == false) {
+            projectiles.push(new TempProjectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["ravenStrike"], this.direction, 10, 2, this.opponent, 150, 100));
+            this.strike = true;
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.strike = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+
+    specialAttack() {
+        this.currAnimation = "specialAttack";
+        this.hitboxes.attack('special');
+        if(this.special == false && this.spriteAnimations[this.currAnimation].currentFrame == 4) {
+            projectiles.push(new TempProjectile(this.x + 100 * this.dirMultiplier(), this.y, this.spriteAnimations["ravenSpecial"], this.direction, 10, 5, this.opponent, 300, 200));
+            this.special = true;
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.special = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+}
+
+
+class TempProjectile {
+    constructor(x,y, sequence, direction, damage, speed, opponent, h, w) {
+        this.x = x;
+        this.y = y;
+        this.animation = new Sequence(sequence, this.x, this.y, speed, h, w);
+        this.direction = direction;
+        this.damage = damage;
+        this.opponent = opponent;
+        this.hitrad = 8;
+    }
+
+    move() {
+        this.animation.display();
+    }
+
+    check() {
+        //TODO
+    }
+
+    delete() {
+        return this.animation.checkEnd();
+    }
+
 }
 
 /*
