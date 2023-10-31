@@ -1,3 +1,13 @@
+/* THINGS TO DO
+- Fix hitboxes (right now they only work for those facing to the right)
+- Sounds
+- End screen
+- HUD
+- prettify
+
+*/
+
+
 // Home Screen Vars
 let backgroundImage;
 let backgroundOffset = 0;
@@ -17,6 +27,7 @@ let newFont;
 
 // Game Vars to Keep Track of Game State
 let projectiles = [];
+let tprojectiles = [];
 
 // char select data
 let charSelect = {};
@@ -32,12 +43,28 @@ let kitsuneIdle, kitsuneRun, kitsuneJump,
 let ravenIdle, ravenRun, ravenJump,
   ravenBasicAttack, ravenHeavyAttack, ravenSpecialAttack,
   ravenHurt, ravenDeath, ravenBlock;
+let ravenStrike = [];
+let ravenSpecial = [];
+
+let werewolfIdle, werewolfRun, werewolfJump,
+  werewolfBasicAttack, werewolfHeavyAttack, werewolfSpecialAttack,
+  werewolfHurt, werewolfDeath, werewolfBlock;
+let werewolfStrike = [];
+
+let samuraiIdle, samuraiRun, samuraiJump,
+  samuraiBasicAttack, samuraiHeavyAttack, samuraiSpecialAttack,
+  samuraiHurt, samuraiDeath, samuraiBlock;
+let samuraiShot = [];
+
+let fighterIdle, fighterRun, fighterJump,
+  fighterBasicAttack, fighterHeavyAttack, fighterSpecialAttack,
+  fighterHurt, fighterDeath, fighterBlock, fighterFireball;
 
 
 let testCharAnimations;
 let theParticles = [];
-let kitsune;
 let ground = 600;
+
 
 function preload() {
   // Load the background images
@@ -71,23 +98,65 @@ function preload() {
   ravenIdle = loadImage("./assets/characters/Raven/Idle.png");
   ravenRun = loadImage("./assets/characters/Raven/Run.png");
   ravenJump = loadImage("./assets/characters/Raven/Jump.png");
-  ravenBasicAttack = loadImage("./assets/characters/Raven/Attack_1.png");
-  ravenHeavyAttack = loadImage("./assets/characters/Raven/Attack_2.png");
-  ravenSpecialAttack = loadImage("./assets/characters/Raven/Attack_3.png");
+  ravenBasicAttack = loadImage("./assets/characters/Raven/Attack_2.png");
+  ravenHeavyAttack = loadImage("./assets/characters/Raven/Attack_3.png");
+  ravenSpecialAttack = loadImage("./assets/characters/Raven/Attack_1.png");
   ravenHurt = loadImage("./assets/characters/Raven/Hurt.png");
   ravenDeath = loadImage("./assets/characters/Raven/Dead.png");
   //TODO
   ravenBlock = loadImage("./assets/characters/Raven/Idle_2.png");
+
+  // Raven Strike Setup
+  for (let i = 1; i <= 8; i++) {
+    let filename = './assets/characters/Raven/ravenStrike/' + nf(i) + '.png';
+    ravenStrike.push(loadImage(filename));
+  }
+  for (let i = 1; i <= 10; i++) {
+    let filename = './assets/characters/Raven/SpecialAttack/' + nf(i) + '.png';
+    ravenSpecial.push(loadImage(filename));
+  }
+
+  // WereWolf Animations
+  werewolfIdle = loadImage("./assets/characters/Werewolf/Idle.png");
+  werewolfRun = loadImage("./assets/characters/Werewolf/Run.png");
+  werewolfJump = loadImage("./assets/characters/Werewolf/Jump.png");
+  werewolfBasicAttack = loadImage("./assets/characters/Werewolf/Attack_1.png");
+  werewolfHeavyAttack = loadImage("./assets/characters/Werewolf/Attack_2.png");
+  werewolfSpecialAttack = loadImage("./assets/characters/Werewolf/Attack_3.png");
+  werewolfHurt = loadImage("./assets/characters/Werewolf/Hurt.png");
+  werewolfDeath = loadImage("./assets/characters/Werewolf/Dead.png");
+  werewolfBlock = loadImage("./assets/characters/Werewolf/Run+Attack.png");
+
+
+  // Samurai Animations
+  samuraiIdle = loadImage("./assets/characters/Samurai/Idle.png");
+  samuraiRun = loadImage("./assets/characters/Samurai/Run.png");
+  samuraiJump = loadImage("./assets/characters/Samurai/Jump.png");
+  samuraiBasicAttack = loadImage("./assets/characters/Samurai/Attack_1.png");
+  samuraiHeavyAttack = loadImage("./assets/characters/Samurai/Shot.png");
+  samuraiSpecialAttack = loadImage("./assets/characters/Samurai/combined_attack.png");
+  samuraiHurt = loadImage("./assets/characters/Samurai/Hurt.png");
+  samuraiDeath = loadImage("./assets/characters/Samurai/Dead.png");
+  samuraiBlock = loadImage("./assets/characters/Samurai/Walk.png");
+  samuraiArrow = loadImage("./assets/characters/Samurai/Arrow.png");
+
+  // Fighter Animations
+  fighterIdle = loadImage("./assets/characters/Fighter/Idle.png");
+  fighterRun = loadImage("./assets/characters/Fighter/Run.png");
+  fighterJump = loadImage("./assets/characters/Fighter/Jump.png");
+  fighterBasicAttack = loadImage("./assets/characters/Fighter/twopunch.png");
+  fighterHeavyAttack = loadImage("./assets/characters/Fighter/Attack_2.png");
+  fighterSpecialAttack = loadImage("./assets/characters/Fighter/Attack_3.png");
+  fighterHurt = loadImage("./assets/characters/Fighter/Hurt.png");
+  fighterDeath = loadImage("./assets/characters/Fighter/Dead.png");
+  fighterBlock = loadImage("./assets/characters/Fighter/Shield.png");
+  fighterFireball = loadImage("./assets/characters/Fighter/fighter-fireball.png");
 }
 
 function setup() {
   let cnv = createCanvas(1200, 800);
   cnv.parent('center');
   background(0);
-  
-  // Initializing Kitsune
-  kitsune = new Kitsune("Kitsune", 250, ground, 0, null);
-  kitsune.setup();
 
   // init charselect
   charSelectSetup(charSelect);
@@ -380,14 +449,22 @@ function arena() {
       projectiles.splice(i, 1);
     }
   }
+
+  // TODO Hitboxes
+  for(let i = 0; i < tprojectiles.length; i++) {
+    tprojectiles[i].move();
+    if(tprojectiles[i].delete()) {
+      tprojectiles.splice(i, 1);
+    }
+  }
 }
 
 function charSelectSetup(charSelect) {
   charSelect.chars = {
     kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
     raven: new CharSelect(ravenHeavyAttack, 0, 0, 128, 128, 40), 
-    char3: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
-    char4: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40)
+    char3: new CharSelect(samuraiSpecialAttack, 0, 0, 128, 128, 40),
+    char4: new CharSelect(fighterSpecialAttack, 0, 0, 128, 128, 40)
   };
   charSelect.selectors = {
     p1: 1,
@@ -398,13 +475,13 @@ function charSelectSetup(charSelect) {
       x: 120, y: 160, name: "Kitsune", factory: Kitsune
     },
     2: {
-      x: 300, y: 160, name: "Black Raven", factory: BlackRaven
+      x: 300, y: 160, name: "Raven", factory: Raven
     },
     3: {
-      x: 120, y: 350, name: "char3", factory: Kitsune
+      x: 120, y: 350, name: "Samurai", factory: Samurai
     },
     4: {
-      x: 300, y:350, name: "char4", factory: Kitsune
+      x: 300, y:350, name: "Fighter", factory: Fighter
     }
   };
 }

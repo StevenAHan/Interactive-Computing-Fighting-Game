@@ -12,7 +12,7 @@
         opponent - object of the opponent character
 */
 class Character {
-    constructor(name, speed, jumpSpeed, x, y, spriteAnimations, spriteWidth, spriteHeight, playerNumber, opponent=null) {
+    constructor(name, speed, jumpSpeed, x, y, spriteAnimations, spriteWidth, spriteHeight, playerNumber, opponent=null, offset=0) {
         this.name = name;
         this.speed = speed;
         this.jumpSpeed = jumpSpeed;
@@ -38,20 +38,22 @@ class Character {
 
         // list of character's projectiles in existence
         this.projectiles = [];
+
+        this.offset = offset;
     }
 
     // Sets up the character, should only run once in the beginning
     setup() {
-        this.spriteAnimations.idle = new Sprite(this.spriteAnimations.idle, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
-        this.spriteAnimations.run = new Sprite(this.spriteAnimations.run, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
+        this.spriteAnimations.idle = new Sprite(this.spriteAnimations.idle, this.x, this.y, this.spriteWidth, this.spriteHeight, 5, this.offset);
+        this.spriteAnimations.run = new Sprite(this.spriteAnimations.run, this.x, this.y, this.spriteWidth, this.spriteHeight, 5, this.offset);
         let jumpTiming = (60 / ((this.jumpSpeed ) / this.gravity));
-        this.spriteAnimations.jump = new Sprite(this.spriteAnimations.jump, this.x, this.y, this.spriteWidth, this.spriteHeight, jumpTiming);
-        this.spriteAnimations.basicAttack = new Sprite(this.spriteAnimations.basicAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.basicAttackSpeed);
-        this.spriteAnimations.heavyAttack = new Sprite(this.spriteAnimations.heavyAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.heavyAttackSpeed);
-        this.spriteAnimations.specialAttack = new Sprite(this.spriteAnimations.specialAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.specialAttackSpeed);
-        this.spriteAnimations.hurt = new Sprite(this.spriteAnimations.hurt, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
-        this.spriteAnimations.block = new Sprite(this.spriteAnimations.block, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
-        this.spriteAnimations.die = new Sprite(this.spriteAnimations.die, this.x, this.y, this.spriteWidth, this.spriteHeight, 10);
+        this.spriteAnimations.jump = new Sprite(this.spriteAnimations.jump, this.x, this.y, this.spriteWidth, this.spriteHeight, jumpTiming, this.offset);
+        this.spriteAnimations.basicAttack = new Sprite(this.spriteAnimations.basicAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.basicAttackSpeed, this.offset);
+        this.spriteAnimations.heavyAttack = new Sprite(this.spriteAnimations.heavyAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.heavyAttackSpeed, this.offset);
+        this.spriteAnimations.specialAttack = new Sprite(this.spriteAnimations.specialAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.specialAttackSpeed, this.offset);
+        this.spriteAnimations.hurt = new Sprite(this.spriteAnimations.hurt, this.x, this.y, this.spriteWidth, this.spriteHeight, 5, this.offset);
+        this.spriteAnimations.block = new Sprite(this.spriteAnimations.block, this.x, this.y, this.spriteWidth, this.spriteHeight, 5, this.offset);
+        this.spriteAnimations.die = new Sprite(this.spriteAnimations.die, this.x, this.y, this.spriteWidth, this.spriteHeight, 10, this.offset);
     }
 
     displayAndMove() {
@@ -277,6 +279,15 @@ class Character {
             this.dead = true;
         }
     }
+
+
+    dirMultiplier() {
+        if(this.direction == 0) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
 }
 
 /*
@@ -309,7 +320,7 @@ class Kitsune extends Character {
          // Kitsune initializations
          this.basicAttackSpeed = 3;
          this.heavyAttackSpeed = 5;
-         this.specialAttackSpeed = 8;
+         this.specialAttackSpeed = 10;
          this.health = 100;
          this.fireball = false;
          this.bigBall = false;
@@ -322,7 +333,7 @@ class Kitsune extends Character {
         this.currAnimation = "heavyAttack";
         this.hitboxes.attack('heavy');
         if(this.spriteAnimations[this.currAnimation].currentFrame == 3 && this.fireball == false) {
-            projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 64, 64, 10, 5, this.opponent));
+            projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 64, 64, 10, 8, this.opponent));
             this.fireball = true;
         }
 
@@ -340,14 +351,14 @@ class Kitsune extends Character {
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             if(this.bigBall == false) {
                 if(this.direction == 0) {
-                    projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
-                    projectiles.push(new Projectile(this.x + 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
-                    projectiles.push(new Projectile(this.x + 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
 
                 } else {
-                    projectiles.push(new Projectile(this.x - 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
-                    projectiles.push(new Projectile(this.x - 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
-                    projectiles.push(new Projectile(this.x - 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
                 }
             }
             this.state = false;
@@ -363,7 +374,7 @@ class Kitsune extends Character {
     
 }
 
-class BlackRaven extends Character{
+class Raven extends Character{
     constructor(name, x, y, playerNumber, opponent=null) {
         let ravenAnimations = {
             "idle": ravenIdle,
@@ -375,12 +386,158 @@ class BlackRaven extends Character{
             "hurt": ravenHurt,
             "die": ravenDeath,
             "block": ravenBlock,
+            "ravenStrike": ravenStrike,
+            "ravenSpecial": ravenSpecial,
         };
-        super(name, 5, 15, x, y, ravenAnimations, 128, 128, playerNumber, opponent);
+        super(name, 8, 20, x, y, ravenAnimations, 128, 128, playerNumber, opponent);
         this.basicAttackSpeed = 5;
-        this.heavyAttackSpeed = 10;
-        this.specialAttackSpeed = 20;
+        this.heavyAttackSpeed = 20;
+        this.specialAttackSpeed = 12;
+        this.strike = false;
+        this.special = false;
     }
+
+    heavyAttack() {
+        this.currAnimation = "heavyAttack";
+        this.hitboxes.attack('heavy');
+        if(this.strike == false) {
+            tprojectiles.push(new TempProjectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["ravenStrike"], this.direction, 10, 2, this.opponent, 150, 100));
+            this.strike = true;
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.strike = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+
+    specialAttack() {
+        this.currAnimation = "specialAttack";
+        this.hitboxes.attack('special');
+        if(this.special == false && this.spriteAnimations[this.currAnimation].currentFrame == 4) {
+            tprojectiles.push(new TempProjectile(this.x + 100 * this.dirMultiplier(), this.y, this.spriteAnimations["ravenSpecial"], this.direction, 10, 5, this.opponent, 300, 200));
+            this.special = true;
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.special = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+}
+
+class Werewolf extends Character {
+    constructor(name, x, y, playerNumber, opponent=null) {
+        let animations = {
+            "idle": werewolfIdle,
+            "run": werewolfRun,
+            "jump": werewolfJump,
+            "basicAttack": werewolfBasicAttack,
+            "heavyAttack": werewolfHeavyAttack,
+            "specialAttack": werewolfSpecialAttack,
+            "hurt": werewolfHurt,
+            "die": werewolfDeath,
+            "block": werewolfBlock,
+        };
+        super(name, 5, 15, x, y, animations, 128, 128, playerNumber, opponent);
+        this.basicAttackSpeed = 5;
+        this.heavyAttackSpeed = 5;
+        this.specialAttackSpeed = 5;
+    }
+}
+
+class Samurai extends Character {
+    constructor(name, x, y, playerNumber, opponent=null) {
+        let animations = {
+            "idle": samuraiIdle,
+            "run": samuraiRun,
+            "jump": samuraiJump,
+            "basicAttack": samuraiBasicAttack,
+            "heavyAttack": samuraiHeavyAttack,
+            "specialAttack": samuraiSpecialAttack,
+            "hurt": samuraiHurt,
+            "die": samuraiDeath,
+            "block": samuraiBlock,
+            "arrow": samuraiArrow,
+        };
+        super(name, 7, 15, x, y, animations, 128, 128, playerNumber, opponent);
+        this.basicAttackSpeed = 8;
+        this.heavyAttackSpeed = 5;
+        this.specialAttackSpeed = 5;
+        this.arrow = false;
+    }
+
+    heavyAttack() {
+        this.currAnimation = "heavyAttack";
+        this.hitboxes.attack('heavy');
+        if(this.arrow == false && this.spriteAnimations[this.currAnimation].currentFrame == 12) {
+            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["arrow"], this.direction, 64, 64, 20, 10, this.opponent));
+            this.arrow = true;
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.arrow = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+}
+
+class Fighter extends Character {
+    constructor(name, x, y, playerNumber, opponent=null) {
+        let animations = {
+            "idle": fighterIdle,
+            "run": fighterRun,
+            "jump": fighterJump,
+            "basicAttack": fighterBasicAttack,
+            "heavyAttack": fighterHeavyAttack,
+            "specialAttack": fighterSpecialAttack,
+            "hurt": fighterHurt,
+            "die": fighterDeath,
+            "block": fighterBlock,
+
+        };
+        super(name, 8.5, 15, x, y, animations, 128, 128, playerNumber, opponent);
+        this.basicAttackSpeed = 6;
+        this.heavyAttackSpeed = 30;
+        this.specialAttackSpeed = 10;
+        this.fball = false;
+    }
+
+    heavyAttack() {
+        this.currAnimation = "heavyAttack";
+        this.hitboxes.attack('heavy');
+        if(this.fball == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
+            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, fighterFireball, this.direction, 64, 64, 15, 5, this.opponent));
+            this.fball = true;
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.fball = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+}
+
+class TempProjectile {
+    constructor(x,y, sequence, direction, damage, speed, opponent, h, w) {
+        this.x = x;
+        this.y = y;
+        this.animation = new Sequence(sequence, this.x, this.y, speed, h, w);
+        this.direction = direction;
+        this.damage = damage;
+        this.opponent = opponent;
+        this.hitrad = 8;
+    }
+
+    move() {
+        this.animation.display(this.direction);
+    }
+
+
+    delete() {
+        return this.animation.checkEnd();
+    }
+
 }
 
 /*
