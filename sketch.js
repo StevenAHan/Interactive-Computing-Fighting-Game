@@ -28,6 +28,12 @@ let arenaState = {};
 let kitsuneIdle, kitsuneRun, kitsuneJump, 
   kitsuneBasicAttack, kitsuneHeavyAttack, kitsuneSpecialAttack,
   kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk, kitsuneFireball, kitsuneBigFireball;
+
+let ravenIdle, ravenRun, ravenJump,
+  ravenBasicAttack, ravenHeavyAttack, ravenSpecialAttack,
+  ravenHurt, ravenDeath, ravenBlock;
+
+
 let testCharAnimations;
 let theParticles = [];
 let kitsune;
@@ -60,6 +66,18 @@ function preload() {
   //font
   newFont = loadFont("./assets/norwester.otf")
   
+
+  // Raven Animations
+  ravenIdle = loadImage("./assets/characters/Raven/Idle.png");
+  ravenRun = loadImage("./assets/characters/Raven/Run.png");
+  ravenJump = loadImage("./assets/characters/Raven/Jump.png");
+  ravenBasicAttack = loadImage("./assets/characters/Raven/Attack_1.png");
+  ravenHeavyAttack = loadImage("./assets/characters/Raven/Attack_2.png");
+  ravenSpecialAttack = loadImage("./assets/characters/Raven/Attack_3.png");
+  ravenHurt = loadImage("./assets/characters/Raven/Hurt.png");
+  ravenDeath = loadImage("./assets/characters/Raven/Dead.png");
+  //TODO
+  ravenBlock = loadImage("./assets/characters/Raven/Idle_2.png");
 }
 
 function setup() {
@@ -226,17 +244,17 @@ function menu() {
   fill(0);
   rect(100, 200, 400, 400);
   charSelect.chars.kitsune.display(120, 160, 0); 
-  charSelect.chars.kitsune.display(300, 160, 0); 
-  charSelect.chars.kitsune.display(120, 350, 0); 
-  charSelect.chars.kitsune.display(300, 350, 0); 
+  charSelect.chars.raven.display(300, 160, 0); 
+  charSelect.chars.char3.display(120, 350, 0); 
+  charSelect.chars.char4.display(300, 350, 0); 
 
   
   // P2 
   rect(width/2+100, 200, 400, 400);
   charSelect.chars.kitsune.display(width/2+120, 160, 0); 
-  charSelect.chars.kitsune.display(width/2+300, 160, 0); 
-  charSelect.chars.kitsune.display(width/2+120, 350, 0);
-  charSelect.chars.kitsune.display(width/2+300, 350, 0); 
+  charSelect.chars.raven.display(width/2+300, 160, 0); 
+  charSelect.chars.char3.display(width/2+120, 350, 0);
+  charSelect.chars.char4.display(width/2+300, 350, 0); 
   
   stroke(255);
   fill(250,250,250, 50);
@@ -330,8 +348,10 @@ function arenaSetup() {
   arenaState.p1 = new charSelect.spots[charSelect.selectors.p1].factory(charSelect.spots[charSelect.selectors.p1].name, 250, ground, 0, null);
   arenaState.p1.setup();
 
-  arenaState.p2 = new charSelect.spots[charSelect.selectors.p2].factory(charSelect.spots[charSelect.selectors.p2].name, 750, ground, 1, null);
+  arenaState.p2 = new charSelect.spots[charSelect.selectors.p2].factory(charSelect.spots[charSelect.selectors.p2].name, 750, ground, 1, arenaState.p1);
   arenaState.p2.setup();
+  arenaState.p1.opponent = arenaState.p2;
+
 
   mode++;
 }
@@ -364,7 +384,7 @@ function arena() {
 function charSelectSetup(charSelect) {
   charSelect.chars = {
     kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
-    char2: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40), // set all to kitsune for now
+    raven: new CharSelect(ravenHeavyAttack, 0, 0, 128, 128, 40), 
     char3: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
     char4: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40)
   };
@@ -377,7 +397,7 @@ function charSelectSetup(charSelect) {
       x: 120, y: 160, name: "Kitsune", factory: Kitsune
     },
     2: {
-      x: 300, y: 160, name: "char2", factory: Kitsune
+      x: 300, y: 160, name: "Black Raven", factory: BlackRaven
     },
     3: {
       x: 120, y: 350, name: "char3", factory: Kitsune

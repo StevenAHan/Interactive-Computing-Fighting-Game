@@ -34,6 +34,7 @@ class Character {
         this.jumping = false;
         this.state = false;
         this.dead = false;
+        this.hitpoints = 100;
 
         // list of character's projectiles in existence
         this.projectiles = [];
@@ -43,7 +44,6 @@ class Character {
     setup() {
         this.spriteAnimations.idle = new Sprite(this.spriteAnimations.idle, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
         this.spriteAnimations.run = new Sprite(this.spriteAnimations.run, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
-        this.spriteAnimations.walk = new Sprite(this.spriteAnimations.walk, this.x, this.y, this.spriteWidth, this.spriteHeight, 5);
         let jumpTiming = (60 / ((this.jumpSpeed ) / this.gravity));
         this.spriteAnimations.jump = new Sprite(this.spriteAnimations.jump, this.x, this.y, this.spriteWidth, this.spriteHeight, jumpTiming);
         this.spriteAnimations.basicAttack = new Sprite(this.spriteAnimations.basicAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.basicAttackSpeed);
@@ -340,14 +340,14 @@ class Kitsune extends Character {
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             if(this.bigBall == false) {
                 if(this.direction == 0) {
-                    projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
-                    projectiles.push(new Projectile(this.x + 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
-                    projectiles.push(new Projectile(this.x + 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
 
                 } else {
-                    projectiles.push(new Projectile(this.x - 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
-                    projectiles.push(new Projectile(this.x - 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
-                    projectiles.push(new Projectile(this.x - 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
                 }
             }
             this.state = false;
@@ -361,6 +361,26 @@ class Kitsune extends Character {
         this.state = false;
     }
     
+}
+
+class BlackRaven extends Character{
+    constructor(name, x, y, playerNumber, opponent=null) {
+        let ravenAnimations = {
+            "idle": ravenIdle,
+            "run": ravenRun,
+            "jump": ravenJump,
+            "basicAttack": ravenBasicAttack,
+            "heavyAttack": ravenHeavyAttack,
+            "specialAttack": ravenSpecialAttack,
+            "hurt": ravenHurt,
+            "die": ravenDeath,
+            "block": ravenBlock,
+        };
+        super(name, 5, 15, x, y, ravenAnimations, 128, 128, playerNumber, opponent);
+        this.basicAttackSpeed = 5;
+        this.heavyAttackSpeed = 10;
+        this.specialAttackSpeed = 20;
+    }
 }
 
 /*
