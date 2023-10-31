@@ -26,6 +26,7 @@ let instruction = false;
 
 // Game Vars to Keep Track of Game State
 let projectiles = [];
+let tprojectiles = [];
 
 // char select data
 let charSelect = {};
@@ -44,10 +45,18 @@ let ravenIdle, ravenRun, ravenJump,
 let ravenStrike = [];
 let ravenSpecial = [];
 
+let werewolfIdle, werewolfRun, werewolfJump,
+  werewolfBasicAttack, werewolfHeavyAttack, werewolfSpecialAttack,
+  werewolfHurt, werewolfDeath, werewolfBlock;
+let werewolfStrike = [];
+
+let samuraiIdle, samuraiRun, samuraiJump,
+  samuraiBasicAttack, samuraiHeavyAttack, samuraiSpecialAttack,
+  samuraiHurt, samuraiDeath, samuraiBlock;
+let samuraiShot = [];
 
 let testCharAnimations;
 let theParticles = [];
-let kitsune;
 let ground = 600;
 
 
@@ -93,18 +102,35 @@ function preload() {
     let filename = './assets/characters/Raven/SpecialAttack/' + nf(i) + '.png';
     ravenSpecial.push(loadImage(filename));
   }
-  
+
+  // WereWolf Animations
+  werewolfIdle = loadImage("./assets/characters/Werewolf/Idle.png");
+  werewolfRun = loadImage("./assets/characters/Werewolf/Run.png");
+  werewolfJump = loadImage("./assets/characters/Werewolf/Jump.png");
+  werewolfBasicAttack = loadImage("./assets/characters/Werewolf/Attack_1.png");
+  werewolfHeavyAttack = loadImage("./assets/characters/Werewolf/Attack_2.png");
+  werewolfSpecialAttack = loadImage("./assets/characters/Werewolf/Attack_3.png");
+  werewolfHurt = loadImage("./assets/characters/Werewolf/Hurt.png");
+  werewolfDeath = loadImage("./assets/characters/Werewolf/Dead.png");
+  werewolfBlock = loadImage("./assets/characters/Werewolf/Run+Attack.png");
 
 
+  // Samurai Animations
+  samuraiIdle = loadImage("./assets/characters/Samurai/Idle.png");
+  samuraiRun = loadImage("./assets/characters/Samurai/Run.png");
+  samuraiJump = loadImage("./assets/characters/Samurai/Jump.png");
+  samuraiBasicAttack = loadImage("./assets/characters/Samurai/Attack_1.png");
+  samuraiHeavyAttack = loadImage("./assets/characters/Samurai/Shot.png");
+  samuraiSpecialAttack = loadImage("./assets/characters/Samurai/combined_attack.png");
+  samuraiHurt = loadImage("./assets/characters/Samurai/Hurt.png");
+  samuraiDeath = loadImage("./assets/characters/Samurai/Dead.png");
+  samuraiBlock = loadImage("./assets/characters/Samurai/Walk.png");
+  samuraiArrow = loadImage("./assets/characters/Samurai/Arrow.png");
 }
 
 function setup() {
   createCanvas(1200, 800);
   background(0);
-  
-  // Initializing Kitsune
-  kitsune = new Kitsune("Kitsune", 250, ground, 0, null);
-  kitsune.setup();
 
   // init charselect
   charSelectSetup(charSelect);
@@ -393,10 +419,13 @@ function arena() {
     if(projectiles[i].x > width || projectiles[i].x < 0) {
       projectiles.splice(i, 1);
     }
+  }
 
-    // For Temp Projectiles
-    if(projectiles[i].delete()) {
-      projectiles.splice(i, 1);
+  // TODO Hitboxes
+  for(let i = 0; i < tprojectiles.length; i++) {
+    tprojectiles[i].move();
+    if(tprojectiles[i].delete()) {
+      tprojectiles.splice(i, 1);
     }
   }
 }
@@ -405,8 +434,8 @@ function charSelectSetup(charSelect) {
   charSelect.chars = {
     kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
     raven: new CharSelect(ravenHeavyAttack, 0, 0, 128, 128, 40), 
-    char3: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
-    char4: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40)
+    char3: new CharSelect(samuraiSpecialAttack, 0, 0, 128, 128, 40),
+    char4: new CharSelect(werewolfBasicAttack, 0, 0, 128, 128, 40)
   };
   charSelect.selectors = {
     p1: 1,
@@ -420,10 +449,10 @@ function charSelectSetup(charSelect) {
       x: 300, y: 160, name: "Raven", factory: Raven
     },
     3: {
-      x: 120, y: 350, name: "char3", factory: Kitsune
+      x: 120, y: 350, name: "Samurai", factory: Samurai
     },
     4: {
-      x: 300, y:350, name: "char4", factory: Kitsune
+      x: 300, y:350, name: "Werewolf", factory: Werewolf
     }
   };
 }

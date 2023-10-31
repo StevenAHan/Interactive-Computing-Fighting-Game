@@ -1,6 +1,6 @@
 // Taken from day10 source code Interactive Computing and Adjusted for Our Project
 class Sprite {
-    constructor(img, x, y, w, h, pause) {
+    constructor(img, x, y, w, h, pause, offset=0) {
         // each Sprite knows its position, size of the animation cell
         // and source image
         this.x = x;
@@ -8,6 +8,7 @@ class Sprite {
         this.w = w;
         this.h = h;
         this.img = img;
+        this.offset = offset;
 
         // compute how many frames we have by computing the overall width
         // of the sprite and dividing by the cell width
@@ -31,10 +32,10 @@ class Sprite {
         if(direction == 1) {
             push();
             scale(-1, 1);
-            image(this.img, -this.x, this.y, this.w, this.h, this.currentFrame * this.w, 0, this.w, this.h);
+            image(this.img, -this.x, this.y, this.w, this.h, this.currentFrame * this.w + this.offset, 0, this.w, this.h);
             pop();
         } else {
-            image(this.img, this.x, this.y, this.w, this.h, this.currentFrame * this.w, 0, this.w, this.h);
+            image(this.img, this.x, this.y, this.w, this.h, this.currentFrame * this.w + this.offset, 0, this.w, this.h);
         }
         
     
@@ -138,9 +139,17 @@ class Sequence {
         this.h = h;
         this.w = w;
     }
-    display() {
+    display(direction) {
         // display the current image in the sequence
-        image(this.images[this.index], this.x, this.y, this.h, this.w);
+        if(direction == 1) {
+            push();
+            scale(-1, 1);
+            image(this.images[this.index], -this.x, this.y, this.h, this.w);
+            pop();
+        } else {
+            image(this.images[this.index], this.x, this.y, this.h, this.w);
+        }
+        
         // cycle to the next image in the sequence if we are not paused
         if (this.paused == false && this.timing % this.delay == 0) {
             this.index++;
