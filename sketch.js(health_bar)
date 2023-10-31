@@ -1,0 +1,57 @@
+let health1;
+let health2;
+let timer = 99
+let time;
+
+function setup () {
+  createCanvas(500,500)
+  background(128) 
+  health1 = new Health (10, 30)
+  health2 = new Health (275, 30)
+  time = new Timer (width/2, 40)
+}
+
+function draw() {
+  health1.display();
+  health2.display()
+  time.display()
+}
+
+class Health { 
+  constructor (x,y) {
+    this.x = x;
+    this.y = y
+  }
+
+  display() {
+    stroke(51);
+    fill(255,0,0)
+    rect(this.x, this.y, width*3/7, 25)
+  }
+}
+
+class Timer {
+  constructor (x,y) {
+    this.x = x;
+    this.y = y;
+  }
+  display() {
+    stroke(20)
+    fill(255)
+    rectMode(CENTER)
+    rect(this.x, this.y, 50, 50)
+    rectMode(CORNER)
+    fill(0)
+    textFont('Courier New');
+    textAlign(CENTER, CENTER);
+    textSize(30);
+    text(timer, this.x, this.y);
+
+    if (frameCount % 60 == 0 && timer > 0) {
+      timer --;
+    }
+    if (timer == 0) {
+      text("GAME OVER", this.x, this.y+3);
+   }
+  }
+}
