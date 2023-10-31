@@ -460,7 +460,7 @@ class Samurai extends Character {
             "block": samuraiBlock,
             "arrow": samuraiArrow,
         };
-        super(name, 5, 15, x, y, animations, 128, 128, playerNumber, opponent);
+        super(name, 7, 15, x, y, animations, 128, 128, playerNumber, opponent);
         this.basicAttackSpeed = 8;
         this.heavyAttackSpeed = 5;
         this.specialAttackSpeed = 5;
@@ -471,12 +471,48 @@ class Samurai extends Character {
         this.currAnimation = "heavyAttack";
         this.hitboxes.attack('heavy');
         if(this.arrow == false && this.spriteAnimations[this.currAnimation].currentFrame == 12) {
-            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["arrow"], this.direction, 64, 64, 15, 8, this.opponent));
+            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["arrow"], this.direction, 64, 64, 20, 10, this.opponent));
             this.arrow = true;
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.arrow = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+}
+
+class Fighter extends Character {
+    constructor(name, x, y, playerNumber, opponent=null) {
+        let animations = {
+            "idle": fighterIdle,
+            "run": fighterRun,
+            "jump": fighterJump,
+            "basicAttack": fighterBasicAttack,
+            "heavyAttack": fighterHeavyAttack,
+            "specialAttack": fighterSpecialAttack,
+            "hurt": fighterHurt,
+            "die": fighterDeath,
+            "block": fighterBlock,
+
+        };
+        super(name, 8.5, 15, x, y, animations, 128, 128, playerNumber, opponent);
+        this.basicAttackSpeed = 6;
+        this.heavyAttackSpeed = 30;
+        this.specialAttackSpeed = 10;
+        this.fball = false;
+    }
+
+    heavyAttack() {
+        this.currAnimation = "heavyAttack";
+        this.hitboxes.attack('heavy');
+        if(this.fball == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
+            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, fighterFireball, this.direction, 64, 64, 15, 5, this.opponent));
+            this.fball = true;
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.fball = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
         }
     }

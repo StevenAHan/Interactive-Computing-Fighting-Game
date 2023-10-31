@@ -55,6 +55,11 @@ let samuraiIdle, samuraiRun, samuraiJump,
   samuraiHurt, samuraiDeath, samuraiBlock;
 let samuraiShot = [];
 
+let fighterIdle, fighterRun, fighterJump,
+  fighterBasicAttack, fighterHeavyAttack, fighterSpecialAttack,
+  fighterHurt, fighterDeath, fighterBlock, fighterFireball;
+
+
 let testCharAnimations;
 let theParticles = [];
 let ground = 600;
@@ -126,6 +131,18 @@ function preload() {
   samuraiDeath = loadImage("./assets/characters/Samurai/Dead.png");
   samuraiBlock = loadImage("./assets/characters/Samurai/Walk.png");
   samuraiArrow = loadImage("./assets/characters/Samurai/Arrow.png");
+
+  // Fighter Animations
+  fighterIdle = loadImage("./assets/characters/Fighter/Idle.png");
+  fighterRun = loadImage("./assets/characters/Fighter/Run.png");
+  fighterJump = loadImage("./assets/characters/Fighter/Jump.png");
+  fighterBasicAttack = loadImage("./assets/characters/Fighter/twopunch.png");
+  fighterHeavyAttack = loadImage("./assets/characters/Fighter/Attack_2.png");
+  fighterSpecialAttack = loadImage("./assets/characters/Fighter/Attack_3.png");
+  fighterHurt = loadImage("./assets/characters/Fighter/Hurt.png");
+  fighterDeath = loadImage("./assets/characters/Fighter/Dead.png");
+  fighterBlock = loadImage("./assets/characters/Fighter/Shield.png");
+  fighterFireball = loadImage("./assets/characters/Fighter/fighter-fireball.png");
 }
 
 function setup() {
@@ -435,7 +452,7 @@ function charSelectSetup(charSelect) {
     kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
     raven: new CharSelect(ravenHeavyAttack, 0, 0, 128, 128, 40), 
     char3: new CharSelect(samuraiSpecialAttack, 0, 0, 128, 128, 40),
-    char4: new CharSelect(werewolfBasicAttack, 0, 0, 128, 128, 40)
+    char4: new CharSelect(fighterSpecialAttack, 0, 0, 128, 128, 40)
   };
   charSelect.selectors = {
     p1: 1,
@@ -452,7 +469,7 @@ function charSelectSetup(charSelect) {
       x: 120, y: 350, name: "Samurai", factory: Samurai
     },
     4: {
-      x: 300, y:350, name: "Werewolf", factory: Werewolf
+      x: 300, y:350, name: "Fighter", factory: Fighter
     }
   };
 }
