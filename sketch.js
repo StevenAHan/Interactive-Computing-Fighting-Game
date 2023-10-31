@@ -13,6 +13,7 @@ let mode = 0; // FOR TESTING
 let isPlaying = false; // Initialize isPlaying
 let backgroundMusic;
 let instruction = false;
+let newFont;
 
 // Game Vars to Keep Track of Game State
 let projectiles = [];
@@ -37,7 +38,6 @@ function preload() {
   backgroundImage = loadImage("./assets/environments/char_background.png");
   foregroundImage = loadImage("./assets/environments/foreground.png");
   arenaImage = loadImage("./assets/environments/game_background_1.png")
-  // backgroundMusic = loadSound("./assets/environments/background_music.mp3");
 
   // Kitsune Animations
   kitsuneIdle = loadImage("./assets/characters/Kitsune/Idle.png");
@@ -52,6 +52,14 @@ function preload() {
   kitsuneWalk = loadImage("./assets/characters/Kitsune/Walk.png");
   kitsuneFireball = loadImage("./assets/characters/Kitsune/Fire_1_cropped.png");
   kitsuneBigFireball = loadImage("./assets/characters/Kitsune/Fire_2_cropped.png");
+
+  //sounds
+  startsound = loadSound("./assets/sounds/startsbreak.mp3")
+  backgroundMusic = loadSound("./assets/environments/background_music.mp3");
+
+  //font
+  newFont = loadFont("./assets/norwester.otf")
+  
 }
 
 function setup() {
@@ -92,8 +100,8 @@ function keyPressed() {
   } else if (mode === 1 && keyCode === ENTER) {
     if (instruction) {
       instruction = false;
-      // backgroundMusic.setVolume(0.5);
-      // backgroundMusic.loop();
+      //backgroundMusic.setVolume(0.5);
+      //backgroundMusic.loop();
     }
     mode = 2;
     isPlaying = false; // Reset isPlaying
@@ -120,8 +128,11 @@ function titleScreen() {
     isPlaying = true;
 
     // Initialize and play background music
-    // backgroundMusic.setVolume(0.5);
-    // backgroundMusic.loop();
+    startsound.setVolume(0.5)
+    startsound.play(.9)
+
+    //backgroundMusic.setVolume(0.5);
+    //backgroundMusic.loop();
   }
   // Fade in effect
   if (titleScreenOpacityDirection === 1 && titleScreenOpacity < 255) {
@@ -161,6 +172,7 @@ function warning() {
   // Display "WARNING" in big red text
   fill(255, 0, 0); // Set text color to red
   textSize(36);
+  textFont(newFont);
   text(warningText, width / 2, height / 2 - 50);
 
   // Display the subtext in white
@@ -193,27 +205,25 @@ function menu() {
   image(backgroundImage, -backgroundOffset, y, backgroundImage.width, backgroundImage.height);
   image(backgroundImage, backgroundImage.width - backgroundOffset, y, backgroundImage.width, backgroundImage.height);
 
-
-
   // character select
   textAlign(LEFT);
   textSize(80);
   fill(255);
   noStroke();
-  // TODO: font?
   textAlign(CENTER);
   text("Choose your characters", 600, 100);
   
   // char boxes
   textSize(50);
-  fill(255, 0, 0);
-  text("Player One", 250, 180);
-  text("Player Two", width/2+250, 180);
+  fill(250);
+  text("Player One", 300, 180);
+  text("Player Two", width/2+300, 180);
 
-  stroke(255, 0, 0);
+  stroke(51, 102, 0);
   strokeWeight(10);
-  noFill();
+  //noFill();
   // P1
+  fill(0);
   rect(100, 200, 400, 400);
   charSelect.chars.kitsune.display(120, 160, 0); 
   charSelect.chars.kitsune.display(300, 160, 0); 
@@ -229,7 +239,8 @@ function menu() {
   charSelect.chars.kitsune.display(width/2+300, 350, 0); 
   
   stroke(255);
-  strokeWeight(5);
+  fill(250,250,250, 50);
+  strokeWeight(3);
   
   // P1
   rect(charSelect.spots[charSelect.selectors.p1].x, charSelect.spots[charSelect.selectors.p1].y+60, 160, 160);
@@ -303,9 +314,9 @@ function menu() {
 
   // list selected character
   noStroke();
-  fill(0, 255, 155);
-  text(charSelect.spots[charSelect.selectors.p1].name, 250, 660);
-  text(charSelect.spots[charSelect.selectors.p2].name, width/2+250, 660);
+  fill(153, 204, 255);
+  text(charSelect.spots[charSelect.selectors.p1].name, 300, 660);
+  text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
 
   fill(255);
 
