@@ -309,7 +309,7 @@ class Kitsune extends Character {
          // Kitsune initializations
          this.basicAttackSpeed = 3;
          this.heavyAttackSpeed = 5;
-         this.specialAttackSpeed = 8;
+         this.specialAttackSpeed = 10;
          this.health = 100;
          this.fireball = false;
          this.bigBall = false;
@@ -322,7 +322,7 @@ class Kitsune extends Character {
         this.currAnimation = "heavyAttack";
         this.hitboxes.attack('heavy');
         if(this.spriteAnimations[this.currAnimation].currentFrame == 3 && this.fireball == false) {
-            projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 64, 64, 10, 5, this.opponent));
+            projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 64, 64, 10, 8, this.opponent));
             this.fireball = true;
         }
 
@@ -340,14 +340,14 @@ class Kitsune extends Character {
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             if(this.bigBall == false) {
                 if(this.direction == 0) {
-                    projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
-                    projectiles.push(new Projectile(this.x + 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
-                    projectiles.push(new Projectile(this.x + 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
 
                 } else {
-                    projectiles.push(new Projectile(this.x - 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
-                    projectiles.push(new Projectile(this.x - 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
-                    projectiles.push(new Projectile(this.x - 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 8, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
                 }
             }
             this.state = false;

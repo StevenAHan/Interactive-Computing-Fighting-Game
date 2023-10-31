@@ -1,3 +1,13 @@
+/* THINGS TO DO
+- Fix hitboxes (right now they only work for those facing to the right)
+- Sounds
+- End screen
+- HUD
+- prettify
+
+*/
+
+
 // Home Screen Vars
 let backgroundImage;
 let backgroundOffset = 0;
