@@ -509,9 +509,8 @@ function endGame(){
   fill(255);
   noStroke();
   textAlign(CENTER);
-  text("GAME OVER", 600, 100);
-  fill(255,255,0)
-  text("Winner", 600, 300)
+  //text("GAME OVER", 600, 100);
+  text("VICTORY", 600, 300)
 
   if(arenaState.p1.hitpoints > 0){
   }
