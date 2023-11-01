@@ -235,6 +235,8 @@ class Character {
     basicAttack() {
         this.currAnimation = "basicAttack";
         this.hitboxes.attack('light');
+        this.opponent.hitboxes.checkHit(this, 'light');
+
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
@@ -267,8 +269,10 @@ class Character {
         }
     }
 
-    takeDamage() {
+    takeDamage(amount) {
         // TODO
+        console.log("damage: " + amount);
+
     }
 
     die() {
@@ -332,6 +336,7 @@ class Kitsune extends Character {
     heavyAttack() {
         this.currAnimation = "heavyAttack";
         this.hitboxes.attack('heavy');
+        this.opponent.hitboxes.checkHit(this, 'heavy');
         if(this.spriteAnimations[this.currAnimation].currentFrame == 3 && this.fireball == false) {
             projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 64, 64, 10, 8, this.opponent));
             this.fireball = true;
@@ -582,6 +587,12 @@ class Projectile {
     check() {
         this.opponent.hitboxes.checkHitProjectile(this);
     }
+
+    disappear() {
+        // TODO: make this projectile go away
+        this.x = width+20;
+        this.direction = 0;
+    }
 }
 
 // class to represent a hitbox for a character.
@@ -605,28 +616,47 @@ class HitBoxes {
         this.direction = [ [new HitBox(-25, 5, -5, 46), new HitBox(-10, 5, 45, 63)], 
                            [new HitBox(-5, 25, -5, 46), new HitBox(-5, 10, 45, 63)]];
 
-        this.attacks = {
-            light: [new HitBox(15, 40, 0, 25)],
-            heavy: [new HitBox(15, 40, 0, 25)],
-            special: [new HitBox(15, 40, 0, 25)]
+        this.attacks = { // TODO: make these accurate
+            light: [[new HitBox(15, 40, 0, 25)], [new HitBox(-25, 40, -10, 25)]], // first list is facing right, second facing left
+            heavy: [[new HitBox(15, 40, 0, 25)], [new HitBox(15, 40, 0, 25)]],
+            special: [[new HitBox(15, 40, 0, 25)], [new HitBox(15, 40, 0, 25)]]
         }
     }
 
     // check if the attack passed in hit the char's hitbox, or if blocked
-    checkHit(attack) {
+    // expected input: the opponent, and the attack type
+    checkHit(opponent, attackType) {
         // TODO
+        let char = this.char;
+        let attack = opponent.hitboxes.attacks[attackType][opponent.direction]; // the attack hitbox array
+        
+        this.direction[this.char.direction].forEach(h => {
+            attack.forEach(a => {
+                if ( ((opponent.x+a.left > char.x+h.left && opponent.x+a.left < char.x+h.right) || (opponent.x+a.right > char.x+h.left && opponent.x+a.right < char.x+h.right)) && 
+                     ((opponent.y+a.top > char.y+h.top && opponent.y+a.top < char.y+h.bottom) || (opponent.y+a.bottom > char.y+h.top && opponent.y+a.bottom < char.y+h.bottom))
+                ) {
+                    // it's a hit (think it works)
+                    if( this.char.state === "block" ) {
+                        // TODO: blocking logic
+                    }
+                    char.takeDamage(20);
+                    // TODO: end the attack
+                }
+            });
+        });
     }
 
     checkHitProjectile(proj) {
-        
+        let char = this.char;
         this.direction[this.char.direction].forEach(h => {
-            if ( (proj.x-proj.hitrad <= h.right) && 
-                 (proj.x+proj.hitrad >= h.left) && 
-                 (proj.y-proj.hitrad >= h.top) && 
-                 (proj.y+proj.hitrad <= h.bottom) ) 
+            if ( (proj.x-proj.hitrad <= h.right+char.x) && 
+            (proj.x+proj.hitrad >= h.left+char.x) && 
+            (proj.y-proj.hitrad >= h.top+char.y) && 
+            (proj.y+proj.hitrad <= h.bottom+char.y) ) 
             {
                 // it's a hit!
-                
+                char.takeDamage(proj.damage);
+                proj.disappear();
             }
         })
     }
@@ -642,22 +672,21 @@ class HitBoxes {
                 line(h.left+this.char.x, h.bottom+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
             });
 
-
-
         noStroke();
     }
 
     // draws attack hitbox
     attack(type) {
         stroke('green');
-        console.log(type);
-        this.attacks[type].forEach(h => {
-            line(h.left+this.char.x, h.top+this.char.y, h.left+this.char.x, h.bottom+this.char.y);
-            line(h.right+this.char.x, h.top+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
-            line(h.left+this.char.x, h.top+this.char.y, h.right+this.char.x, h.top+this.char.y);
-            line(h.left+this.char.x, h.bottom+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
+        let char = this.char;
+        this.attacks[type][char.direction].forEach(h => {
+            line(h.left+char.x, h.top+char.y, h.left+char.x, h.bottom+char.y);
+            line(h.right+char.x, h.top+char.y, h.right+char.x, h.bottom+char.y);
+            line(h.left+char.x, h.top+char.y, h.right+char.x, h.top+char.y);
+            line(h.left+char.x, h.bottom+char.y, h.right+char.x, h.bottom+char.y);
         });
 
         noStroke();
+
     }
 }
