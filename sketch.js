@@ -23,7 +23,7 @@ let mode = 0; // FOR TESTING
 let isPlaying = false; // Initialize isPlaying
 let backgroundMusic;
 let instruction = false;
-let newFont;
+let newFont, blood;
 
 // Game Vars to Keep Track of Game State
 let projectiles = [];
@@ -92,6 +92,7 @@ function preload() {
 
   //font
   newFont = loadFont("./assets/norwester.otf")
+  blood = loadImage("./assets/environments/blood.png")
   
 
   // Raven Animations
@@ -177,6 +178,10 @@ function draw() {
     } else if (mode === 4) { 
       arena();
     }
+    else if (mode === 5) { 
+      endGame();
+    }
+
 }
 
 function keyPressed() {
@@ -198,7 +203,7 @@ function keyPressed() {
   // TEMP for testing
   else if(keyCode === ENTER) {
     mode++;
-    if(mode >= 5) {
+    if(mode > 5) {
       mode = 0;
     }
   }
@@ -422,8 +427,17 @@ function arenaSetup() {
   arenaState.p2.setup();
   arenaState.p1.opponent = arenaState.p2;
 
+  background(0);
+  text(charSelect.spots[charSelect.selectors.p1].name, 300, 660);
+  fill(255,0,0)
+  text("VERSUS", 600, 660)
+  fill(255)
+  text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
+  console.log(frameCount)
 
-  mode++;
+  if(frameCount %400 == 0){
+    mode++;
+  }
 }
 
 function arena() {
@@ -485,6 +499,30 @@ function charSelectSetup(charSelect) {
     }
   };
 }
+
+function endGame(){
+  background(0)
+  blood.resize(1200, 600);
+  imageMode(LEFT)
+  image(blood, 600, 300)
+  textSize(100);
+  fill(255);
+  noStroke();
+  textAlign(CENTER);
+  text("GAME OVER", 600, 100);
+  fill(255,255,0)
+  text("Winner", 600, 300)
+
+  if(arenaState.p1.hitpoints > 0){
+  }
+  else{
+    
+  }
+  textSize(50);
+  fill(255);
+  text("Play again?", 600, 700)
+}
+
 
 
   
