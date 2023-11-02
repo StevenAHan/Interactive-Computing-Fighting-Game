@@ -21,7 +21,7 @@ let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
 let mode = 0; // FOR TESTING
 let isPlaying = false; // Initialize isPlaying
-let backgroundMusic;
+let backgroundMusic, versus;
 let instruction = false;
 let newFont, blood;
 
@@ -89,6 +89,7 @@ function preload() {
   //sounds
   startsound = loadSound("./assets/sounds/startsbreak.mp3")
   backgroundMusic = loadSound("./assets/environments/background_music.mp3");
+  versus = loadSound("./assets/sounds/versus.mp3")
 
   //font
   newFont = loadFont("./assets/norwester.otf")
@@ -203,7 +204,7 @@ function keyPressed() {
   // TEMP for testing
   else if(keyCode === ENTER) {
     mode++;
-    if(mode > 5) {
+    if(mode >= 5) {
       mode = 0;
     }
   }
@@ -415,6 +416,7 @@ function menu() {
 
   // then user presses enter to move to game, and these chars are used
   text("Press Enter to continue", 600, 740);
+  instruction = true;
 }
 
 // sets up game state before playing
@@ -427,6 +429,12 @@ function arenaSetup() {
   arenaState.p2.setup();
   arenaState.p1.opponent = arenaState.p2;
 
+  if(instruction){
+    versus.play();
+    instruction = false;
+  }
+  versus.onended(finished);
+
   background(0);
   text(charSelect.spots[charSelect.selectors.p1].name, 300, 660);
   fill(255,0,0)
@@ -435,24 +443,26 @@ function arenaSetup() {
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
   console.log(frameCount)
 
-  if(frameCount %400 == 0){
-    mode++;
-  }
+  // if(frameCount %400 == 0){
+  //   mode++;
+  // }
+}
+function finished(){
+  mode++;
 }
 
 function arena() {
   imageMode(CENTER);
   image(arenaImage, width, height, width * 2, height * 2);
-  fill(0, 150);
-  rect(200, 130, 800, 150);
-  fill(255);
-  textSize(20);
-  text("Controls:", 600, 170);
-  textSize(12);
-  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, f - block, y - test die, u - respawn", 600, 200);
-  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, h - block, m - test die, n - respawn", 600, 230);
-  fill(255, 128, 128);
-  text("Note: Kitsune cannot block", 600, 260);
+  //if space is pressed show the controls
+  if(keyIsDown(32)){
+    controls()
+  }
+  else{
+    fill(0)
+    textSize(30)
+    text("Press space for controls", 600, 790)
+  }
   arenaState.p1.displayAndMove();
   arenaState.p2.displayAndMove();
 
@@ -500,26 +510,35 @@ function charSelectSetup(charSelect) {
   };
 }
 
-function endGame(){
-  background(0)
-  blood.resize(1200, 600);
-  imageMode(LEFT)
-  image(blood, 600, 300)
-  textSize(100);
+function controls(){
+  fill(0, 150);
+  //rect(200, 130, 800, 150);
+  rect(50, 300, 300, 170)
+  rect(850, 300, 300, 170)
   fill(255);
-  noStroke();
-  textAlign(CENTER);
-  //text("GAME OVER", 600, 100);
-  text("VICTORY", 600, 300)
-
-  if(arenaState.p1.hitpoints > 0){
-  }
-  else{
-    
-  }
-  textSize(50);
+  textSize(80);
+  //text("Controls", 600, 170);
+  text("Controls", 600, 400);
+  fill(153, 204, 255);
+  textSize(40);
+  text("Player 1", 200, 345);
+  text("Player 2", 1000, 345);
   fill(255);
-  text("Play again?", 600, 700)
+  textSize(20);
+  text("wasd - move", 200, 370);
+  text("e - basic attack", 200, 390);
+  text("q - heavy attack", 200, 410);
+  text("r - special attack", 200, 430);
+  text("f - block (N/A for kitsune)", 200, 450);
+  text("ijkl - move", 1000, 370);
+  text("u - basic attack", 1000, 390);
+  text("o - heavy attack", 1000, 410);
+  text("y - special attack", 1000, 430);
+  text("h - block (N/A for kitsune)", 1000, 450);
+  //text("Player 1: wasd - move, e - basic attack, q - heavy attack, r - special attack, f - block, y - test die, u - respawn", 600, 200);
+  //text("Player 2: ijkl - move, u - basic attack, o - heavy attack, y - special attack, h - block, m - test die, n - respawn", 600, 230);
+  fill(255, 128, 128);
+  //text("Note: Kitsune cannot block", 600, 260);
 }
 
 
