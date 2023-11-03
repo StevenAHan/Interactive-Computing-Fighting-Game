@@ -486,7 +486,7 @@ class Fighter extends Character {
         super(name, 8.5, 15, x, y, animations, 128, 128, playerNumber, opponent);
         this.basicAttackSpeed = 6;
         this.heavyAttackSpeed = 30;
-        this.specialAttackSpeed = 10;
+        this.specialAttackSpeed = 20;
         this.fball = false;
         this.health = 200;
     }
