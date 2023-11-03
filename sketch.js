@@ -64,6 +64,7 @@ let fighterIdle, fighterRun, fighterJump,
 let testCharAnimations;
 let theParticles = [];
 let ground = 600;
+let end = false;
 
 
 function preload() {
@@ -199,14 +200,11 @@ function keyPressed() {
     }
     mode = 2;
     isPlaying = false; // Reset isPlaying
-  } 
-
-  // TEMP for testing
-  else if(keyCode === ENTER) {
-    mode++;
-    if(mode >= 5) {
-      mode = 0;
-    }
+  } else if (mode === 2 && keyCode === ENTER) {
+    mode = 3;
+  } else if(mode === 3 && keyCode === ENTER && end) {
+    mode = 2;
+    end = false;
   }
 }
 
@@ -481,6 +479,15 @@ function arena() {
     if(tprojectiles[i].delete()) {
       tprojectiles.splice(i, 1);
     }
+  }
+
+  textSize(50);
+  if(arenaState.p1.dying) {
+    text("Player 2 Wins!", 600, 400);
+    end = true;
+  } else if(arenaState.p2.dying) {
+    text("Player 1 Wins!", 600, 400);
+    end = true;
   }
 }
 

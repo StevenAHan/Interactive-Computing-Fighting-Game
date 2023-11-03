@@ -34,12 +34,13 @@ class Character {
         this.jumping = false;
         this.state = false;
         this.dead = false;
-        this.hitpoints = 100;
-
+        this.dying = false;
+        this.health = 100;
         // list of character's projectiles in existence
         this.projectiles = [];
 
         this.offset = offset;
+        this.blocking = false;
     }
 
     // Sets up the character, should only run once in the beginning
@@ -57,6 +58,9 @@ class Character {
     }
 
     displayAndMove() {
+        if(this.dying) {
+            this.die();
+        }
         if(!this.dead) {
             this.spriteAnimations[this.currAnimation].display(this.x, this.y, this.direction);
         }
@@ -104,22 +108,6 @@ class Character {
                 // r - special attack
                 if(keyIsDown(82)) {
                     this.state = "specialAttack";
-                }
-
-                // f- block
-                if(keyIsDown(70)) {
-                    this.state = "block";
-                }
-
-
-                // x - TEST DIE
-                if(keyIsDown(88)) {
-                    this.state = "die";
-                }
-
-                // z - respawn
-                if(keyIsDown(90)) {
-                    this.dead = false;
                 }
             }
 
@@ -171,22 +159,6 @@ class Character {
                 // y - special attack
                 if(keyIsDown(89)) {
                     this.state = "specialAttack";
-                }
-
-                // h - block
-                if(keyIsDown(72)) {
-                    this.state = "block";
-                }
-
-
-                // m - TEST DIE
-                if(keyIsDown(77)) {
-                    this.state = "die";
-                }
-
-                // n - respawn
-                if(keyIsDown(78)) {
-                    this.dead = false;
                 }
             }
         }
@@ -263,18 +235,24 @@ class Character {
 
     block() {
         this.currAnimation = "block";
+        this.blocking = true;
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
+            this.blocking = false
             this.spriteAnimations[this.currAnimation].resetFrames();
         }
     }
 
     takeDamage(amount) {
-        // TODO
-        this.hitpoints-=amount;
-        console.log("character" + this.hitpoints);
-        console.log("damage: " + amount);
-
+        if(this.blocking) {
+            this.health -= amount / 2;
+        } else {
+            this.health -= amount;
+        }
+        if(this.health <= 0) {
+            this.dying = true;
+        } 
+        console.log("damage: " + amount, "health: " + this.health);
     }
 
     die() {
@@ -327,7 +305,7 @@ class Kitsune extends Character {
          this.basicAttackSpeed = 3;
          this.heavyAttackSpeed = 5;
          this.specialAttackSpeed = 10;
-         this.health = 100;
+         this.health = 125;
          this.fireball = false;
          this.bigBall = false;
          
@@ -401,6 +379,7 @@ class Raven extends Character{
         this.heavyAttackSpeed = 20;
         this.specialAttackSpeed = 12;
         this.strike = false;
+        this.health = 150;
         this.special = false;
     }
 
@@ -471,6 +450,7 @@ class Samurai extends Character {
         this.basicAttackSpeed = 8;
         this.heavyAttackSpeed = 5;
         this.specialAttackSpeed = 5;
+        this.health = 150;
         this.arrow = false;
     }
 
@@ -506,13 +486,24 @@ class Fighter extends Character {
         super(name, 8.5, 15, x, y, animations, 128, 128, playerNumber, opponent);
         this.basicAttackSpeed = 6;
         this.heavyAttackSpeed = 30;
-        this.specialAttackSpeed = 10;
+        this.specialAttackSpeed = 20;
         this.fball = false;
+        this.health = 200;
     }
 
     heavyAttack() {
-        this.currAnimation = "heavyAttack";
-        this.hitboxes.attack('heavy');
+        this.currAnimation = "block";
+        this.blocking = true;
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.blocking = false
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+    
+    specialAttack() {
+        this.currAnimation = "specialAttack";
+        this.hitboxes.attack('special');
         if(this.fball == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
             projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, fighterFireball, this.direction, 64, 64, 15, 5, this.opponent));
             this.fball = true;
@@ -523,6 +514,7 @@ class Fighter extends Character {
             this.spriteAnimations[this.currAnimation].resetFrames();
         }
     }
+
 }
 
 class TempProjectile {
