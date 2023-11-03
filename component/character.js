@@ -36,8 +36,12 @@ class Character {
         this.dead = false;
         this.dying = false;
         this.health = 100;
+        this.origHealth = this.health;
+        this.healthPercentage = 1;
         // list of character's projectiles in existence
         this.projectiles = [];
+        this.getHurt = false;
+        this.immune = false;
 
         this.offset = offset;
         this.blocking = false;
@@ -52,14 +56,23 @@ class Character {
         this.spriteAnimations.basicAttack = new Sprite(this.spriteAnimations.basicAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.basicAttackSpeed, this.offset);
         this.spriteAnimations.heavyAttack = new Sprite(this.spriteAnimations.heavyAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.heavyAttackSpeed, this.offset);
         this.spriteAnimations.specialAttack = new Sprite(this.spriteAnimations.specialAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.specialAttackSpeed, this.offset);
-        this.spriteAnimations.hurt = new Sprite(this.spriteAnimations.hurt, this.x, this.y, this.spriteWidth, this.spriteHeight, 5, this.offset);
+        this.spriteAnimations.hurt = new Sprite(this.spriteAnimations.hurt, this.x, this.y, this.spriteWidth, this.spriteHeight, 15, this.offset);
         this.spriteAnimations.block = new Sprite(this.spriteAnimations.block, this.x, this.y, this.spriteWidth, this.spriteHeight, 5, this.offset);
         this.spriteAnimations.die = new Sprite(this.spriteAnimations.die, this.x, this.y, this.spriteWidth, this.spriteHeight, 10, this.offset);
     }
 
     displayAndMove() {
+        if(this.immune != false) {
+            this.immune++;
+            if(this.immune == 50) {
+                this.immune = false;
+            }
+        }
         if(this.dying) {
             this.die();
+        }
+        if(this.getHurt) {
+            this.hurt();
         }
         if(!this.dead) {
             this.spriteAnimations[this.currAnimation].display(this.x, this.y, this.direction);
@@ -177,20 +190,25 @@ class Character {
         }
 
         // check states
-        if(this.state == "basicAttack") {
-            this.basicAttack();
-        }
-        if(this.state == "heavyAttack") {
-            this.heavyAttack();
-        }
-        if(this.state == "specialAttack") {
-            this.specialAttack();
-        }
-        if(this.state == "die") {
-            this.die();
-        }
-        if(this.state == "block") {
-            this.block();
+        if(!this.dying || !this.dead) {
+            if(this.state == "basicAttack") {
+                this.basicAttack();
+            }
+            if(this.state == "heavyAttack") {
+                this.heavyAttack();
+            }
+            if(this.state == "specialAttack") {
+                this.specialAttack();
+            }
+            if(this.state == "die") {
+                this.die();
+            }
+            if(this.state == "block") {
+                this.block();
+            }
+            if(this.state == "hurt") {
+                this.currAnimation = "hurt";
+            }
         }
 
         
@@ -244,14 +262,17 @@ class Character {
     }
 
     takeDamage(amount) {
+        this.immune = 1;
         if(this.blocking) {
             this.health -= amount / 2;
         } else {
             this.health -= amount;
+            this.getHurt = true;
         }
         if(this.health <= 0) {
             this.dying = true;
         } 
+        this.healthPercentage = this.health / this.origHealth;
         console.log("damage: " + amount, "health: " + this.health);
     }
 
@@ -261,6 +282,15 @@ class Character {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
             this.dead = true;
+        }
+    }
+
+    hurt() {
+        this.state = "hurt";
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.getHurt = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
         }
     }
 
@@ -336,27 +366,20 @@ class Kitsune extends Character {
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             if(this.bigBall == false) {
                 if(this.direction == 0) {
-                    projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
-                    projectiles.push(new Projectile(this.x + 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
-                    projectiles.push(new Projectile(this.x + 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 10, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 10, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x + 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 10, 6, this.opponent));
 
                 } else {
-                    projectiles.push(new Projectile(this.x - 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
-                    projectiles.push(new Projectile(this.x - 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
-                    projectiles.push(new Projectile(this.x - 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 20, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 10, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 8, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 10, 6, this.opponent));
+                    projectiles.push(new Projectile(this.x - 20, this.y + 28, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 10, 6, this.opponent));
                 }
             }
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
         }
     }
-
-    // Kitsune Cannot Block
-    block() {
-        this.currAnimation = "idle";
-        this.state = false;
-    }
-    
 }
 
 class Raven extends Character{
@@ -593,11 +616,12 @@ class Projectile {
 // Takes 4 params: min/max x and min.max y
 // which define the 'box'
 class HitBox {
-    constructor(left, right, top, bottom) {
+    constructor(left, right, top, bottom, damage=20) {
         this.left = left;
         this.right = right;
         this.top = top;
         this.bottom = bottom;
+        this.damage = damage;
     }
 }
 
@@ -626,15 +650,16 @@ class HitBoxes {
         
         this.direction[this.char.direction].forEach(h => {
             attack.forEach(a => {
-                if ( ((opponent.x+a.left > char.x+h.left && opponent.x+a.left < char.x+h.right) || (opponent.x+a.right > char.x+h.left && opponent.x+a.right < char.x+h.right)) && 
-                     ((opponent.y+a.top > char.y+h.top && opponent.y+a.top < char.y+h.bottom) || (opponent.y+a.bottom > char.y+h.top && opponent.y+a.bottom < char.y+h.bottom))
+                if ( ((opponent.x+a.left > char.x+h.left && opponent.x+a.left < char.x+h.right) || 
+                (opponent.x+a.right > char.x+h.left && opponent.x+a.right < char.x+h.right)) && 
+                     ((opponent.y+a.top > char.y+h.top && opponent.y+a.top < char.y+h.bottom) || 
+                     (opponent.y+a.bottom > char.y+h.top && opponent.y+a.bottom < char.y+h.bottom))
                 ) {
-                    // it's a hit (think it works)
-                    if( this.char.state === "block" ) {
-                        // TODO: blocking logic
+                    // attack only once
+                    console.log("hit!");
+                    if(char.immune == false) {
+                        char.takeDamage(a.damage);
                     }
-                    char.takeDamage(20);
-                    // TODO: end the attack
                 }
             });
         });

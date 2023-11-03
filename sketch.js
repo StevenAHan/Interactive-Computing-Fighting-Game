@@ -196,7 +196,7 @@ function keyPressed() {
     isPlaying = false; // Reset isPlaying
   } else if (mode === 2 && keyCode === ENTER) {
     mode = 3;
-  } else if(mode === 3 && keyCode === ENTER && end) {
+  } else if(mode === 4 && keyCode === ENTER && end == true) {
     mode = 2;
     end = false;
   }
@@ -455,23 +455,27 @@ function arena() {
       tprojectiles.splice(i, 1);
     }
   }
-
+  fill(128, 0, 0)
   textSize(50);
   if(arenaState.p1.dying) {
     text("Player 2 Wins!", 600, 400);
+    textSize(25);
+    text("Press Enter to Go Back to Character Selection", 600, 450);
     end = true;
   } else if(arenaState.p2.dying) {
     text("Player 1 Wins!", 600, 400);
+    textSize(25);
+    text("Press Enter to Go Back to Character Selection", 600, 450);
     end = true;
   }
 }
 
 function charSelectSetup(charSelect) {
   charSelect.chars = {
-    kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
-    raven: new CharSelect(ravenHeavyAttack, 0, 0, 128, 128, 40), 
-    char3: new CharSelect(samuraiSpecialAttack, 0, 0, 128, 128, 40),
-    char4: new CharSelect(fighterSpecialAttack, 0, 0, 128, 128, 40)
+    kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 20),
+    raven: new CharSelect(ravenSpecialAttack, 0, 0, 128, 128, 20), 
+    char3: new CharSelect(samuraiSpecialAttack, 0, 0, 128, 128, 20),
+    char4: new CharSelect(fighterSpecialAttack, 0, 0, 128, 128, 20)
   };
   charSelect.selectors = {
     p1: 1,
