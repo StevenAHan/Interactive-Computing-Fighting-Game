@@ -21,7 +21,7 @@ class Character {
         this.gravity = 1;
         this.x = x;
         this.y = y;
-        this.hitboxes = new HitBoxes(this);
+        //this.hitboxes = new HitBoxes(this);
         this.spriteAnimations = spriteAnimations;
         this.spriteWidth = spriteWidth;
         this.spriteHeight = spriteHeight;
@@ -252,7 +252,7 @@ class Character {
         if(this.health <= 0) {
             this.dying = true;
         } 
-        console.log("damage: " + amount, "health: " + this.health);
+        console.log("character:" + this.name + " damage: " + amount, "health: " + this.health);
     }
 
     die() {
@@ -308,7 +308,7 @@ class Kitsune extends Character {
          this.health = 125;
          this.fireball = false;
          this.bigBall = false;
-         
+         this.hitboxes = new HitBoxes(this, 15, 40, 5, 50, 0, 0, 0, 0, 0, 0, 0, 0);
     }
     // Kitsune Basic Attack - Swipes tail and deals damage directly in front
 
@@ -381,6 +381,7 @@ class Raven extends Character{
         this.strike = false;
         this.health = 150;
         this.special = false;
+        this.hitboxes = new HitBoxes(this, 10, 70, 0, 30, 10, 80, 0, 55, 80, 220, -60, 60);
     }
 
     heavyAttack() {
@@ -429,6 +430,7 @@ class Werewolf extends Character {
         this.basicAttackSpeed = 5;
         this.heavyAttackSpeed = 5;
         this.specialAttackSpeed = 5;
+        this.hitboxes = new HitBoxes(this, 15, 40, 5, 50, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 }
 
@@ -452,6 +454,7 @@ class Samurai extends Character {
         this.specialAttackSpeed = 5;
         this.health = 150;
         this.arrow = false;
+        this.hitboxes = new HitBoxes(this, 15, 70, 5, 30, 0, 0, 0, 0, 10, 70, -10, 50);
     }
 
     heavyAttack() {
@@ -481,7 +484,6 @@ class Fighter extends Character {
             "hurt": fighterHurt,
             "die": fighterDeath,
             "block": fighterBlock,
-
         };
         super(name, 8.5, 15, x, y, animations, 128, 128, playerNumber, opponent);
         this.basicAttackSpeed = 6;
@@ -489,6 +491,7 @@ class Fighter extends Character {
         this.specialAttackSpeed = 20;
         this.fball = false;
         this.health = 200;
+        this.hitboxes = new HitBoxes(this, 0, 50, 5, 30, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
     heavyAttack() {
@@ -605,16 +608,19 @@ class HitBox {
 // holds all the hitboxes for each character
 // two options: per-state hitboxes (tedious), or just per direction (easier)
 class HitBoxes {
-    constructor(father) {
+    constructor(father, lattackl, lattackr, lattackt, lattackb, hattackl, hattackr, hattackb, hattackt, sattackl, sattackr, sattackb, sattackt) {
         this.char = father;
 
         this.direction = [ [new HitBox(-25, 5, -5, 46), new HitBox(-10, 5, 45, 63)], 
                            [new HitBox(-5, 25, -5, 46), new HitBox(-5, 10, 45, 63)]];
 
         this.attacks = { // TODO: make these accurate
-            light: [[new HitBox(15, 40, 0, 25)], [new HitBox(-25, 40, -10, 25)]], // first list is facing right, second facing left
-            heavy: [[new HitBox(15, 40, 0, 25)], [new HitBox(15, 40, 0, 25)]],
-            special: [[new HitBox(15, 40, 0, 25)], [new HitBox(15, 40, 0, 25)]]
+            //light: [[new HitBox(15, 40, 0, 25)], [new HitBox(-25, 40, -10, 25)]], // first list is facing right, second facing left
+            light:[[new HitBox(lattackl, lattackr, lattackt, lattackb)], [new HitBox(-lattackl, -lattackr, lattackt, lattackb)]],
+            //heavy: [[new HitBox(15, 40, 0, 25)], [new HitBox(15, 40, 0, 25)]],
+            heavy:[[new HitBox(hattackl, hattackr, hattackb, hattackt)], [new HitBox(-hattackl, -hattackr, hattackb, hattackt)]],
+            //special: [[new HitBox(15, 40, 0, 25)], [new HitBox(15, 40, 0, 25)]]
+            special: [[new HitBox(sattackl, sattackr, sattackb, sattackt)], [new HitBox(-sattackl, -sattackr, sattackb, sattackt)]]
         }
     }
 
@@ -622,12 +628,12 @@ class HitBoxes {
     // expected input: the opponent, and the attack type
     checkHit(opponent, attackType) {
         // TODO
-        let check = true;
         let char = this.char;
         let attack = opponent.hitboxes.attacks[attackType][opponent.direction]; // the attack hitbox array
         
         this.direction[this.char.direction].forEach(h => {
             attack.forEach(a => {
+                console.log(a)
                 if ( ((opponent.x+a.left > char.x+h.left && opponent.x+a.left < char.x+h.right) || (opponent.x+a.right > char.x+h.left && opponent.x+a.right < char.x+h.right)) && 
                      ((opponent.y+a.top > char.y+h.top && opponent.y+a.top < char.y+h.bottom) || (opponent.y+a.bottom > char.y+h.top && opponent.y+a.bottom < char.y+h.bottom))
                 ) {
@@ -635,11 +641,7 @@ class HitBoxes {
                     if( this.char.state === "block" ) {
                         // TODO: blocking logic
                     }
-                    if(check){
-                        char.takeDamage(20);
-                        console.log(char.name)
-                        check = false;
-                    }
+                    char.takeDamage(20);
 
                     // TODO: end the attack
                 }
