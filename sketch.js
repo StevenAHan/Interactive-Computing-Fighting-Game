@@ -436,7 +436,7 @@ function arena() {
   text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, f - block", 600, 200);
   text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack", 600, 230);
   fill(255, 128, 128);
-  text("Note: Only Fighter can block through his special attack", 600, 260);
+  text("Note: Only Fighter can block through his heavy attack", 600, 260);
   arenaState.p1.displayAndMove();
   arenaState.p2.displayAndMove();
 

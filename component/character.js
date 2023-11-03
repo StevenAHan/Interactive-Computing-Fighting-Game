@@ -656,7 +656,6 @@ class HitBoxes {
                      (opponent.y+a.bottom > char.y+h.top && opponent.y+a.bottom < char.y+h.bottom))
                 ) {
                     // attack only once
-                    console.log("hit!");
                     if(char.immune == false) {
                         char.takeDamage(a.damage);
                     }
