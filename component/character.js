@@ -271,6 +271,8 @@ class Character {
 
     takeDamage(amount) {
         // TODO
+        this.hitpoints-=amount;
+        console.log("character" + this.hitpoints);
         console.log("damage: " + amount);
 
     }
@@ -555,6 +557,7 @@ class TempProjectile {
         damage - damage the projectile does
         speed - speed of the projectile
 */
+
 class Projectile {
     constructor(x,y, animation, direction, width, height, damage, speed, opponent) {
         this.x = x;
@@ -627,6 +630,7 @@ class HitBoxes {
     // expected input: the opponent, and the attack type
     checkHit(opponent, attackType) {
         // TODO
+        let check = true;
         let char = this.char;
         let attack = opponent.hitboxes.attacks[attackType][opponent.direction]; // the attack hitbox array
         
@@ -639,7 +643,12 @@ class HitBoxes {
                     if( this.char.state === "block" ) {
                         // TODO: blocking logic
                     }
-                    char.takeDamage(20);
+                    if(check){
+                        char.takeDamage(20);
+                        console.log(char.name)
+                        check = false;
+                    }
+
                     // TODO: end the attack
                 }
             });

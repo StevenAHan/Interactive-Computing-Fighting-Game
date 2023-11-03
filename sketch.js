@@ -179,9 +179,9 @@ function draw() {
     } else if (mode === 4) { 
       arena();
     }
-    else if (mode === 5) { 
-      endGame();
-    }
+    //else if (mode === 5) { 
+      //endGame();
+    //}
 
 }
 
@@ -293,6 +293,7 @@ function menu() {
   backgroundOffset %= backgroundImage.width; // Ensure the offset loops
 
   // Center the background image vertically
+  
   const y = height - backgroundImage.height;
 
   // Draw the background image at its original size
@@ -435,13 +436,13 @@ function arenaSetup() {
   }
   versus.onended(finished);
 
+  //arenaState.p1.displayAndMove().specialAttack()
   background(0);
   text(charSelect.spots[charSelect.selectors.p1].name, 300, 660);
   fill(255,0,0)
   text("VERSUS", 600, 660)
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
-  console.log(frameCount)
 
   // if(frameCount %400 == 0){
   //   mode++;
