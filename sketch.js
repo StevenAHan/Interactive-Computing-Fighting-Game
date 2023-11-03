@@ -180,9 +180,9 @@ function draw() {
     } else if (mode === 4) { 
       arena();
     }
-    //else if (mode === 5) { 
-      //endGame();
-    //}
+    else if (mode === 5) { 
+      endGame();
+    }
 
 }
 
@@ -202,7 +202,7 @@ function keyPressed() {
     isPlaying = false; // Reset isPlaying
   } else if (mode === 2 && keyCode === ENTER) {
     mode = 3;
-  } else if(mode === 4 && keyCode === ENTER && end == true) {
+  } else if(mode === 5 && keyCode === ENTER && end == true) {
     mode = 2;
     end = false;
   }
@@ -438,6 +438,7 @@ function arenaSetup() {
   background(0);
   text(charSelect.spots[charSelect.selectors.p1].name, 300, 660);
   fill(255,0,0)
+  text("INSERT IMAGES", 600, 300)
   text("VERSUS", 600, 660)
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
@@ -480,19 +481,24 @@ function arena() {
       tprojectiles.splice(i, 1);
     }
   }
-  fill(128, 0, 0)
-  textSize(50);
-  if(arenaState.p1.dying) {
-    text("Player 2 Wins!", 600, 400);
-    textSize(25);
-    text("Press Enter to Go Back to Character Selection", 600, 450);
-    end = true;
-  } else if(arenaState.p2.dying) {
-    text("Player 1 Wins!", 600, 400);
-    textSize(25);
-    text("Press Enter to Go Back to Character Selection", 600, 450);
+
+  if(arenaState.p1.dying || arenaState.p2.dying){
+    mode++;
     end = true;
   }
+  // fill(128, 0, 0)
+  // textSize(50);
+  // if(arenaState.p1.dying) {
+  //   text("Player 2 Wins!", 600, 400);
+  //   textSize(25);
+  //   text("Press Enter to Go Back to Character Selection", 600, 450);
+  //   end = true;
+  // } else if(arenaState.p2.dying) {
+  //   text("Player 1 Wins!", 600, 400);
+  //   textSize(25);
+  //   text("Press Enter to Go Back to Character Selection", 600, 450);
+  //   end = true;
+  //}
 }
 
 function charSelectSetup(charSelect) {
@@ -525,7 +531,7 @@ function charSelectSetup(charSelect) {
 function endGame(){
   background(0)
   blood.resize(1200, 600);
-  imageMode(LEFT)
+  //imageMode(LEFT)
   image(blood, 600, 300)
   textSize(100);
   fill(255);
@@ -533,6 +539,16 @@ function endGame(){
   textAlign(CENTER);
   //text("GAME OVER", 600, 100);
   text("VICTORY", 600, 300)
+  textSize(60);
+  if(arenaState.p1.dying){
+    text("insert " + arenaState.p1.name + " dead pic", 600, 400)
+    text("insert " + arenaState.p2.name + " pic", 600, 520)
+  }
+  else{
+    text("insert " + arenaState.p2.name + " dead pic", 600, 400)
+    text("insert " + arenaState.p1.name + " pic", 600, 520)
+  }
+  text("or", 600, 450)
   textSize(50);
   fill(255);
   text("Play again?", 600, 700)
