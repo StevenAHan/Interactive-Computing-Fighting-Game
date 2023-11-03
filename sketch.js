@@ -64,6 +64,7 @@ let fighterIdle, fighterRun, fighterJump,
 let testCharAnimations;
 let theParticles = [];
 let ground = 600;
+let end = false;
 
 
 function preload() {
@@ -193,14 +194,11 @@ function keyPressed() {
     }
     mode = 2;
     isPlaying = false; // Reset isPlaying
-  } 
-
-  // TEMP for testing
-  else if(keyCode === ENTER) {
-    mode++;
-    if(mode >= 5) {
-      mode = 0;
-    }
+  } else if (mode === 2 && keyCode === ENTER) {
+    mode = 3;
+  } else if(mode === 3 && keyCode === ENTER && end) {
+    mode = 2;
+    end = false;
   }
 }
 
@@ -435,10 +433,10 @@ function arena() {
   textSize(20);
   text("Controls:", 600, 170);
   textSize(12);
-  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, f - block, y - test die, u - respawn", 600, 200);
-  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack, h - block, m - test die, n - respawn", 600, 230);
+  text("Player 1 Controls: wasd - move, e - basic attack, q - heavy attack, r - special attack, f - block", 600, 200);
+  text("Player 2 Controls: ijkl - move, u - basic attack, o - heavy attack, y - special attack", 600, 230);
   fill(255, 128, 128);
-  text("Note: Kitsune cannot block", 600, 260);
+  text("Note: Only Fighter can block through his special attack", 600, 260);
   arenaState.p1.displayAndMove();
   arenaState.p2.displayAndMove();
 
@@ -456,6 +454,15 @@ function arena() {
     if(tprojectiles[i].delete()) {
       tprojectiles.splice(i, 1);
     }
+  }
+
+  textSize(50);
+  if(arenaState.p1.dying) {
+    text("Player 2 Wins!", 600, 400);
+    end = true;
+  } else if(arenaState.p2.dying) {
+    text("Player 1 Wins!", 600, 400);
+    end = true;
   }
 }
 
