@@ -202,7 +202,7 @@ function keyPressed() {
     isPlaying = false; // Reset isPlaying
   } else if (mode === 2 && keyCode === ENTER) {
     mode = 3;
-  } else if(mode === 3 && keyCode === ENTER && end) {
+  } else if(mode === 4 && keyCode === ENTER && end == true) {
     mode = 2;
     end = false;
   }
@@ -480,23 +480,27 @@ function arena() {
       tprojectiles.splice(i, 1);
     }
   }
-
+  fill(128, 0, 0)
   textSize(50);
   if(arenaState.p1.dying) {
     text("Player 2 Wins!", 600, 400);
+    textSize(25);
+    text("Press Enter to Go Back to Character Selection", 600, 450);
     end = true;
   } else if(arenaState.p2.dying) {
     text("Player 1 Wins!", 600, 400);
+    textSize(25);
+    text("Press Enter to Go Back to Character Selection", 600, 450);
     end = true;
   }
 }
 
 function charSelectSetup(charSelect) {
   charSelect.chars = {
-    kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 40),
-    raven: new CharSelect(ravenHeavyAttack, 0, 0, 128, 128, 40), 
-    char3: new CharSelect(samuraiSpecialAttack, 0, 0, 128, 128, 40),
-    char4: new CharSelect(fighterSpecialAttack, 0, 0, 128, 128, 40)
+    kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 20),
+    raven: new CharSelect(ravenSpecialAttack, 0, 0, 128, 128, 20), 
+    char3: new CharSelect(samuraiSpecialAttack, 0, 0, 128, 128, 20),
+    char4: new CharSelect(fighterSpecialAttack, 0, 0, 128, 128, 20)
   };
   charSelect.selectors = {
     p1: 1,
@@ -518,6 +522,23 @@ function charSelectSetup(charSelect) {
   };
 }
 
+function endGame(){
+  background(0)
+  blood.resize(1200, 600);
+  imageMode(LEFT)
+  image(blood, 600, 300)
+  textSize(100);
+  fill(255);
+  noStroke();
+  textAlign(CENTER);
+  //text("GAME OVER", 600, 100);
+  text("VICTORY", 600, 300)
+  textSize(50);
+  fill(255);
+  text("Play again?", 600, 700)
+}
+
+
 function controls(){
   fill(0, 150);
   //rect(200, 130, 800, 150);
@@ -537,12 +558,12 @@ function controls(){
   text("e - basic attack", 200, 390);
   text("q - heavy attack", 200, 410);
   text("r - special attack", 200, 430);
-  text("f - block (N/A for kitsune)", 200, 450);
+  text("Note: Only Fighter can block through his heavy attack", 200, 450);
   text("ijkl - move", 1000, 370);
   text("u - basic attack", 1000, 390);
   text("o - heavy attack", 1000, 410);
   text("y - special attack", 1000, 430);
-  text("h - block (N/A for kitsune)", 1000, 450);
+  text("Note: Only Fighter can block through his heavy attack", 1000, 450);
   //text("Player 1: wasd - move, e - basic attack, q - heavy attack, r - special attack, f - block, y - test die, u - respawn", 600, 200);
   //text("Player 2: ijkl - move, u - basic attack, o - heavy attack, y - special attack, h - block, m - test die, n - respawn", 600, 230);
   fill(255, 128, 128);
