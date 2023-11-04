@@ -516,6 +516,17 @@ class Samurai extends Character {
         this.arrow = false;
         this.hitboxes = new HitBoxes(this, 15, 70, 5, 30, 0, 0, 0, 0, 10, 70, -10, 50, 20, 40);
     }
+    basicAttack() {
+        this.currAnimation = "basicAttack";
+        if(this.spriteAnimations[this.currAnimation].currentFrame < 1) {
+            this.hitboxes.attack('light');
+            this.opponent.hitboxes.checkHit(this, 'light');
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
 
     heavyAttack() {
         this.currAnimation = "heavyAttack";
@@ -527,6 +538,18 @@ class Samurai extends Character {
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.arrow = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
+    
+    specialAttack() {
+        this.currAnimation = "specialAttack";
+        if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.hitboxes.attack('special');
+            this.opponent.hitboxes.checkHit(this, 'special');
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
         }
     }
@@ -552,6 +575,18 @@ class Fighter extends Character {
         this.fball = false;
         this.health = 200;
         this.hitboxes = new HitBoxes(this, 0, 50, 5, 30, 0, 0, 0, 0, 0, 50, 5, 30, 30);
+    }
+
+    basicAttack() {
+        this.currAnimation = "basicAttack";
+        if(this.spriteAnimations[this.currAnimation].currentFrame < 1) {
+            this.hitboxes.attack('light');
+            this.opponent.hitboxes.checkHit(this, 'light');
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
     }
 
     heavyAttack() {
