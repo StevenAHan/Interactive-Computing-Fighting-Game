@@ -357,6 +357,8 @@ class Kitsune extends Character {
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
+            kitsune_basic.setVolume(0.5);
+            kitsune_basic.play();
         }
     }
 
@@ -368,6 +370,8 @@ class Kitsune extends Character {
         if(this.spriteAnimations[this.currAnimation].currentFrame == 3 && this.fireball == false) {
             projectiles.push(new Projectile(this.x, this.y + 18, this.spriteAnimations["fireball"], this.direction, 64, 64, 10, 8, this.opponent));
             this.fireball = true;
+            kitsune_heavy.setVolume(0.5)
+            kitsune_heavy.play()
         }
 
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
@@ -383,6 +387,8 @@ class Kitsune extends Character {
         this.currAnimation = "specialAttack";
         this.opponent.hitboxes.checkHit(this, 'light');
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            kitsune_special.setVolume(0.3)
+            kitsune_special.play()
             if(this.bigBall == false) {
                 if(this.direction == 0) {
                     projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 10, 6, this.opponent));
@@ -431,6 +437,8 @@ class Raven extends Character{
         if(this.spriteAnimations[this.currAnimation].currentFrame > 0) {
             this.hitboxes.attack('light');
             this.opponent.hitboxes.checkHit(this, 'light');
+            raven_basic.setVolume(0.7)
+            raven_basic.play()
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
@@ -447,6 +455,8 @@ class Raven extends Character{
         if(this.strike == false) {
             tprojectiles.push(new TempProjectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["ravenStrike"], this.direction, 10, 2, this.opponent, 150, 100));
             this.strike = true;
+            raven_heavy.setVolume(0.7)
+            raven_heavy.play()
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
@@ -462,6 +472,8 @@ class Raven extends Character{
             this.opponent.hitboxes.checkHit(this, 'special');
         }
         if(this.special == false && this.spriteAnimations[this.currAnimation].currentFrame == 4) {
+            raven_special.setVolume(0.5)
+            raven_special.play()
             tprojectiles.push(new TempProjectile(this.x + 100 * this.dirMultiplier(), this.y, this.spriteAnimations["ravenSpecial"], this.direction, 10, 5, this.opponent, 300, 200));
             this.special = true;
         }
@@ -525,6 +537,8 @@ class Samurai extends Character {
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
+            samurai_basic.setVolume(0.4)
+            samurai_basic.play()
         }
     }
 
@@ -536,6 +550,8 @@ class Samurai extends Character {
             this.arrow = true;
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            samurai_heavy.setVolume(0.7)
+            samurai_heavy.play()
             this.state = false;
             this.arrow = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
@@ -549,6 +565,8 @@ class Samurai extends Character {
             this.opponent.hitboxes.checkHit(this, 'special');
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            samurai_special.setVolume(0.7)
+            samurai_special.play()
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
         }
@@ -580,6 +598,8 @@ class Fighter extends Character {
     basicAttack() {
         this.currAnimation = "basicAttack";
         if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
+            fighter_basic.setVolume(0.5)
+            fighter_basic.play()
             this.hitboxes.attack('light');
             this.opponent.hitboxes.checkHit(this, 'light');
         }
@@ -606,6 +626,8 @@ class Fighter extends Character {
             this.opponent.hitboxes.checkHit(this, 'heavy');
         }
         if(this.fball == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
+            kitsune_heavy.setVolume(0.5)
+            kitsune_heavy.play()
             projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, fighterFireball, this.direction, 64, 64, 15, 5, this.opponent));
             this.fball = true;
         }
