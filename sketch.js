@@ -455,13 +455,13 @@ function arena() {
   imageMode(CENTER);
   image(arenaImage, width, height, width * 2, height * 2);
   //if tab is pressed show the controls
-  if(keyIsDown(9)){
+  if(keyIsDown(84)){
     controls()
   }
   else{
     fill(0)
     textSize(30)
-    text("Hold tab for controls", 600, 790)
+    text("Hold t for controls", 600, 790)
   }
   arenaState.p1.displayAndMove();
   arenaState.p2.displayAndMove();
@@ -575,12 +575,10 @@ function controls(){
   text("e - basic attack", 200, 390);
   text("q - heavy attack", 200, 410);
   text("r - special attack", 200, 430);
-  text("Note: Only Fighter can block through his heavy attack", 200, 450);
   text("ijkl - move", 1000, 370);
   text("u - basic attack", 1000, 390);
   text("o - heavy attack", 1000, 410);
   text("y - special attack", 1000, 430);
-  text("Note: Only Fighter can block through his heavy attack", 1000, 450);
   //text("Player 1: wasd - move, e - basic attack, q - heavy attack, r - special attack, f - block, y - test die, u - respawn", 600, 200);
   //text("Player 2: ijkl - move, u - basic attack, o - heavy attack, y - special attack, h - block, m - test die, n - respawn", 600, 230);
   fill(255, 128, 128);
