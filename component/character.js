@@ -423,12 +423,12 @@ class Raven extends Character{
         this.strike = false;
         this.health = 150;
         this.special = false;
-        this.hitboxes = new HitBoxes(this, 10, 70, 0, 30, 10, 80, 0, 55, 80, 220, -60, 60, 10, 20, 50);
+        this.hitboxes = new HitBoxes(this, 10, 70, 0, 30, 40, 90, -10, 45, 80, 220, -60, 60, 10, 20, 50);
     }
     
     basicAttack() {
         this.currAnimation = "basicAttack";
-        if(this.spriteAnimations[this.currAnimation].currentFrame < 1) {
+        if(this.spriteAnimations[this.currAnimation].currentFrame > 0) {
             this.hitboxes.attack('light');
             this.opponent.hitboxes.checkHit(this, 'light');
         }
@@ -518,7 +518,7 @@ class Samurai extends Character {
     }
     basicAttack() {
         this.currAnimation = "basicAttack";
-        if(this.spriteAnimations[this.currAnimation].currentFrame < 1) {
+        if(this.spriteAnimations[this.currAnimation].currentFrame > 1) {
             this.hitboxes.attack('light');
             this.opponent.hitboxes.checkHit(this, 'light');
         }
@@ -541,7 +541,7 @@ class Samurai extends Character {
             this.spriteAnimations[this.currAnimation].resetFrames();
         }
     }
-    
+
     specialAttack() {
         this.currAnimation = "specialAttack";
         if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
@@ -574,12 +574,12 @@ class Fighter extends Character {
         this.specialAttackSpeed = 20;
         this.fball = false;
         this.health = 200;
-        this.hitboxes = new HitBoxes(this, 0, 50, 5, 30, 0, 0, 0, 0, 0, 50, 5, 30, 30);
+        this.hitboxes = new HitBoxes(this, 0, 35, 0, 30, 0, 0, 0, 0, 0, 50, 5, 30, 30);
     }
 
     basicAttack() {
         this.currAnimation = "basicAttack";
-        if(this.spriteAnimations[this.currAnimation].currentFrame < 1) {
+        if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.hitboxes.attack('light');
             this.opponent.hitboxes.checkHit(this, 'light');
         }
