@@ -454,14 +454,14 @@ function finished(){
 function arena() {
   imageMode(CENTER);
   image(arenaImage, width, height, width * 2, height * 2);
-  //if space is pressed show the controls
-  if(keyIsDown(32)){
+  //if tab is pressed show the controls
+  if(keyIsDown(9)){
     controls()
   }
   else{
     fill(0)
     textSize(30)
-    text("Press space for controls", 600, 790)
+    text("Hold tab for controls", 600, 790)
   }
   arenaState.p1.displayAndMove();
   arenaState.p2.displayAndMove();
@@ -482,23 +482,23 @@ function arena() {
     }
   }
 
-  if(arenaState.p1.dying || arenaState.p2.dying){
-    mode++;
+  // if(arenaState.p1.dying || arenaState.p2.dying){
+  //   mode++;
+  //   end = true;
+  // }
+  fill(128, 0, 0)
+  textSize(50);
+  if(arenaState.p1.dying) {
+    text("Player 2 Wins!", 600, 400);
+    textSize(25);
+    text("Press Enter to Go Back to Character Selection", 600, 450);
+    end = true;
+  } else if(arenaState.p2.dying) {
+    text("Player 1 Wins!", 600, 400);
+    textSize(25);
+    text("Press Enter to Go Back to Character Selection", 600, 450);
     end = true;
   }
-  // fill(128, 0, 0)
-  // textSize(50);
-  // if(arenaState.p1.dying) {
-  //   text("Player 2 Wins!", 600, 400);
-  //   textSize(25);
-  //   text("Press Enter to Go Back to Character Selection", 600, 450);
-  //   end = true;
-  // } else if(arenaState.p2.dying) {
-  //   text("Player 1 Wins!", 600, 400);
-  //   textSize(25);
-  //   text("Press Enter to Go Back to Character Selection", 600, 450);
-  //   end = true;
-  //}
 }
 
 function charSelectSetup(charSelect) {

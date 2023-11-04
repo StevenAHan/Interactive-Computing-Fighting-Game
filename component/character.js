@@ -224,9 +224,10 @@ class Character {
 
     basicAttack() {
         this.currAnimation = "basicAttack";
-        this.hitboxes.attack('light');
-        this.opponent.hitboxes.checkHit(this, 'light');
-
+        if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.hitboxes.attack('light');
+            this.opponent.hitboxes.checkHit(this, 'light');
+        }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
@@ -235,7 +236,10 @@ class Character {
 
     heavyAttack() {
         this.currAnimation = "heavyAttack";
-        this.hitboxes.attack('heavy');
+        if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.hitboxes.attack('heavy');
+            this.opponent.hitboxes.checkHit(this, 'heavy');
+        }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
@@ -244,7 +248,10 @@ class Character {
 
     specialAttack() {
         this.currAnimation = "specialAttack";
-        this.hitboxes.attack('special');
+        if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.hitboxes.attack('special');
+            this.opponent.hitboxes.checkHit(this, 'special');
+        }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
@@ -338,9 +345,20 @@ class Kitsune extends Character {
          this.health = 125;
          this.fireball = false;
          this.bigBall = false;
-         this.hitboxes = new HitBoxes(this, 15, 40, 5, 50, 0, 0, 0, 0, 0, 0, 0, 0);
+         this.hitboxes = new HitBoxes(this, 0, 50, 5, 50, 0, 0, 0, 0, 0, 0, 0, 0, 15);
     }
     // Kitsune Basic Attack - Swipes tail and deals damage directly in front
+    basicAttack() {
+        this.currAnimation = "basicAttack";
+        if(this.spriteAnimations[this.currAnimation].currentFrame > 6) {
+            this.hitboxes.attack('light');
+        }
+        this.opponent.hitboxes.checkHit(this, 'light');
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
+    }
 
     // Kitsune Heavy Attack - fires a small fireball after a delay
     heavyAttack() {
@@ -363,6 +381,7 @@ class Kitsune extends Character {
     specialAttack() {
         this.currJumpSpeed = 0;
         this.currAnimation = "specialAttack";
+        this.opponent.hitboxes.checkHit(this, 'light');
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             if(this.bigBall == false) {
                 if(this.direction == 0) {
@@ -404,12 +423,27 @@ class Raven extends Character{
         this.strike = false;
         this.health = 150;
         this.special = false;
-        this.hitboxes = new HitBoxes(this, 10, 70, 0, 30, 10, 80, 0, 55, 80, 220, -60, 60);
+        this.hitboxes = new HitBoxes(this, 10, 70, 0, 30, 10, 80, 0, 55, 80, 220, -60, 60, 10, 20, 50);
+    }
+    
+    basicAttack() {
+        this.currAnimation = "basicAttack";
+        if(this.spriteAnimations[this.currAnimation].currentFrame < 1) {
+            this.hitboxes.attack('light');
+            this.opponent.hitboxes.checkHit(this, 'light');
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+        }
     }
 
     heavyAttack() {
         this.currAnimation = "heavyAttack";
-        this.hitboxes.attack('heavy');
+        if(this.spriteAnimations[this.currAnimation].currentFrame < 1) {
+            this.hitboxes.attack('heavy');
+            this.opponent.hitboxes.checkHit(this, 'heavy');
+        }
         if(this.strike == false) {
             tprojectiles.push(new TempProjectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["ravenStrike"], this.direction, 10, 2, this.opponent, 150, 100));
             this.strike = true;
@@ -423,7 +457,10 @@ class Raven extends Character{
 
     specialAttack() {
         this.currAnimation = "specialAttack";
-        this.hitboxes.attack('special');
+        if(this.spriteAnimations[this.currAnimation].currentFrame >= 4) {
+            this.hitboxes.attack('special');
+            this.opponent.hitboxes.checkHit(this, 'special');
+        }
         if(this.special == false && this.spriteAnimations[this.currAnimation].currentFrame == 4) {
             tprojectiles.push(new TempProjectile(this.x + 100 * this.dirMultiplier(), this.y, this.spriteAnimations["ravenSpecial"], this.direction, 10, 5, this.opponent, 300, 200));
             this.special = true;
@@ -477,7 +514,7 @@ class Samurai extends Character {
         this.specialAttackSpeed = 5;
         this.health = 150;
         this.arrow = false;
-        this.hitboxes = new HitBoxes(this, 15, 70, 5, 30, 0, 0, 0, 0, 10, 70, -10, 50);
+        this.hitboxes = new HitBoxes(this, 15, 70, 5, 30, 0, 0, 0, 0, 10, 70, -10, 50, 20, 40);
     }
 
     heavyAttack() {
@@ -514,7 +551,7 @@ class Fighter extends Character {
         this.specialAttackSpeed = 20;
         this.fball = false;
         this.health = 200;
-        this.hitboxes = new HitBoxes(this, 0, 50, 5, 30, 0, 0, 0, 0, 0, 0, 0, 0);
+        this.hitboxes = new HitBoxes(this, 0, 50, 5, 30, 0, 0, 0, 0, 0, 50, 5, 30, 30);
     }
 
     heavyAttack() {
@@ -529,7 +566,10 @@ class Fighter extends Character {
     
     specialAttack() {
         this.currAnimation = "specialAttack";
-        this.hitboxes.attack('special');
+        if(this.spriteAnimations[this.currAnimation].currentFrame >= 2) {
+            this.hitboxes.attack('special');
+            this.opponent.hitboxes.checkHit(this, 'heavy');
+        }
         if(this.fball == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
             projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, fighterFireball, this.direction, 64, 64, 15, 5, this.opponent));
             this.fball = true;
@@ -632,7 +672,8 @@ class HitBox {
 // holds all the hitboxes for each character
 // two options: per-state hitboxes (tedious), or just per direction (easier)
 class HitBoxes {
-    constructor(father, lattackl, lattackr, lattackt, lattackb, hattackl, hattackr, hattackb, hattackt, sattackl, sattackr, sattackb, sattackt) {
+    constructor(father, lattackl, lattackr, lattackt, lattackb, hattackl, hattackr, hattackb, hattackt, 
+        sattackl, sattackr, sattackb, sattackt, dmgl, dmgh, dmgs) {
         this.char = father;
 
         this.direction = [ [new HitBox(-25, 5, -5, 46), new HitBox(-10, 5, 45, 63)], 
@@ -640,11 +681,11 @@ class HitBoxes {
 
         this.attacks = { // TODO: make these accurate
             //light: [[new HitBox(15, 40, 0, 25)], [new HitBox(-25, 40, -10, 25)]], // first list is facing right, second facing left
-            light:[[new HitBox(lattackl, lattackr, lattackt, lattackb)], [new HitBox(-lattackl, -lattackr, lattackt, lattackb)]],
+            light:[[new HitBox(lattackl, lattackr, lattackt, lattackb, dmgl)], [new HitBox(-lattackl, -lattackr, lattackt, lattackb, dmgl)]],
             //heavy: [[new HitBox(15, 40, 0, 25)], [new HitBox(15, 40, 0, 25)]],
-            heavy:[[new HitBox(hattackl, hattackr, hattackb, hattackt)], [new HitBox(-hattackl, -hattackr, hattackb, hattackt)]],
+            heavy:[[new HitBox(hattackl, hattackr, hattackb, hattackt, dmgh)], [new HitBox(-hattackl, -hattackr, hattackb, hattackt, dmgh)]],
             //special: [[new HitBox(15, 40, 0, 25)], [new HitBox(15, 40, 0, 25)]]
-            special: [[new HitBox(sattackl, sattackr, sattackb, sattackt)], [new HitBox(-sattackl, -sattackr, sattackb, sattackt)]]
+            special: [[new HitBox(sattackl, sattackr, sattackb, sattackt, dmgs)], [new HitBox(-sattackl, -sattackr, sattackb, sattackt, dmgs)]]
         }
     }
 
@@ -663,6 +704,7 @@ class HitBoxes {
                      (opponent.y+a.bottom > char.y+h.top && opponent.y+a.bottom < char.y+h.bottom))
                 ) {
                     // attack only once
+                    console.log("hit!");
                     if(char.immune == false) {
                         char.takeDamage(a.damage);
                     }
