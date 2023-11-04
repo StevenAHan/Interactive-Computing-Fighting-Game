@@ -60,6 +60,11 @@ let fighterIdle, fighterRun, fighterJump,
   fighterBasicAttack, fighterHeavyAttack, fighterSpecialAttack,
   fighterHurt, fighterDeath, fighterBlock, fighterFireball;
 
+// attack sounds
+let kitsune_basic, kitsune_heavy, kitsune_special;
+let raven_basic, raven_heavy, raven_special;
+let samurai_basic, samurai_heavy, samurai_special;
+let fighter_basic, fighter_heavy, fighter_special;
 
 let testCharAnimations;
 let theParticles = [];
@@ -87,6 +92,11 @@ function preload() {
   kitsuneFireball = loadImage("./assets/characters/Kitsune/Fire_1_cropped.png");
   kitsuneBigFireball = loadImage("./assets/characters/Kitsune/Fire_2_cropped.png");
 
+  // Kitsune attack effects
+  kitsune_basic = loadSound("./assets/sounds/kitsune_basic.wav")
+  kitsune_heavy = loadSound("./assets/sounds/kitsune_heavy.wav")
+  kitsune_special = loadSound("./assets/sounds/kitsune_special.wav")
+  
   //sounds
   startsound = loadSound("./assets/sounds/startsbreak.mp3")
   backgroundMusic = loadSound("./assets/environments/background_music.mp3");
@@ -109,6 +119,11 @@ function preload() {
   //TODO
   ravenBlock = loadImage("./assets/characters/Raven/Idle_2.png");
 
+  //Raven attack
+  raven_basic = loadSound("./assets/sounds/raven_basic.wav")
+  raven_heavy = loadSound("./assets/sounds/raven_heavy.wav")
+  raven_special = loadSound("./assets/sounds/raven_special.wav")
+  
   // Raven Strike Setup
   for (let i = 1; i <= 8; i++) {
     let filename = './assets/characters/Raven/ravenStrike/' + nf(i) + '.png';
@@ -142,7 +157,12 @@ function preload() {
   samuraiDeath = loadImage("./assets/characters/Samurai/Dead.png");
   samuraiBlock = loadImage("./assets/characters/Samurai/Walk.png");
   samuraiArrow = loadImage("./assets/characters/Samurai/Arrow.png");
-
+  
+  // samurai attack effects
+  samurai_basic = loadSound("./assets/sounds/samurai_basic.wav")
+  samurai_heavy = loadSound("./assets/sounds/samurai_heavy.wav")
+  samurai_special = loadSound("./assets/sounds/samurai_special.wav")
+  
   // Fighter Animations
   fighterIdle = loadImage("./assets/characters/Fighter/Idle.png");
   fighterRun = loadImage("./assets/characters/Fighter/Run.png");
@@ -154,6 +174,9 @@ function preload() {
   fighterDeath = loadImage("./assets/characters/Fighter/Dead.png");
   fighterBlock = loadImage("./assets/characters/Fighter/Shield.png");
   fighterFireball = loadImage("./assets/characters/Fighter/fighter-fireball.png");
+
+  //fighter attack effect
+  fighter_basic = loadSound("./assets/sounds/fighter_basic.mp3")
 }
 
 function setup() {
