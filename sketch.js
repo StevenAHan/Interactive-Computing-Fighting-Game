@@ -202,7 +202,7 @@ function keyPressed() {
     isPlaying = false; // Reset isPlaying
   } else if (mode === 2 && keyCode === ENTER) {
     mode = 3;
-  } else if(mode === 5 && keyCode === ENTER && end == true) {
+  } else if(mode > 3 && keyCode === ENTER && end == true) {
     mode = 2;
     end = false;
   }
@@ -482,6 +482,7 @@ function arena() {
     }
   }
 
+  // Temp while we design the end screen
   // if(arenaState.p1.dying || arenaState.p2.dying){
   //   mode++;
   //   end = true;
