@@ -45,6 +45,9 @@ class Character {
 
         this.offset = offset;
         this.blocking = false;
+        this.basicSound = false;
+        this.heavySound = false;
+        this.specialSound = false;
     }
 
     // Sets up the character, should only run once in the beginning
@@ -354,11 +357,15 @@ class Kitsune extends Character {
             this.hitboxes.attack('light');
         }
         this.opponent.hitboxes.checkHit(this, 'light');
+        if(this.spriteAnimations[this.currAnimation].actionEnd() && this.basicSound == false) {
+            kitsune_basic.setVolume(0.5);
+            kitsune_basic.play();
+            this.basicSound = true;
+        }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
-            kitsune_basic.setVolume(0.5);
-            kitsune_basic.play();
+            this.basicSound = false;
         }
     }
 
@@ -386,9 +393,12 @@ class Kitsune extends Character {
         this.currJumpSpeed = 0;
         this.currAnimation = "specialAttack";
         this.opponent.hitboxes.checkHit(this, 'light');
-        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+        if(this.spriteAnimations[this.currAnimation].currentFrame == 3 && this.specialSound == false) {
             kitsune_special.setVolume(0.3)
             kitsune_special.play()
+            this.specialSound = true;
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             if(this.bigBall == false) {
                 if(this.direction == 0) {
                     projectiles.push(new Projectile(this.x + 20, this.y + 18, this.spriteAnimations["big_fireball"], this.direction, 64, 64, 10, 6, this.opponent));
@@ -403,6 +413,7 @@ class Kitsune extends Character {
             }
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
+            this.specialSound = false;
         }
     }
 }
@@ -437,12 +448,16 @@ class Raven extends Character{
         if(this.spriteAnimations[this.currAnimation].currentFrame > 0) {
             this.hitboxes.attack('light');
             this.opponent.hitboxes.checkHit(this, 'light');
+        }
+        if(this.spriteAnimations[this.currAnimation].currentFrame == 0 && this.basicSound == false) {
             raven_basic.setVolume(0.7)
             raven_basic.play()
+            this.basicSound = true;
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
+            this.basicSound = false;
         }
     }
 
@@ -471,9 +486,13 @@ class Raven extends Character{
             this.hitboxes.attack('special');
             this.opponent.hitboxes.checkHit(this, 'special');
         }
-        if(this.special == false && this.spriteAnimations[this.currAnimation].currentFrame == 4) {
+        if(this.spriteAnimations[this.currAnimation].currentFrame == 1 && this.specialSound == false && this.specialSound == false) {
             raven_special.setVolume(0.5)
             raven_special.play()
+            this.specialSound = true;
+        }
+        if(this.special == false && this.spriteAnimations[this.currAnimation].currentFrame == 4) {
+            
             tprojectiles.push(new TempProjectile(this.x + 100 * this.dirMultiplier(), this.y, this.spriteAnimations["ravenSpecial"], this.direction, 10, 5, this.opponent, 300, 200));
             this.special = true;
         }
@@ -481,6 +500,7 @@ class Raven extends Character{
             this.state = false;
             this.special = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
+            this.specialSound = false;
         }
     }
 }
@@ -534,11 +554,15 @@ class Samurai extends Character {
             this.hitboxes.attack('light');
             this.opponent.hitboxes.checkHit(this, 'light');
         }
+        if(this.spriteAnimations[this.currAnimation].actionEnd() && this.basicSound == false) {
+            samurai_basic.setVolume(0.4)
+            samurai_basic.play()
+            this.basicSound = true;
+        }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
-            samurai_basic.setVolume(0.4)
-            samurai_basic.play()
+            this.basicSound = false;
         }
     }
 
@@ -549,26 +573,34 @@ class Samurai extends Character {
             projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["arrow"], this.direction, 64, 64, 20, 10, this.opponent));
             this.arrow = true;
         }
-        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+        if(this.spriteAnimations[this.currAnimation].currentFrame == 12 && this.heavySound == false) {
             samurai_heavy.setVolume(0.7)
             samurai_heavy.play()
+            this.heavySound = true;
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {   
             this.state = false;
             this.arrow = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
+            this.heavySound = false;
         }
     }
 
     specialAttack() {
         this.currAnimation = "specialAttack";
+        if(this.spriteAnimations[this.currAnimation].currentFrame == 0 && this.specialSound == false) {
+            samurai_special.setVolume(0.7)
+            samurai_special.play()
+            this.specialSound = true;
+        }
         if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.hitboxes.attack('special');
             this.opponent.hitboxes.checkHit(this, 'special');
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
-            samurai_special.setVolume(0.7)
-            samurai_special.play()
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
+            this.specialSound = false;
         }
     }
 }
@@ -597,15 +629,19 @@ class Fighter extends Character {
 
     basicAttack() {
         this.currAnimation = "basicAttack";
-        if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
+        if(this.spriteAnimations[this.currAnimation].currentFrame == 2 && this.basicSound == false) {
             fighter_basic.setVolume(0.5)
             fighter_basic.play()
+            this.basicSound = true;
+        }
+        if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.hitboxes.attack('light');
             this.opponent.hitboxes.checkHit(this, 'light');
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.state = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
+            this.basicSound = false;
         }
     }
 
