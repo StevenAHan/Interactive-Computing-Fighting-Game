@@ -21,9 +21,9 @@ let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
 let mode = 0; // FOR TESTING
 let isPlaying = false; // Initialize isPlaying
-let backgroundMusic, versus;
+let backgroundMusic, versus, chooseCharMusic, woodsMusic, winMusic;
 let instruction = false;
-let newFont, blood;
+let newFont, blood, playArena, playWin;
 
 // Game Vars to Keep Track of Game State
 let projectiles = [];
@@ -100,6 +100,9 @@ function preload() {
   //sounds
   startsound = loadSound("./assets/sounds/startsbreak.mp3")
   backgroundMusic = loadSound("./assets/environments/background_music.mp3");
+  chooseCharMusic = loadSound("./assets/sounds/choosechar.mp3");
+  woodsMusic = loadSound("./assets/sounds/woods.mp3");
+  winMusic = loadSound("./assets/sounds/win.mp3");
   versus = loadSound("./assets/sounds/versus.mp3")
 
   //font
@@ -218,16 +221,23 @@ function keyPressed() {
   } else if (mode === 1 && keyCode === ENTER) {
     if (instruction) {
       instruction = false;
+
       //backgroundMusic.setVolume(0.5);
       //backgroundMusic.loop();
     }
     mode = 2;
+    chooseCharMusic.setVolume(0.5);
+    chooseCharMusic.loop();
     isPlaying = false; // Reset isPlaying
   } else if (mode === 2 && keyCode === ENTER) {
+    chooseCharMusic.stop()
     mode = 3;
   } else if(mode > 3 && keyCode === ENTER && end == true) {
+    winMusic.stop()
     mode = 2;
     end = false;
+    chooseCharMusic.setVolume(0.5);
+    chooseCharMusic.loop();
   }
 }
 
@@ -472,11 +482,19 @@ function arenaSetup() {
 }
 function finished(){
   mode++;
+  playArena = true;
+  playWin = true;
 }
 
 function arena() {
   imageMode(CENTER);
   image(arenaImage, width, height, width * 2, height * 2);
+  if(playArena){
+    woodsMusic.setVolume(0.5)
+    woodsMusic.play()
+    playArena = false;
+  }
+  woodsMusic.onended(woodsend)
   //if tab is pressed show the controls
   if(keyIsDown(84)){
     controls()
@@ -510,6 +528,7 @@ function arena() {
   //   mode++;
   //   end = true;
   // }
+
   fill(128, 0, 0)
   textSize(50);
   if(arenaState.p1.dying) {
@@ -517,12 +536,26 @@ function arena() {
     textSize(25);
     text("Press Enter to Go Back to Character Selection", 600, 450);
     end = true;
+    woodsMusic.stop()
+    if(playWin){
+      winMusic.play()
+      playWin = false
+    }
   } else if(arenaState.p2.dying) {
     text("Player 1 Wins!", 600, 400);
     textSize(25);
     text("Press Enter to Go Back to Character Selection", 600, 450);
     end = true;
+    woodsMusic.stop()
+    if(playWin){
+      winMusic.play()
+      playWin = false
+    }
   }
+}
+
+function woodsend(){
+  woodsMusic.loop()
 }
 
 function charSelectSetup(charSelect) {
