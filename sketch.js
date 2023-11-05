@@ -495,7 +495,7 @@ function arena() {
     playArena = false;
   }
   woodsMusic.onended(woodsend)
-  //if tab is pressed show the controls
+  //if t is pressed show the controls
   if(keyIsDown(84)){
     controls()
   }
@@ -614,12 +614,10 @@ function endGame(){
 
 function controls(){
   fill(0, 150);
-  //rect(200, 130, 800, 150);
   rect(50, 300, 300, 170)
   rect(850, 300, 300, 170)
   fill(255);
   textSize(80);
-  //text("Controls", 600, 170);
   text("Controls", 600, 400);
   fill(153, 204, 255);
   textSize(40);
@@ -635,12 +633,5 @@ function controls(){
   text("u - basic attack", 1000, 390);
   text("o - heavy attack", 1000, 410);
   text("y - special attack", 1000, 430);
-  //text("Player 1: wasd - move, e - basic attack, q - heavy attack, r - special attack, f - block, y - test die, u - respawn", 600, 200);
-  //text("Player 2: ijkl - move, u - basic attack, o - heavy attack, y - special attack, h - block, m - test die, n - respawn", 600, 230);
   fill(255, 128, 128);
-  //text("Note: Kitsune cannot block", 600, 260);
 }
-
-
-
-  
