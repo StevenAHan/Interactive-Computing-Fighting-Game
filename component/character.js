@@ -440,7 +440,7 @@ class Raven extends Character{
         this.strike = false;
         this.health = 150;
         this.special = false;
-        this.hitboxes = new HitBoxes(this, 10, 70, 0, 30, 40, 90, -10, 45, 80, 220, -60, 60, 10, 20, 50);
+        this.hitboxes = new HitBoxes(this, 10, 70, 0, 30, 40, 90, -10, 45, 80, 220, -60, 60, 10, 20, 30);
     }
     
     basicAttack() {
@@ -546,7 +546,7 @@ class Samurai extends Character {
         this.specialAttackSpeed = 5;
         this.health = 150;
         this.arrow = false;
-        this.hitboxes = new HitBoxes(this, 15, 70, 5, 30, 0, 0, 0, 0, 10, 70, -10, 50, 20, 40);
+        this.hitboxes = new HitBoxes(this, 15, 70, 5, 30, 0, 0, 0, 0, 10, 70, -10, 50, 15, 0, 30);
     }
     basicAttack() {
         this.currAnimation = "basicAttack";
@@ -624,7 +624,7 @@ class Fighter extends Character {
         this.specialAttackSpeed = 20;
         this.fball = false;
         this.health = 200;
-        this.hitboxes = new HitBoxes(this, 0, 35, 0, 30, 0, 0, 0, 0, 0, 50, 5, 30, 30);
+        this.hitboxes = new HitBoxes(this, 0, 35, 0, 30, 0, 0, 0, 0, 0, 50, 5, 30, 20, 0, 15);
     }
 
     basicAttack() {
