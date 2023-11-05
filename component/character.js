@@ -792,7 +792,7 @@ class HitBoxes {
         this.direction[this.char.direction].forEach(h => {
             attack.forEach(a => {
                 if ( ((opponent.x+a.left > char.x+h.left && opponent.x+a.left < char.x+h.right) || 
-                (opponent.x+a.right > char.x+h.left && opponent.x+a.right < char.x+h.right)) ||
+                (opponent.x+a.right > char.x+h.left && opponent.x+a.right < char.x+h.right)) &&
                      ((opponent.y+a.top > char.y+h.top && opponent.y+a.top < char.y+h.bottom) || 
                      (opponent.y+a.bottom > char.y+h.top && opponent.y+a.bottom < char.y+h.bottom))
                 ) {
