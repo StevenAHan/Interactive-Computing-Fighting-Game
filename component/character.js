@@ -850,3 +850,77 @@ class HitBoxes {
 
     }
 }
+
+class Health_L {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.health = 1; // Health starts at 100%
+    }
+  
+    // Call this method when the object receives an attack
+    receiveAttack(damage) {
+        this.health -= damage; // Assuming you have a 'health' property
+        if (this.health < 0) this.health = 0;
+    }
+  
+    // Call this method to update the display of the health bar
+    display() {
+      stroke(51);
+      fill(255, 0, 0);
+      // Width of the health bar is now proportional to the health property
+      rect(this.x, this.y, (width * 3 / 7) * this.health, 25);
+    }
+  }
+
+  class Health_R {
+    constructor(x, y, maxWidth) {
+      this.x = x;
+      this.y = y;
+      this.maxWidth = maxWidth; // The total width of the health bar at full health
+      this.health = 1; // Health starts at 100%
+    }
+  
+    // Call this method when the object receives an attack
+    receiveAttack(damage) {
+      this.health -= damage;
+      if (this.health < 0) {
+        this.health = 0; // Prevent the health from dropping below 0
+      }
+    }
+  
+    // Call this method to update the display of the health bar
+    display() {
+      stroke(51);
+      fill(255, 0, 0);
+      // Calculate the current width of the health bar based on the health
+      let currentWidth = this.maxWidth * this.health;
+      rect(this.x, this.y, currentWidth, 25);
+    }
+  }
+  
+  
+  
+  
+  class Timer {
+    constructor (x,y) {
+      this.x = x;
+      this.y = y;
+    }
+    display() {
+      stroke(20)
+      fill(255)
+      rectMode(CENTER)
+      rect(this.x, this.y, 50, 50)
+      rectMode(CORNER)
+      fill(0)
+      textFont('Courier New');
+      textAlign(CENTER, CENTER);
+      textSize(30);
+      text(timer, this.x, this.y);
+  
+      if (frameCount % 60 == 0 && timer > 0) {
+        timer --;
+      }
+    }
+  }
