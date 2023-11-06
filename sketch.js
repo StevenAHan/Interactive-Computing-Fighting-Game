@@ -508,8 +508,22 @@ function arena() {
   rect(670, 30, (width * 3 / 7), 25);
   health1.display(arenaState.p1.healthPercentage);
   health2.display(arenaState.p2.healthPercentage);
-  time.display()
   stroke(1);
+  //timer
+  stroke(20)
+  fill(255)
+  rectMode(CENTER)
+  rect(width/2, 40, 50, 50)
+  rectMode(CORNER)
+  fill(0)
+  textFont('Courier New');
+  textAlign(CENTER, CENTER);
+  textSize(30);
+  text(timer, width/2, 40);
+  
+  if (frameCount % 60 == 0 && timer > 0) {
+    timer --;
+  }
   
   if(playArena){
     woodsMusic.setVolume(0.5)
