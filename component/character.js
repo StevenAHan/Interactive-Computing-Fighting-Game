@@ -917,25 +917,4 @@ class Health_L {
   
   
   
-  class Timer {
-    constructor (x,y) {
-      this.x = x;
-      this.y = y;
-    }
-    display() {
-      stroke(20)
-      fill(255)
-      rectMode(CENTER)
-      rect(this.x, this.y, 50, 50)
-      rectMode(CORNER)
-      fill(0)
-      textFont('Courier New');
-      textAlign(CENTER, CENTER);
-      textSize(30);
-      text(timer, this.x, this.y);
-  
-      if (frameCount % 60 == 0 && timer > 0) {
-        timer --;
-      }
-    }
-  }
+
