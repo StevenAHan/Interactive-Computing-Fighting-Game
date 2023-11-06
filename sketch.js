@@ -25,6 +25,7 @@ let backgroundMusic, versus, chooseCharMusic, woodsMusic, winMusic;
 let instruction = false;
 let newFont, blood, playArena, playWin;
 
+
 // Game Vars to Keep Track of Game State
 let projectiles = [];
 let tprojectiles = [];
@@ -65,6 +66,8 @@ let kitsune_basic, kitsune_heavy, kitsune_special;
 let raven_basic, raven_heavy, raven_special;
 let samurai_basic, samurai_heavy, samurai_special;
 let fighter_basic, fighter_heavy, fighter_special;
+
+let hurtSound;
 
 let testCharAnimations;
 let theParticles = [];
@@ -186,6 +189,9 @@ function preload() {
 
   //fighter attack effect
   fighter_basic = loadSound("./assets/sounds/fighter_basic.mp3")
+
+  // hurt sound
+  hurtSound = loadSound("./assets/sounds/hurtsound.mp3")
 }
 
 function setup() {

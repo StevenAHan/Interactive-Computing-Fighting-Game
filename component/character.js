@@ -66,6 +66,13 @@ class Character {
     }
 
     displayAndMove() {
+        if(this.x > 1200) {
+            this.x = 1200;
+        }
+        if(this.x < 0) {
+            this.x = 0;
+        }
+
         if(this.immune != false) {
             this.immune++;
             if(this.immune == 50) {
@@ -274,6 +281,7 @@ class Character {
 
     takeDamage(amount) {
         this.immune = 1;
+        hurtSound.play()
         if(this.blocking) {
             this.health -= amount / 2;
         } else {
