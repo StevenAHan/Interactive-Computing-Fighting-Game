@@ -929,7 +929,7 @@ class Health_L {
       rect(this.x, this.y, 50, 50)
       rectMode(CORNER)
       fill(0)
-      textFont('Courier New');
+      textFont(newFont);
       textAlign(CENTER, CENTER);
       textSize(30);
       text(timer, this.x, this.y);

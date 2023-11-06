@@ -31,6 +31,7 @@
       font-family:myFirstFont;
       color:rgba(255, 255, 255, 0.913);
     } 
+
     #header{
       text-align:center;
       font-family:myFirstFont;
@@ -39,24 +40,26 @@
     }
 
     h3 {
-      font-size: 30px;
+      font-size: 60px;
+      color:rgb(240, 131, 6);
     }
 
     h4 {
-      color:aqua;
-      font-size: 25px;
+      color:rgb(118, 48, 214);
+      font-size: 40px;
+      text-align: center;
     }
 
     h5 {
-      color: rgb(207, 255, 255);
+      color: rgb(126, 10, 198);
       font-size: 18px;
-      display:inline;
     }
 
     .inliner {
-      color: white;
-      display:inline;
-
+      color: rgb(69, 0, 111);
+      display:center;
+      font-align:center;
+      margin-top: -30px;
     }
 
     body {                       
@@ -79,85 +82,126 @@
       text-align: center;
     }
 
-    #characterDescContainer {
-      
+    #scroll_box{
+      height:300px;
+      margin: auto;
+      width: 70%;
+      padding: 10px;
+      overflow:auto;
+      background-color:yellowgreen;
+      color:white;
+      scrollbar-base-color:gold;
+      margin-top: 100px;
+      border:20px solid rgb(0, 36, 2);
     }
-    
-    .links{
-      padding-left: 50px;
-    }
+
+  p{
+    text-align: center;
+  }
+  
+.leftContent{
+  text-align: center;
+  color: rgb(220, 2, 166);
+  font-size: 20px;
+}
+
+.rightContent{
+  text-align: center;
+  font-size: 15px;
+  color: rgb(121, 11, 61);
+}
+
+#charcontainer{
+  width:100%;
+  height:150 px;
+  display: flex;
+  gap: 5px;
+  align-items:center;
+  align-items:stretch;
+}
+#attackcontainer{
+  border: 5px solid rgba(119, 119, 119, 0.89);
+  width: 33%;
+}
 
   </style>
   <h1 id="header">Random Fighter</h1>
-  <p class="center">Fighting Game created for the class, Interactive Computing. Currently only supports local two player. Created by Steven Han, ___, ___, ___</p>
+  <p class="center">Two player local Fighting Game for Interactive Computing class. Created by Steven Han, ___, ___, ___</p>
   <body style="background-color:rgb(12, 9, 99)">
 
     <div id="center"></div>
-
-    <div id="characterDescContainer">
-      <h3>Characters</h3>
-
+    <div id = "scroll_box">
+      <h3 style="text-align:center">Characters</h3>
       <h4>Kitsune</h4>
       <p class="inliner">More focused on keeping the distance with ranged attacks. She has the least amount of health and the slowest movement speed of the characters</p>
-      <br>
-      <h5>Basic Attack - </h5>
-      <p class="inliner">A fast tail swipe dealing fast melee damage directly in front of her</p>
-      <br>
-      <h5>Heavy Attack - </h5>
-      <p class="inliner">Quickly fires a fast-moving, small fireball</p>
-      <br>
-      <h5>Special Attack - </h5>
-      <p class="inliner">Floats while charging the attack. After a small delay, fires 3 slow large fireballs</p>
+      <div id="charcontainer">
+        <div id="attackcontainer">
+          <p class="leftContent">Basic Attack</p>
+          <p class="rightContent">A fast tail swipe dealing fast melee damage directly in front of her</p>
+        </div>
+        <div id="attackcontainer">
+          <p class="leftContent">Heavy Attack</p>
+          <p class="rightContent">Quickly fires a fast-moving, small fireball</p>
+        </div>
+        <div id="attackcontainer">
+          <p class="leftContent">Special Attack</p>
+          <p class="rightContent">Floats while charging the attack. After a small delay, fires 3 slow large fireballs</p>
+        </div>
+      </div>
 
       <h4>Raven</h4>
       <p class="inliner">Focused on speed and agility in movement, with fast melee attacks.</p>
-      <br>
-      <h5>Basic Attack - </h5>
-      <p class="inliner">High-speed blade swipe</p>
-      <br>
-      <h5>Heavy Attack - </h5>
-      <p class="inliner">Fast slash attack that slashes a small distance in front of the Raven</p>
-      <br>
-      <h5>Special Attack - </h5>
-      <p class="inliner">Long charge up to a very large cloud swipe that deals a lot of damage</p>
+      <div id="charcontainer">
+        <div id="attackcontainer">
+          <p class="leftContent">Basic Attack</p>
+          <p class="rightContent">High-speed blade swipe</p>
+        </div>
+        <div id="attackcontainer">
+          <p class="leftContent">Heavy Attack</p>
+          <p class="rightContent">Fast slash attack that slashes a small distance in front of the Raven</p>
+        </div>
+        <div id="attackcontainer">
+          <p class="leftContent">Special Attack</p>
+          <p class="rightContent">Long charge up to a very large cloud swipe that deals a lot of damage</p>
+        </div>
+      </div>
 
       <h4>Samurai</h4>
       <p class="inliner">Versatile character with a combination of distance and close-ranged attacks</p>
-      <br>
-      <h5>Basic Attack - </h5>
-      <p class="inliner">Fast sword swipe</p>
-      <br>
-      <h5>Heavy Attack - </h5>
-      <p class="inliner">Fires bow for a fast arrow projectile</p>
-      <br>
-      <h5>Special Attack - </h5>
-      <p class="inliner">Double Swipe, dealing more damage in a wider area</p>
+      <div id="charcontainer">
+        <div id="attackcontainer">
+          <p class="leftContent">Basic Attack</p>
+          <p class="rightContent">Fast sword swipe</p>
+        </div>
+        <div id="attackcontainer">
+          <p class="leftContent">Heavy Attack</p>
+          <p class="rightContent">Fires bow for a fast arrow projectile</p>
+        </div>
+        <div id="attackcontainer">
+          <p class="leftContent">Special Attack</p>
+          <p class="rightContent">Double Swipe, dealing more damage in a wider area</p>
+        </div>
+      </div>
+
 
       <h4>Fighter</h4>
       <p class="inliner">Focuses on close-quarter fights and blocking to get close to opponents. He has the largest amount of health</p>
-      <br>
-      <h5>Basic Attack - </h5>
-      <p class="inliner">Punches</p>
-      <br>
-      <h5>Heavy Attack - </h5>
-      <p class="inliner">Blocks, receiving only half damage from all attacks when blocking</p>
-      <br>
-      <h5>Special Attack - </h5>
-      <p class="inliner">Kick that also shoots a fireball</p>
+      <div id="charcontainer">
+        <div id="attackcontainer">
+          <p class="leftContent">Basic Attack</p>
+          <p class="rightContent">Punches</p>
+        </div>
+        <div id="attackcontainer">
+          <p class="leftContent">Heavy Attack</p>
+          <p class="rightContent">Blocks, receiving only half damage from all attacks when blocking</p>
+        </div>
+        <div id="attackcontainer">
+          <p class="leftContent">Special Attack</p>
+          <p class="rightContent">Kick that also shoots a fireball</p>
+        </div>
+      </div>
     </div>
-
-    <div id="attributions">
-      <h3>Attributions</h3>
-      <p>Thanks to CraftPix for all our external sprites and spritesheets. Links:</p>
-      <div class="links">
-        <p>https://craftpix.net/freebies/free-yokai-pixel-art-character-sprites/</p>
-        <p>https://craftpix.net/freebies/free-samurai-pixel-art-sprite-sheets/</p>
-        <p>https://craftpix.net/freebies/free-shinobi-sprites-pixel-art/</p>
-        <p>https://craftpix.net/freebies/free-slash-sprite-cartoon-effects/ </p>
-        <p>https://craftpix.net/freebies/free-forest-battle-backgrounds/</p>
-      </div> 
-      <p>Music by <a href="https://pixabay.com/users/daddy_s_music-22836301/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=9448">Zakhar Valaha</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=9448">Pixabay</a></p>
-    </div>
+    <p style="font-size: 30px; text-align:center"><a style="text-align:center;"href="https://docs.google.com/document/d/1NqZMO_9Kw6Eqsh91O-b7ka1zJrtUJfXAG_mPepl1niU/edit?usp=sharing">Attributions</a></p>
     
   </body>
 </html>
