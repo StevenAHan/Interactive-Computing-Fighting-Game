@@ -768,10 +768,29 @@ class HitBoxes {
     constructor(father, lattackl, lattackr, lattackt, lattackb, hattackl, hattackr, hattackb, hattackt, 
         sattackl, sattackr, sattackb, sattackt, dmgl, dmgh, dmgs) {
         this.char = father;
+        this.direction;
 
-        this.direction = [ [new HitBox(-25, 5, -5, 46), new HitBox(-10, 5, 45, 63)], 
-                           [new HitBox(-5, 25, -5, 46), new HitBox(-5, 10, 45, 63)]];
+        switch (father.name) {
+            case "Kitsune":
+                this.direction = [ [new HitBox(-25, 5, -5, 46), new HitBox(-10, 5, 45, 63)], 
+                                   [new HitBox(-5, 25, -5, 46), new HitBox(-5, 10, 45, 63)]];
+                break;
+            case "Raven":
+                this.direction = [ [new HitBox(-25, 25, -20, 46), new HitBox(-10, 25, 45, 63)], 
+                                   [new HitBox(-25, 25, -20, 46), new HitBox(-15, 10, 45, 63)]];
+                break;
+            case "Fighter":
+                this.direction = [ [new HitBox(-15, 10, -15, 46), new HitBox(-15, 10, 45, 63)], 
+                                   [new HitBox(-10, 15, -15, 46), new HitBox(-10, 15, 45, 63)]];
+                break;
+            case "Samurai":
+                this.direction = [ [new HitBox(-20, 15, -7, 46), new HitBox(-10, 15, 45, 63)], 
+                                   [new HitBox(-15, 20, -7, 46), new HitBox(-15, 10, 45, 63)]];
+                break;
 
+
+
+        }
         this.attacks = { // TODO: make these accurate
             //light: [[new HitBox(15, 40, 0, 25)], [new HitBox(-25, 40, -10, 25)]], // first list is facing right, second facing left
             light:[[new HitBox(lattackl, lattackr, lattackt, lattackb, dmgl)], [new HitBox(-lattackl, -lattackr, lattackt, lattackb, dmgl)]],
