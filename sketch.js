@@ -552,11 +552,11 @@ function arena() {
   //   end = true;
   // }
 
-  fill(128, 0, 0)
-  textSize(50);
+  fill(255, 0, 0);
+  textSize(60);
   if(arenaState.p1.dying) {
     text("Player 2 Wins!", 600, 400);
-    textSize(25);
+    textSize(30);
     text("Press Enter to Go Back to Character Selection", 600, 450);
     end = true;
     woodsMusic.stop()
