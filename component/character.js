@@ -280,6 +280,7 @@ class Character {
     }
 
     takeDamage(amount) {
+        this.spriteAnimations[this.currAnimation]?.resetFrames();
         this.immune = 1;
         hurtSound.play()
         if(this.blocking) {
@@ -293,7 +294,6 @@ class Character {
         } 
         this.healthPercentage = this.health / this.origHealth;
 
-        console.log("damage: " + amount, "health: " + this.health, "percentage: " + this.healthPercentage);
     }
 
     die() {
@@ -740,8 +740,8 @@ class Projectile {
         imageMode(CENTER);
 
         // hitbox work
-        fill('green');
-        rect(this.x-this.hitrad, this.y-this.hitrad, this.hitrad*2, this.hitrad*2);
+        // fill('green');
+        // rect(this.x-this.hitrad, this.y-this.hitrad, this.hitrad*2, this.hitrad*2);
 
         this.animation.display(this.x, this.y, this.direction);
         if(this.direction == 0) {
@@ -831,7 +831,6 @@ class HitBoxes {
                       (opponent.y+a.top    < char.y+h.top  && opponent.y+a.bottom > char.y+h.bottom ) ||
                       (opponent.y+a.bottom < char.y+h.top  && opponent.y+a.top    > char.y+h.bottom ) )
                 ) {
-                    console.log("hit!");
                     if(char.immune == false) {
                         char.takeDamage(a.damage);
                     }
@@ -858,6 +857,7 @@ class HitBoxes {
     draw() {
         stroke('red');
         strokeWeight(3);
+        noStroke();
 
         this.direction[this.char.direction].forEach(h => {
                 line(h.left+this.char.x, h.top+this.char.y, h.left+this.char.x, h.bottom+this.char.y);
@@ -866,12 +866,13 @@ class HitBoxes {
                 line(h.left+this.char.x, h.bottom+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
             });
 
-        noStroke();
     }
 
     // draws attack hitbox
     attack(type) {
         stroke('green');
+        noStroke();
+
         let char = this.char;
         this.attacks[type][char.direction].forEach(h => {
             line(h.left+char.x, h.top+char.y, h.left+char.x, h.bottom+char.y);
@@ -880,7 +881,6 @@ class HitBoxes {
             line(h.left+char.x, h.bottom+char.y, h.right+char.x, h.bottom+char.y);
         });
 
-        noStroke();
 
     }
 }
