@@ -507,7 +507,6 @@ function arena() {
   rect(10, 30, (width * 3 / 7), 25);
   rect(670, 30, (width * 3 / 7), 25);
   health1.display(arenaState.p1.healthPercentage);
-  console.log(arenaState.p1.healthPercentage)
   health2.display(arenaState.p2.healthPercentage);
   time.display()
   stroke(1);
@@ -538,7 +537,6 @@ function arena() {
     }
   }
 
-  // TODO Hitboxes
   for(let i = 0; i < tprojectiles.length; i++) {
     tprojectiles[i].move();
     if(tprojectiles[i].delete()) {
