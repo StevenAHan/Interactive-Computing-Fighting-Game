@@ -71,6 +71,10 @@ let theParticles = [];
 let ground = 600;
 let end = false;
 
+let health1;
+let health2;
+let timer = 99
+let time;
 
 function preload() {
   // Load the background images
@@ -186,6 +190,9 @@ function setup() {
   let cnv = createCanvas(1200, 800);
   cnv.parent('center');
   background(0);
+  health1 = new Health_L (10, 30)
+  health2 = new Health_R (670, 30, (width * 3 / 7))
+  time = new Timer (width/2, 40)
 
   // init charselect
   charSelectSetup(charSelect);
@@ -495,6 +502,11 @@ function finished(){
 function arena() {
   imageMode(CENTER);
   image(arenaImage, width, height, width * 2, height * 2);
+  
+  health1.display();
+  health2.display()
+  time.display()
+  
   if(playArena){
     woodsMusic.setVolume(0.5)
     woodsMusic.play()
