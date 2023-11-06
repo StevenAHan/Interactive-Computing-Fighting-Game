@@ -1,4 +1,4 @@
 # Fighting Game
 
-Game Name: Random Fighter
+Game Name: Shaded Showdown
 
