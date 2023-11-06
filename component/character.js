@@ -294,6 +294,9 @@ class Character {
         } 
         this.healthPercentage = this.health / this.origHealth;
 
+        if (debug) {
+            console.log("damage: " + amount, "health: " + this.health, "percentage: " + this.healthPercentage);
+        }
     }
 
     die() {
@@ -740,8 +743,10 @@ class Projectile {
         imageMode(CENTER);
 
         // hitbox work
-        // fill('green');
-        // rect(this.x-this.hitrad, this.y-this.hitrad, this.hitrad*2, this.hitrad*2);
+        if (debug) {
+            fill('green');
+            rect(this.x-this.hitrad, this.y-this.hitrad, this.hitrad*2, this.hitrad*2);
+        }
 
         this.animation.display(this.x, this.y, this.direction);
         if(this.direction == 0) {
@@ -821,7 +826,6 @@ class HitBoxes {
         
         this.direction[this.char.direction].forEach(h => {
             attack.forEach(a => {
-                console.log((opponent.x+a.right   + ", " + char.x+h.left));
                 if ( ((opponent.x+a.left   > char.x+h.left && opponent.x+a.left   < char.x+h.right  ) || 
                       (opponent.x+a.right  > char.x+h.left && opponent.x+a.right  < char.x+h.right  ) ||
                       (opponent.x+a.left   < char.x+h.left && opponent.x+a.right  > char.x+h.right  ) ||
@@ -831,6 +835,9 @@ class HitBoxes {
                       (opponent.y+a.top    < char.y+h.top  && opponent.y+a.bottom > char.y+h.bottom ) ||
                       (opponent.y+a.bottom < char.y+h.top  && opponent.y+a.top    > char.y+h.bottom ) )
                 ) {
+                    if (debug) {
+                        console.log("hit!");
+                    }
                     if(char.immune == false) {
                         char.takeDamage(a.damage);
                     }
@@ -854,34 +861,38 @@ class HitBoxes {
         })
     }
 
+    // draws body hitboxes if debug is set
     draw() {
-        stroke('red');
-        strokeWeight(3);
-        noStroke();
+        if ( debug ) {
+            stroke('red');
+            strokeWeight(3);
 
-        this.direction[this.char.direction].forEach(h => {
-                line(h.left+this.char.x, h.top+this.char.y, h.left+this.char.x, h.bottom+this.char.y);
-                line(h.right+this.char.x, h.top+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
-                line(h.left+this.char.x, h.top+this.char.y, h.right+this.char.x, h.top+this.char.y);
-                line(h.left+this.char.x, h.bottom+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
-            });
+            this.direction[this.char.direction].forEach(h => {
+                    line(h.left+this.char.x, h.top+this.char.y, h.left+this.char.x, h.bottom+this.char.y);
+                    line(h.right+this.char.x, h.top+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
+                    line(h.left+this.char.x, h.top+this.char.y, h.right+this.char.x, h.top+this.char.y);
+                    line(h.left+this.char.x, h.bottom+this.char.y, h.right+this.char.x, h.bottom+this.char.y);
+                });
 
+            noStroke();
+        }
     }
 
-    // draws attack hitbox
+    // draws attack hitbox if debug is set
     attack(type) {
-        stroke('green');
-        noStroke();
 
-        let char = this.char;
-        this.attacks[type][char.direction].forEach(h => {
-            line(h.left+char.x, h.top+char.y, h.left+char.x, h.bottom+char.y);
-            line(h.right+char.x, h.top+char.y, h.right+char.x, h.bottom+char.y);
-            line(h.left+char.x, h.top+char.y, h.right+char.x, h.top+char.y);
-            line(h.left+char.x, h.bottom+char.y, h.right+char.x, h.bottom+char.y);
-        });
+        if (debug) {
+            stroke('green');
+            let char = this.char;
+            this.attacks[type][char.direction].forEach(h => {
+                line(h.left+char.x, h.top+char.y, h.left+char.x, h.bottom+char.y);
+                line(h.right+char.x, h.top+char.y, h.right+char.x, h.bottom+char.y);
+                line(h.left+char.x, h.top+char.y, h.right+char.x, h.top+char.y);
+                line(h.left+char.x, h.bottom+char.y, h.right+char.x, h.bottom+char.y);
+            });
 
-
+            noStroke();
+        }
     }
 }
 
