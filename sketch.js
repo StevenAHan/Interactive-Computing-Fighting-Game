@@ -1,12 +1,6 @@
-/* THINGS TO DO
-- Fix hitboxes (right now they only work for those facing to the right)
-- Sounds
-- End screen
-- HUD
-- prettify
 
-*/
-
+// debug var to see hitboxes and some logging
+let debug = false;
 
 // Home Screen Vars
 let backgroundImage;
