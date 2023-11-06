@@ -502,11 +502,15 @@ function finished(){
 function arena() {
   imageMode(CENTER);
   image(arenaImage, width, height, width * 2, height * 2);
-  
+  fill(128);
+  stroke(51);
+  rect(10, 30, (width * 3 / 7), 25);
+  rect(670, 30, (width * 3 / 7), 25);
   health1.display(arenaState.p1.healthPercentage);
   console.log(arenaState.p1.healthPercentage)
   health2.display(arenaState.p2.healthPercentage);
   time.display()
+  stroke(1);
   
   if(playArena){
     woodsMusic.setVolume(0.5)
