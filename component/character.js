@@ -66,6 +66,13 @@ class Character {
     }
 
     displayAndMove() {
+        if(this.x > 1200) {
+            this.x = 1200;
+        }
+        if(this.x < 0) {
+            this.x = 0;
+        }
+
         if(this.immune != false) {
             this.immune++;
             if(this.immune == 50) {
@@ -131,7 +138,7 @@ class Character {
             
         }
 
-        // TODO - Player 2 Controls - copy from player one once done
+        // Player 2 controls
         if(this.playerNumber == 1) {
             let xPrev = this.x
             // can only move if you aren't attacking
@@ -274,6 +281,7 @@ class Character {
 
     takeDamage(amount) {
         this.immune = 1;
+        hurtSound.play()
         if(this.blocking) {
             this.health -= amount / 2;
         } else {
@@ -750,7 +758,6 @@ class Projectile {
     }
 
     disappear() {
-        // TODO: make this projectile go away
         this.x = width+20;
         this.direction = 0;
     }
@@ -798,12 +805,10 @@ class HitBoxes {
 
 
         }
-        this.attacks = { // TODO: make these accurate
-            //light: [[new HitBox(15, 40, 0, 25)], [new HitBox(-25, 40, -10, 25)]], // first list is facing right, second facing left
+        this.attacks = {
+            // first list is facing right, second facing left
             light:[[new HitBox(lattackl, lattackr, lattackt, lattackb, dmgl)], [new HitBox(-lattackl, -lattackr, lattackt, lattackb, dmgl)]],
-            //heavy: [[new HitBox(15, 40, 0, 25)], [new HitBox(15, 40, 0, 25)]],
             heavy:[[new HitBox(hattackl, hattackr, hattackb, hattackt, dmgh)], [new HitBox(-hattackl, -hattackr, hattackb, hattackt, dmgh)]],
-            //special: [[new HitBox(15, 40, 0, 25)], [new HitBox(15, 40, 0, 25)]]
             special: [[new HitBox(sattackl, sattackr, sattackb, sattackt, dmgs)], [new HitBox(-sattackl, -sattackr, sattackb, sattackt, dmgs)]]
         }
     }
@@ -811,18 +816,21 @@ class HitBoxes {
     // check if the attack passed in hit the char's hitbox, or if blocked
     // expected input: the opponent, and the attack type
     checkHit(opponent, attackType) {
-        // TODO
         let char = this.char;
         let attack = opponent.hitboxes.attacks[attackType][opponent.direction]; // the attack hitbox array
         
         this.direction[this.char.direction].forEach(h => {
             attack.forEach(a => {
-                if ( ((opponent.x+a.left > char.x+h.left && opponent.x+a.left < char.x+h.right) || 
-                (opponent.x+a.right > char.x+h.left && opponent.x+a.right < char.x+h.right)) &&
-                     ((opponent.y+a.top > char.y+h.top && opponent.y+a.top < char.y+h.bottom) || 
-                     (opponent.y+a.bottom > char.y+h.top && opponent.y+a.bottom < char.y+h.bottom))
+                console.log((opponent.x+a.right   + ", " + char.x+h.left));
+                if ( ((opponent.x+a.left   > char.x+h.left && opponent.x+a.left   < char.x+h.right  ) || 
+                      (opponent.x+a.right  > char.x+h.left && opponent.x+a.right  < char.x+h.right  ) ||
+                      (opponent.x+a.left   < char.x+h.left && opponent.x+a.right  > char.x+h.right  ) ||
+                      (opponent.x+a.right  < char.x+h.left && opponent.x+a.left   > char.x+h.right  ) ) &&
+                     ((opponent.y+a.top    > char.y+h.top  && opponent.y+a.top    < char.y+h.bottom ) || 
+                      (opponent.y+a.bottom > char.y+h.top  && opponent.y+a.bottom < char.y+h.bottom ) ||  
+                      (opponent.y+a.top    < char.y+h.top  && opponent.y+a.bottom > char.y+h.bottom ) ||
+                      (opponent.y+a.bottom < char.y+h.top  && opponent.y+a.top    > char.y+h.bottom ) )
                 ) {
-                    // attack only once
                     console.log("hit!");
                     if(char.immune == false) {
                         char.takeDamage(a.damage);
@@ -917,25 +925,4 @@ class Health_L {
   
   
   
-  class Timer {
-    constructor (x,y) {
-      this.x = x;
-      this.y = y;
-    }
-    display() {
-      stroke(20)
-      fill(255)
-      rectMode(CENTER)
-      rect(this.x, this.y, 50, 50)
-      rectMode(CORNER)
-      fill(0)
-      textFont(newFont);
-      textAlign(CENTER, CENTER);
-      textSize(30);
-      text(timer, this.x, this.y);
-  
-      if (frameCount % 60 == 0 && timer > 0) {
-        timer --;
-      }
-    }
-  }
+

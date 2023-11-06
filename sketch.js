@@ -25,6 +25,7 @@ let backgroundMusic, versus, chooseCharMusic, woodsMusic, winMusic;
 let instruction = false;
 let newFont, blood, playArena, playWin;
 
+
 // Game Vars to Keep Track of Game State
 let projectiles = [];
 let tprojectiles = [];
@@ -66,6 +67,8 @@ let raven_basic, raven_heavy, raven_special;
 let samurai_basic, samurai_heavy, samurai_special;
 let fighter_basic, fighter_heavy, fighter_special;
 
+let hurtSound;
+
 let testCharAnimations;
 let theParticles = [];
 let ground = 600;
@@ -74,7 +77,9 @@ let end = false;
 let health1;
 let health2;
 let timer = 99
-let time;
+const starting_time = 99;
+
+let menuTime = 0;
 
 function preload() {
   // Load the background images
@@ -184,6 +189,9 @@ function preload() {
 
   //fighter attack effect
   fighter_basic = loadSound("./assets/sounds/fighter_basic.mp3")
+
+  // hurt sound
+  hurtSound = loadSound("./assets/sounds/hurtsound.mp3")
 }
 
 function setup() {
@@ -192,7 +200,6 @@ function setup() {
   background(0);
   health1 = new Health_L (10, 30)
   health2 = new Health_R (670, 30, (width * 3 / 7))
-  time = new Timer (width/2, 40)
 
   // init charselect
   charSelectSetup(charSelect);
@@ -205,6 +212,7 @@ function draw() {
     if (mode === 0) {
       warning();
     } else if (mode === 1) {
+      menuTime++;
       titleScreen();
     } else if (mode === 2) {
       menu();
@@ -225,7 +233,7 @@ function keyPressed() {
     mode = 1;
     isPlaying = false; // Reset isPlaying
     instruction = true;
-  } else if (mode === 1 && keyCode === ENTER) {
+  } else if (mode === 1 && keyCode === ENTER && menuTime >= 120) {
     if (instruction) {
       instruction = false;
 
@@ -242,6 +250,7 @@ function keyPressed() {
   } else if(mode > 3 && keyCode === ENTER && end == true) {
     winMusic.stop()
     mode = 2;
+    timer = starting_time;
     end = false;
     chooseCharMusic.setVolume(0.5);
     chooseCharMusic.loop();
@@ -507,10 +516,23 @@ function arena() {
   rect(10, 30, (width * 3 / 7), 25);
   rect(670, 30, (width * 3 / 7), 25);
   health1.display(arenaState.p1.healthPercentage);
-  console.log(arenaState.p1.healthPercentage)
   health2.display(arenaState.p2.healthPercentage);
-  time.display()
   stroke(1);
+  //timer
+  stroke(20)
+  fill(255)
+  rectMode(CENTER)
+  rect(width/2, 40, 50, 50)
+  rectMode(CORNER)
+  fill(0)
+  textFont('Courier New');
+  textAlign(CENTER, CENTER);
+  textSize(30);
+  text(timer, width/2, 40);
+  
+  if (frameCount % 60 == 0 && timer > 0) {
+    timer --;
+  }
   
   if(playArena){
     woodsMusic.setVolume(0.5)
@@ -538,7 +560,6 @@ function arena() {
     }
   }
 
-  // TODO Hitboxes
   for(let i = 0; i < tprojectiles.length; i++) {
     tprojectiles[i].move();
     if(tprojectiles[i].delete()) {
@@ -554,7 +575,7 @@ function arena() {
 
   fill(255, 0, 0);
   textSize(60);
-  if(arenaState.p1.dying) {
+  if(arenaState.p1.dying || (timer == 0 & arenaState.p1.health < arenaState.p2.health)) {
     text("Player 2 Wins!", 600, 400);
     textSize(30);
     text("Press Enter to Go Back to Character Selection", 600, 450);
@@ -564,7 +585,7 @@ function arena() {
       winMusic.play()
       playWin = false
     }
-  } else if(arenaState.p2.dying) {
+  } else if (arenaState.p2.dying || (timer == 0 & arenaState.p2.health < arenaState.p1.health)) {
     text("Player 1 Wins!", 600, 400);
     textSize(25);
     text("Press Enter to Go Back to Character Selection", 600, 450);
@@ -575,8 +596,18 @@ function arena() {
       playWin = false
     }
   }
+  else if(arenaState.p2.health == arenaState.p1.health & timer == 0) {
+    text("Draw", 600, 400);
+    textSize(25);
+    text("Press Enter to Go Back to Character Selection", 600, 450);
+    end = true;
+    woodsMusic.stop()
+    if(playWin){
+      winMusic.play()
+      playWin = false
+    }
 }
-
+}
 function woodsend(){
   woodsMusic.loop()
 }
