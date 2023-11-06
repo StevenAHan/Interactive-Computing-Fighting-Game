@@ -554,7 +554,11 @@ function arena() {
     textSize(30)
     text("Hold t for controls", 600, 790)
   }
+  fill(255);
+  textSize(20);
+  text("Player 1", arenaState.p1.x, arenaState.p1.y - 30);
   arenaState.p1.displayAndMove();
+  text("Player 2", arenaState.p2.x, arenaState.p2.y - 30);
   arenaState.p2.displayAndMove();
 
   for(let i = 0; i < projectiles.length; i++) {
