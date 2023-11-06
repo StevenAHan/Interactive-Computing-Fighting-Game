@@ -52,6 +52,7 @@ class Character {
 
     // Sets up the character, should only run once in the beginning
     setup() {
+        this.origHealth = this.health;
         this.spriteAnimations.idle = new Sprite(this.spriteAnimations.idle, this.x, this.y, this.spriteWidth, this.spriteHeight, 5, this.offset);
         this.spriteAnimations.run = new Sprite(this.spriteAnimations.run, this.x, this.y, this.spriteWidth, this.spriteHeight, 5, this.offset);
         let jumpTiming = (60 / ((this.jumpSpeed ) / this.gravity));
@@ -283,7 +284,8 @@ class Character {
             this.dying = true;
         } 
         this.healthPercentage = this.health / this.origHealth;
-        console.log("damage: " + amount, "health: " + this.health);
+
+        console.log("damage: " + amount, "health: " + this.health, "percentage: " + this.healthPercentage);
     }
 
     die() {
@@ -863,18 +865,14 @@ class Health_L {
       this.health = 1; // Health starts at 100%
     }
   
-    // Call this method when the object receives an attack
-    receiveAttack(damage) {
-        this.health -= damage; // Assuming you have a 'health' property
-        if (this.health < 0) this.health = 0;
-    }
   
     // Call this method to update the display of the health bar
-    display() {
-      stroke(51);
-      fill(255, 0, 0);
-      // Width of the health bar is now proportional to the health property
-      rect(this.x, this.y, (width * 3 / 7) * this.health, 25);
+    display(health) {
+        this.health = Math.max(0,health);;
+        stroke(51);
+        fill(255, 0, 0);
+        // Width of the health bar is now proportional to the health property
+        rect(this.x, this.y, (width * 3 / 7) * this.health, 25);
     }
   }
 
@@ -886,21 +884,14 @@ class Health_L {
       this.health = 1; // Health starts at 100%
     }
   
-    // Call this method when the object receives an attack
-    receiveAttack(damage) {
-      this.health -= damage;
-      if (this.health < 0) {
-        this.health = 0; // Prevent the health from dropping below 0
-      }
-    }
-  
     // Call this method to update the display of the health bar
-    display() {
-      stroke(51);
-      fill(255, 0, 0);
-      // Calculate the current width of the health bar based on the health
-      let currentWidth = this.maxWidth * this.health;
-      rect(this.x, this.y, currentWidth, 25);
+    display(health) {
+        this.health = Math.max(0,health);
+        stroke(51);
+        fill(255, 0, 0);
+        // Calculate the current width of the health bar based on the health
+        let currentWidth = this.maxWidth * this.health;
+        rect(this.x, this.y, currentWidth, 25);
     }
   }
   
