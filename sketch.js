@@ -502,10 +502,14 @@ function finished(){
 function arena() {
   imageMode(CENTER);
   image(arenaImage, width, height, width * 2, height * 2);
-  
+  fill(128);
+  stroke(51);
+  rect(10, 30, (width * 3 / 7), 25);
+  rect(670, 30, (width * 3 / 7), 25);
   health1.display(arenaState.p1.healthPercentage);
   health2.display(arenaState.p2.healthPercentage);
   time.display()
+  stroke(1);
   
   if(playArena){
     woodsMusic.setVolume(0.5)
@@ -546,11 +550,11 @@ function arena() {
   //   end = true;
   // }
 
-  fill(128, 0, 0)
-  textSize(50);
+  fill(255, 0, 0);
+  textSize(60);
   if(arenaState.p1.dying) {
     text("Player 2 Wins!", 600, 400);
-    textSize(25);
+    textSize(30);
     text("Press Enter to Go Back to Character Selection", 600, 450);
     end = true;
     woodsMusic.stop()
