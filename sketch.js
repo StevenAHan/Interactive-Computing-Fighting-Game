@@ -517,6 +517,15 @@ function arena() {
   rect(670, 30, (width * 3 / 7), 25);
   health1.display(arenaState.p1.healthPercentage);
   health2.display(arenaState.p2.healthPercentage);
+  stroke(3);
+  textSize(30);
+  fill(195)
+  rect(100, 60, 300, 30)
+  rect(width/2+180, 60, 300, 30)
+  noStroke()
+  fill(110, 7, 7);
+  text(arenaState.p1.name + " health", width/2-350, 87)
+  text(arenaState.p2.name + " health", width/2+330, 87);
   stroke(1);
   //timer
   stroke(20)
@@ -525,7 +534,7 @@ function arena() {
   rect(width/2, 40, 50, 50)
   rectMode(CORNER)
   fill(0)
-  textFont('Courier New');
+  textFont(newFont);
   textAlign(CENTER, CENTER);
   textSize(30);
   text(timer, width/2, 40);
@@ -546,6 +555,8 @@ function arena() {
   }
   else{
     fill(0)
+    textAlign(CENTER, BASELINE);
+    noStroke();
     textSize(30)
     text("Hold t for controls", 600, 790)
   }
@@ -576,6 +587,9 @@ function arena() {
   fill(255, 0, 0);
   textSize(60);
   if(arenaState.p1.dying || (timer == 0 & arenaState.p1.health < arenaState.p2.health)) {
+    fill(0, 150);
+    rect(width/2-320, height/2-100, 650, 230)
+    fill(128, 2, 19);
     text("Player 2 Wins!", 600, 400);
     textSize(30);
     text("Press Enter to Go Back to Character Selection", 600, 450);
@@ -586,6 +600,9 @@ function arena() {
       playWin = false
     }
   } else if (arenaState.p2.dying || (timer == 0 & arenaState.p2.health < arenaState.p1.health)) {
+    fill(0, 150);
+    rect(width/2-320, height/2-100, 650, 230)
+    fill(128, 2, 19);
     text("Player 1 Wins!", 600, 400);
     textSize(25);
     text("Press Enter to Go Back to Character Selection", 600, 450);
@@ -609,7 +626,7 @@ function arena() {
 }
 }
 function woodsend(){
-  woodsMusic.loop()
+  playArena = true;
 }
 
 function charSelectSetup(charSelect) {
@@ -667,6 +684,8 @@ function endGame(){
 
 
 function controls(){
+  textAlign(CENTER, BASELINE);
+  noStroke();
   fill(0, 150);
   rect(50, 300, 300, 170)
   rect(850, 300, 300, 170)
