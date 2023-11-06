@@ -584,7 +584,7 @@ function arena() {
       playWin = false
     }
 }
-
+}
 function woodsend(){
   woodsMusic.loop()
 }
