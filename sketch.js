@@ -471,8 +471,14 @@ function arenaSetup() {
   background(0);
   text(charSelect.spots[charSelect.selectors.p1].name, 300, 660);
   fill(255,0,0)
-  text("INSERT IMAGES", 600, 300)
-  text("VERSUS", 600, 660)
+  image(arenaState.p1.spriteAnimations["thumbnail"], 300, 200, 500, 500, 0, 0, 128, 128);
+
+  push();
+  scale(-1, 1);
+  image(arenaState.p2.spriteAnimations["thumbnail"], -900, 200, 500, 500, 0, 0, 128, 128);
+  pop();
+
+  text("VERSUS", 600, 450)
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
 
