@@ -76,6 +76,8 @@ let health2;
 let timer = 99
 const starting_time = 99;
 
+let menuTime = 0;
+
 function preload() {
   // Load the background images
   backgroundImage = loadImage("./assets/environments/char_background.png");
@@ -204,6 +206,7 @@ function draw() {
     if (mode === 0) {
       warning();
     } else if (mode === 1) {
+      menuTime++;
       titleScreen();
     } else if (mode === 2) {
       menu();
@@ -224,7 +227,7 @@ function keyPressed() {
     mode = 1;
     isPlaying = false; // Reset isPlaying
     instruction = true;
-  } else if (mode === 1 && keyCode === ENTER) {
+  } else if (mode === 1 && keyCode === ENTER && menuTime >= 120) {
     if (instruction) {
       instruction = false;
 
