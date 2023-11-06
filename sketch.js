@@ -71,6 +71,10 @@ let theParticles = [];
 let ground = 600;
 let end = false;
 
+let health1;
+let health2;
+let timer = 99
+let time;
 
 function preload() {
   // Load the background images
@@ -186,6 +190,9 @@ function setup() {
   let cnv = createCanvas(1200, 800);
   cnv.parent('center');
   background(0);
+  health1 = new Health_L (10, 30)
+  health2 = new Health_R (670, 30, (width * 3 / 7))
+  time = new Timer (width/2, 40)
 
   // init charselect
   charSelectSetup(charSelect);
@@ -471,8 +478,14 @@ function arenaSetup() {
   background(0);
   text(charSelect.spots[charSelect.selectors.p1].name, 300, 660);
   fill(255,0,0)
-  text("INSERT IMAGES", 600, 300)
-  text("VERSUS", 600, 660)
+  image(arenaState.p1.spriteAnimations["thumbnail"], 300, 200, 500, 500, 0, 0, 128, 128);
+
+  push();
+  scale(-1, 1);
+  image(arenaState.p2.spriteAnimations["thumbnail"], -900, 200, 500, 500, 0, 0, 128, 128);
+  pop();
+
+  text("VERSUS", 600, 450)
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
 
@@ -489,6 +502,11 @@ function finished(){
 function arena() {
   imageMode(CENTER);
   image(arenaImage, width, height, width * 2, height * 2);
+  
+  health1.display();
+  health2.display()
+  time.display()
+  
   if(playArena){
     woodsMusic.setVolume(0.5)
     woodsMusic.play()
