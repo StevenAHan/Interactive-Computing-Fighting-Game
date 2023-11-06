@@ -74,7 +74,7 @@ let end = false;
 let health1;
 let health2;
 let timer = 99
-let time;
+const starting_time = 99;
 
 function preload() {
   // Load the background images
@@ -192,7 +192,6 @@ function setup() {
   background(0);
   health1 = new Health_L (10, 30)
   health2 = new Health_R (670, 30, (width * 3 / 7))
-  time = new Timer (width/2, 40)
 
   // init charselect
   charSelectSetup(charSelect);
@@ -242,6 +241,7 @@ function keyPressed() {
   } else if(mode > 3 && keyCode === ENTER && end == true) {
     winMusic.stop()
     mode = 2;
+    timer = starting_time;
     end = false;
     chooseCharMusic.setVolume(0.5);
     chooseCharMusic.loop();
@@ -552,7 +552,7 @@ function arena() {
 
   fill(255, 0, 0);
   textSize(60);
-  if(arenaState.p1.dying) {
+  if(arenaState.p1.dying || (timer == 0 & arenaState.p1.health < arenaState.p2.health)) {
     text("Player 2 Wins!", 600, 400);
     textSize(30);
     text("Press Enter to Go Back to Character Selection", 600, 450);
@@ -562,7 +562,7 @@ function arena() {
       winMusic.play()
       playWin = false
     }
-  } else if(arenaState.p2.dying) {
+  } else if (arenaState.p2.dying || (timer == 0 & arenaState.p2.health < arenaState.p1.health)) {
     text("Player 1 Wins!", 600, 400);
     textSize(25);
     text("Press Enter to Go Back to Character Selection", 600, 450);
@@ -573,6 +573,16 @@ function arena() {
       playWin = false
     }
   }
+  else if(arenaState.p2.health == arenaState.p1.health & timer == 0) {
+    text("Draw", 600, 400);
+    textSize(25);
+    text("Press Enter to Go Back to Character Selection", 600, 450);
+    end = true;
+    woodsMusic.stop()
+    if(playWin){
+      winMusic.play()
+      playWin = false
+    }
 }
 
 function woodsend(){
