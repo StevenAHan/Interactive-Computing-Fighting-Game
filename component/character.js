@@ -61,7 +61,9 @@ class Character {
         this.spriteAnimations.heavyAttack = new Sprite(this.spriteAnimations.heavyAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.heavyAttackSpeed, this.offset);
         this.spriteAnimations.specialAttack = new Sprite(this.spriteAnimations.specialAttack, this.x, this.y, this.spriteWidth, this.spriteHeight, this.specialAttackSpeed, this.offset);
         this.spriteAnimations.hurt = new Sprite(this.spriteAnimations.hurt, this.x, this.y, this.spriteWidth, this.spriteHeight, 15, this.offset);
-        this.spriteAnimations.block = new Sprite(this.spriteAnimations.block, this.x, this.y, this.spriteWidth, this.spriteHeight, 5, this.offset);
+        if(this.spriteAnimations.block != null) {
+            this.spriteAnimations.block = new Sprite(this.spriteAnimations.block, this.x, this.y, this.spriteWidth, this.spriteHeight, 5, this.offset);
+        }
         this.spriteAnimations.die = new Sprite(this.spriteAnimations.die, this.x, this.y, this.spriteWidth, this.spriteHeight, 10, this.offset);
     }
 
@@ -691,6 +693,30 @@ class Fighter extends Character {
             this.spriteAnimations[this.currAnimation].resetFrames();
         }
     }
+
+}
+
+class Raider extends Character {
+    constructor(name, x, y, playerNumber, opponent=null) {
+        let animations = {
+            "idle": raiderIdle,
+            "run": raiderRun,
+            "jump": raiderJump,
+            "basicAttack": raiderBasicAttack,
+            "heavyAttack": raiderHeavyAttack,
+            "specialAttack": raiderSpecialAttack,
+            "hurt": raiderHurt,
+            "die": raiderDeath,
+            "thumbnail": raiderIdle,
+        };
+        super(name, 5, 10, x, y, animations, 128, 128, playerNumber, opponent);
+        this.basicAttackSpeed = 6;
+        this.heavyAttackSpeed = 5;
+        this.specialAttackSpeed = 20;
+        this.health = 150;
+        this.hitboxes = new HitBoxes(this, 0, 35, 0, 30, 0, 0, 0, 0, 0, 50, 5, 30, 20, 0, 15);
+    }
+
 
 }
 
