@@ -33,17 +33,17 @@ let arenaState = {};
 // Arena Vars
 let kitsuneIdle, kitsuneRun, kitsuneJump, 
   kitsuneBasicAttack, kitsuneHeavyAttack, kitsuneSpecialAttack,
-  kitsuneHurt, kitsuneDeath, kitsuneWalk, kitsuneFireball, kitsuneBigFireball;
+  kitsuneHurt, kitsuneDeath, kitsuneWalk, kitsuneFireball, kitsuneBigFireball, kitsuneBlock;
 
 let ravenIdle, ravenRun, ravenJump,
   ravenBasicAttack, ravenHeavyAttack, ravenSpecialAttack,
-  ravenHurt, ravenDeath;
+  ravenHurt, ravenDeath, ravenBlock;
 let ravenStrike = [];
 let ravenSpecial = [];
 
 let werewolfIdle, werewolfRun, werewolfJump,
   werewolfBasicAttack, werewolfHeavyAttack, werewolfSpecialAttack,
-  werewolfHurt, werewolfDeath;
+  werewolfHurt, werewolfDeath, werewolfBlock;
 let werewolfStrike = [];
 
 let samuraiIdle, samuraiRun, samuraiJump,
