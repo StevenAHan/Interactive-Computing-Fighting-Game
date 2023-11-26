@@ -1,6 +1,6 @@
 
 // debug var to see hitboxes and some logging
-let debug = false;
+let debug = true;
 
 // Home Screen Vars
 let backgroundImage;
@@ -33,7 +33,7 @@ let arenaState = {};
 // Arena Vars
 let kitsuneIdle, kitsuneRun, kitsuneJump, 
   kitsuneBasicAttack, kitsuneHeavyAttack, kitsuneSpecialAttack,
-  kitsuneHurt, kitsuneDeath, kitsuneBlock, kitsuneWalk, kitsuneFireball, kitsuneBigFireball;
+  kitsuneHurt, kitsuneDeath, kitsuneWalk, kitsuneFireball, kitsuneBigFireball, kitsuneBlock;
 
 let ravenIdle, ravenRun, ravenJump,
   ravenBasicAttack, ravenHeavyAttack, ravenSpecialAttack,
@@ -54,6 +54,10 @@ let samuraiShot = [];
 let fighterIdle, fighterRun, fighterJump,
   fighterBasicAttack, fighterHeavyAttack, fighterSpecialAttack,
   fighterHurt, fighterDeath, fighterBlock, fighterFireball;
+
+let raiderIdle, raiderRun, raiderJump,
+  raiderBasicAttack, raiderHeavyAttack, raiderSpecialAttack,
+  raiderHurt, raiderDeath;
 
 // attack sounds
 let kitsune_basic, kitsune_heavy, kitsune_special;
@@ -182,10 +186,21 @@ function preload() {
   fighterFireball = loadImage("./assets/characters/Fighter/fighter-fireball.png");
 
   //fighter attack effect
-  fighter_basic = loadSound("./assets/sounds/fighter_basic.mp3")
+  fighter_basic = loadSound("./assets/sounds/fighter_basic.mp3");
 
   // hurt sound
-  hurtSound = loadSound("./assets/sounds/hurtsound.mp3")
+  hurtSound = loadSound("./assets/sounds/hurtsound.mp3");
+
+  // Raider Animations
+  raiderIdle = loadImage("./assets/characters/Raider/Idle.png");
+  raiderRun = loadImage("./assets/characters/Raider/Run.png");
+  raiderJump = loadImage("./assets/characters/Raider/Jump.png");
+  raiderBasicAttack = loadImage("./assets/characters/Raider/Attack.png");
+  raiderHeavyAttack = loadImage("./assets/characters/Raider/Shot_1.png");
+  raiderSpecialAttack = loadImage("./assets/characters/Raider/Shot_2.png");
+  raiderHurt = loadImage("./assets/characters/Raider/Hurt.png");
+  raiderDeath = loadImage("./assets/characters/Raider/Dead.png");
+
 }
 
 function setup() {
@@ -632,7 +647,7 @@ function charSelectSetup(charSelect) {
     kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 20),
     raven: new CharSelect(ravenSpecialAttack, 0, 0, 128, 128, 20), 
     char3: new CharSelect(samuraiSpecialAttack, 0, 0, 128, 128, 20),
-    char4: new CharSelect(fighterSpecialAttack, 0, 0, 128, 128, 20)
+    char4: new CharSelect(raiderSpecialAttack, 0, 0, 128, 128, 20)
   };
   charSelect.selectors = {
     p1: 1,
@@ -649,7 +664,7 @@ function charSelectSetup(charSelect) {
       x: 120, y: 350, name: "Samurai", factory: Samurai
     },
     4: {
-      x: 300, y:350, name: "Fighter", factory: Fighter
+      x: 300, y:350, name: "Raider", factory: Raider
     }
   };
 }
