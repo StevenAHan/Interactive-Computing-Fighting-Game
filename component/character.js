@@ -707,15 +707,66 @@ class Raider extends Character {
             "die": raiderDeath,
             "thumbnail": raiderIdle,
             "block": raiderIdle,
+            "heavyProj": samuraiArrow,
+            "specialProj": samuraiArrow,
         };
         super(name, 5, 10, x, y, animations, 128, 128, playerNumber, opponent);
         this.basicAttackSpeed = 6;
         this.heavyAttackSpeed = 5;
         this.specialAttackSpeed = 20;
         this.health = 150;
-        this.hitboxes = new HitBoxes(this, 0, 35, 0, 30, 0, 0, 0, 0, 0, 50, 5, 30, 20, 0, 15);
+        this.hitboxes = new HitBoxes(this, 0, 35, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 15);
+        this.heavyProj = false;
+        this.specialProj = false;
     }
 
+
+    basicAttack() {
+        this.currAnimation = "basicAttack";
+        if(this.spriteAnimations[this.currAnimation].currentFrame > 1) {
+            this.hitboxes.attack('light');
+            this.opponent.hitboxes.checkHit(this, 'light');
+        }
+
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+            this.basicSound = false;
+        }
+    }
+
+    heavyAttack() {
+        this.currAnimation = "heavyAttack";
+        this.hitboxes.attack('heavy');
+        if(this.heavyProj == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
+            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 25, this.spriteAnimations["heavyProj"], this.direction, 64, 64, 10, 15, this.opponent));
+            this.heavyProj = true;
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {   
+            this.state = false;
+            this.heavyProj = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+            this.heavySound = false;
+        }
+    }
+
+    specialAttack() {
+        this.currAnimation = "specialAttack";
+        if(this.specialProj == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
+            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["specialProj"], this.direction, 64, 64, 20, 15, this.opponent));
+            this.specialProj = true;
+        }
+        if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.hitboxes.attack('special');
+            this.opponent.hitboxes.checkHit(this, 'special');
+        }
+        if(this.spriteAnimations[this.currAnimation].actionEnd()) {
+            this.state = false;
+            this.spriteAnimations[this.currAnimation].resetFrames();
+            this.specialSound = false;
+            this.specialProj = false;
+        }
+    }
 
 }
 
@@ -830,6 +881,10 @@ class HitBoxes {
             case "Samurai":
                 this.direction = [ [new HitBox(-20, 15, -7, 46), new HitBox(-10, 15, 45, 63)], 
                                    [new HitBox(-15, 20, -7, 46), new HitBox(-15, 10, 45, 63)]];
+                break;
+            case "Raider":
+                this.direction = [ [new HitBox(-15, 15, 0, 46), new HitBox(-10, 15, 45, 63)], 
+                                   [new HitBox(-15, 20, 0, 46), new HitBox(-15, 10, 45, 63)]];
                 break;
 
 
