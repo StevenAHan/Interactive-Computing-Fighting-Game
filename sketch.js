@@ -201,6 +201,8 @@ function preload() {
   raiderHurt = loadImage("./assets/characters/Raider/Hurt.png");
   raiderDeath = loadImage("./assets/characters/Raider/Dead.png");
 
+  //tiles 
+  tiles = loadImage("./assets/environments/tiles.jpg");
 }
 
 function setup() {
@@ -212,6 +214,9 @@ function setup() {
 
   // init charselect
   charSelectSetup(charSelect);
+
+  //set up platform
+  map1 = new Map(platform, 35);
 }
 
 
@@ -506,10 +511,6 @@ function arenaSetup() {
   text("VERSUS", 600, 450)
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
-
-  // if(frameCount %400 == 0){
-  //   mode++;
-  // }
 }
 function finished(){
   mode++;
@@ -520,6 +521,7 @@ function finished(){
 function arena() {
   imageMode(CENTER);
   image(arenaImage, width, height, width * 2, height * 2);
+  map1.draw(); //platform
   fill(128);
   stroke(51);
   rect(10, 30, (width * 3 / 7), 25);
