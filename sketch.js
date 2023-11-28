@@ -222,6 +222,7 @@ function setup() {
 
   // init charselect
   charSelectSetup(charSelect);
+  
 }
 
 
