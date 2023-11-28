@@ -11,15 +11,7 @@ let opacity = 0;
 let opacityDirection = 1;
 
 //maps
-let arena;
-let desert;
-let forest;
-let haunted;
-let path;
-let ruin;
-let swamp;
-let temple;
-let village;
+let arena1, desert, forest, haunted, path, ruin, swamp, temple, village;
 
 let titleVideo;
 let titleScreenOpacity = 0;
@@ -101,7 +93,7 @@ function preload() {
   foregroundImage = loadImage("./assets/environments/foreground.png");
   
   //arena images
-  arena = loadImage("./assets/environments/maps/arena.png")
+  arena1 = loadImage("./assets/environments/maps/arena.png")
   desert = loadImage("./assets/environments/maps/desert.png")
   forest = loadImage("./assets/environments/maps/forest.png")
   haunted = loadImage("./assets/environments/maps/haunted.png")
@@ -109,7 +101,7 @@ function preload() {
   ruin = loadImage("./assets/environments/maps/ruin.png")
   swamp = loadImage("./assets/environments/maps/swamp.png")
   temple = loadImage("./assets/environments/maps/temple.png")
-  village = loadImage("./assets/environments/maps/vilage.png")
+  village = loadImage("./assets/environments/maps/village.png")
   
 
   // Kitsune Animations
@@ -241,14 +233,11 @@ function setup() {
 
   // init charselect
   charSelectSetup(charSelect);
-<<<<<<< HEAD
 
   //set up platform
   map1 = new Map(platform, 35);
-=======
   //init arenaSelect
   arenaSelectSetup();
->>>>>>> 9ed22d9bbc07099d95f7e3a95a338978b9b75ffb
 }
 
 
@@ -622,12 +611,9 @@ function finished(){
 function arena() {
   const selectedArenaImage = arenaSelect.arenas[arenaSelect.selectedArena].img;
   imageMode(CENTER);
-<<<<<<< HEAD
-  image(arenaImage, width, height, width * 2, height * 2);
-  map1.draw(); //platform
-=======
+  //image(arenaImage, width, height, width * 2, height * 2);
+  //map1.draw(); //platform
   image(selectedArenaImage, width / 2, height / 2, width, height);
->>>>>>> 9ed22d9bbc07099d95f7e3a95a338978b9b75ffb
   fill(128);
   stroke(51);
   rect(10, 30, (width * 3 / 7), 25);
