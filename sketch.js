@@ -9,7 +9,18 @@ let foregroundImage;
 let foregroundOffset = 0;
 let opacity = 0;
 let opacityDirection = 1;
-let arenaImage;
+
+//maps
+let arena;
+let desert;
+let forest;
+let haunted;
+let path;
+let ruin;
+let swamp;
+let temple;
+let village;
+
 let titleVideo;
 let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
@@ -19,16 +30,11 @@ let backgroundMusic, versus, chooseCharMusic, woodsMusic, winMusic;
 let instruction = false;
 let newFont, blood, playArena, playWin;
 
+//area selection
 let arenaSelect = {
-  arenas: [],
-  currentSelection: 0,
-  names: ['battleground', 'desert', 'forest', 'haunted', 'path', 'ruin', 'swamp', 'temple', 'village'],
+  arenas: {},
+  selectedArena: null
 };
-
-let selectedArenaName;
-let selectedArenaImage;
-
-
 
 // Game Vars to Keep Track of Game State
 let projectiles = [];
@@ -93,12 +99,18 @@ function preload() {
   // Load the background images
   backgroundImage = loadImage("./assets/environments/char_background.png");
   foregroundImage = loadImage("./assets/environments/foreground.png");
-  arenaImage = loadImage("./assets/environments/game_background_1.png")
-
-  arenaSelect.names.forEach((name) => {
-    let img = loadImage(`./assets/environments/maps/${name}.png`);
-    arenaSelect.arenas.push(img);
-  });
+  
+  //arena images
+  arena = loadImage("./assets/environments/maps/arena.png")
+  desert = loadImage("./assets/environments/maps/desert.png")
+  forest = loadImage("./assets/environments/maps/forest.png")
+  haunted = loadImage("./assets/environments/maps/haunted.png")
+  path = loadImage("./assets/environments/maps/path.png")
+  ruin = loadImage("./assets/environments/maps/ruin.png")
+  swamp = loadImage("./assets/environments/maps/swamp.png")
+  temple = loadImage("./assets/environments/maps/temple.png")
+  village = loadImage("./assets/environments/maps/vilage.png")
+  
 
   // Kitsune Animations
   kitsuneIdle = loadImage("./assets/characters/Kitsune/Idle.png");
@@ -227,6 +239,8 @@ function setup() {
 
   // init charselect
   charSelectSetup(charSelect);
+  //init arenaSelect
+  arenaSelectSetup();
 }
 
 
@@ -240,6 +254,8 @@ function draw() {
       titleScreen();
     } else if (mode === 2) {
       menu();
+    } else if (mode === 3) {
+      arenaMenu();
     } else if (mode === 3) {
       arenaSetup();
     } else if (mode === 4) { 
@@ -491,6 +507,57 @@ function menu() {
   instruction = true;
 }
 
+function arenaMenu() {
+  imageMode(CORNER);
+  // Draw the background image
+  backgroundOffset += 0.2; // Change this value to control the speed of the movement
+  backgroundOffset %= backgroundImage.width; // Ensure the offset loops
+  
+  // Center the background image vertically
+  const y = height - backgroundImage.height;
+  // Draw the background image at its original size
+  image(backgroundImage, -backgroundOffset, y, backgroundImage.width, backgroundImage.height);
+  image(backgroundImage, backgroundImage.width - backgroundOffset, y, backgroundImage.width, backgroundImage.height);
+
+  // Arena select title
+  textAlign(CENTER);
+  textSize(80);
+  fill(255);
+  noStroke();
+  text("Choose your arena", width / 2, 100);
+
+  // Display arena thumbnails
+  const arenaKeys = Object.keys(arenaSelect.arenas);
+  const arenaWidth = 200; // Assuming all arenas have the same width for thumbnails
+  const spacing = 100; // Spacing between thumbnails
+  const startX = (width - (arenaWidth + spacing) * arenaKeys.length) / 2; // Centering arenas
+
+  arenaKeys.forEach((arenaKey, index) => {
+    const arena = arenaSelect.arenas[arenaKey];
+    const xPosition = startX + index * (arenaWidth + spacing);
+    // Use the ArenaSelect class's display method
+    arena.display(xPosition, 200); // Adjust the Y position as needed
+  });
+
+  // Highlight the selected arena
+  const selectedArena = arenaSelect.arenas[arenaKeys[arenaSelect.selector]];
+  stroke(255, 204, 0); // Yellow stroke for highlight
+  strokeWeight(3);
+  noFill();
+  rect(selectedArena.x, selectedArena.y, selectedArena.w, selectedArena.h);
+
+  // Display the name of the currently selected arena
+  noStroke();
+  fill(153, 204, 255);
+  textSize(50);
+  text(selectedArena.name, selectedArena.x + selectedArena.w / 2, selectedArena.y + selectedArena.h + 30);
+
+  // Prompt for P1 to press Enter to confirm the arena selection
+  fill(255);
+  textSize(30);
+  text("P1: Press Enter to confirm", width / 2, height - 50);
+}
+
 // sets up game state before playing
 function arenaSetup() {
   // grabs the class for the character to construct an instance
@@ -522,14 +589,26 @@ function arenaSetup() {
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
 
-  const randomIndex = Math.floor(Math.random() * arenaSelect.arenas.length);
-  selectedArenaImage = arenaSelect.arenas[randomIndex];
-  selectedArenaName = arenaSelect.names[randomIndex];
-
   // if(frameCount %400 == 0){
   //   mode++;
   // }
 }
+
+function arenaSelectSetup(arenaSelect) {
+  arenaSelect.arenas = {
+    Arena: new ArenaSelect(arena, 100, 200, 200, 200),
+    Desert: new ArenaSelect(desert, 400, 200, 200, 200),
+    Forest: new ArenaSelect(forest, 700, 200, 200, 200),
+    Haunted: new ArenaSelect(haunted, 1000, 200, 200, 200),
+    Path: new ArenaSelect(path, 1300, 200, 200, 200),
+    Ruin: new ArenaSelect(ruin, 100, 500, 200, 200),
+    Swamp: new ArenaSelect(swamp, 400, 500, 200, 200),
+    Temple: new ArenaSelect(temple, 700, 500, 200, 200),
+    Village: new ArenaSelect(village, 1000, 500, 200, 200)
+  };
+  arenaSelect.selector = 0; // Start with the first arena selected
+}
+
 function finished(){
   mode++;
   playArena = true;
@@ -537,7 +616,7 @@ function finished(){
 }
 
 function arena() {
-  // Set the image mode to center the image
+  const selectedArenaImage = arenaSelect.arenas[arenaSelect.selectedArena].img;
   imageMode(CENTER);
   image(selectedArenaImage, width / 2, height / 2, width, height);
   fill(128);
