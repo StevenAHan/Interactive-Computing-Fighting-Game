@@ -9,14 +9,7 @@ let foregroundImage;
 let foregroundOffset = 0;
 let opacity = 0;
 let opacityDirection = 1;
-<<<<<<< HEAD
-
-//maps
-let arena1, desert, forest, haunted, path, ruin, swamp, temple, village;
-
-=======
 let arenaImage;
->>>>>>> 57b177b1a2adf5a6c211518330bb5793a8633351
 let titleVideo;
 let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
@@ -97,25 +90,10 @@ function preload() {
   // Load the background images
   backgroundImage = loadImage("./assets/environments/char_background.png");
   foregroundImage = loadImage("./assets/environments/foreground.png");
-<<<<<<< HEAD
-  
-  //arena images
-  arena1 = loadImage("./assets/environments/maps/arena.png")
-  desert = loadImage("./assets/environments/maps/desert.png")
-  forest = loadImage("./assets/environments/maps/forest.png")
-  haunted = loadImage("./assets/environments/maps/haunted.png")
-  path = loadImage("./assets/environments/maps/path.png")
-  ruin = loadImage("./assets/environments/maps/ruin.png")
-  swamp = loadImage("./assets/environments/maps/swamp.png")
-  temple = loadImage("./assets/environments/maps/temple.png")
-  village = loadImage("./assets/environments/maps/village.png")
-  
-=======
   arenaSelect.names.forEach((name) => {
     let img = loadImage(`./assets/environments/maps/${name}.png`);
     arenaSelect.arenas.push(img);
   });
->>>>>>> 57b177b1a2adf5a6c211518330bb5793a8633351
 
   // Kitsune Animations
   kitsuneIdle = loadImage("./assets/characters/Kitsune/Idle.png");
@@ -246,14 +224,11 @@ function setup() {
 
   // init charselect
   charSelectSetup(charSelect);
-<<<<<<< HEAD
 
   //set up platform
   map1 = new Map(platform, 35);
   //init arenaSelect
   arenaSelectSetup();
-=======
->>>>>>> 57b177b1a2adf5a6c211518330bb5793a8633351
 }
 
 
@@ -548,8 +523,6 @@ function arenaSetup() {
   text("VERSUS", 600, 450)
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
-<<<<<<< HEAD
-=======
 
   const randomIndex = Math.floor(Math.random() * arenaSelect.arenas.length);
   selectedArenaImage = arenaSelect.arenas[randomIndex];
@@ -558,7 +531,6 @@ function arenaSetup() {
   // if(frameCount %400 == 0){
   //   mode++;
   // }
->>>>>>> 57b177b1a2adf5a6c211518330bb5793a8633351
 }
 function finished(){
   mode++;
