@@ -9,15 +9,7 @@ let foregroundImage;
 let foregroundOffset = 0;
 let opacity = 0;
 let opacityDirection = 1;
-let arena;
-let desert;
-let forest;
-let haunted;
-let path;
-let ruin;
-let swamp;
-let temple;
-let village;
+let arenaImage;
 let titleVideo;
 let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
@@ -27,11 +19,6 @@ let backgroundMusic, versus, chooseCharMusic, woodsMusic, winMusic;
 let instruction = false;
 let newFont, blood, playArena, playWin;
 
-//area selection
-let arenaSelect = {
-  arenas: {},
-  selectedArena: null
-};
 
 // Game Vars to Keep Track of Game State
 let projectiles = [];
@@ -96,18 +83,7 @@ function preload() {
   // Load the background images
   backgroundImage = loadImage("./assets/environments/char_background.png");
   foregroundImage = loadImage("./assets/environments/foreground.png");
-  
-  //arena images
-  arena = loadImage("./assets/environments/maps/arena.png")
-  desert = loadImage("./assets/environments/maps/desert.png")
-  forest = loadImage("./assets/environments/maps/forest.png")
-  haunted = loadImage("./assets/environments/maps/haunted.png")
-  path = loadImage("./assets/environments/maps/path.png")
-  ruin = loadImage("./assets/environments/maps/ruin.png")
-  swamp = loadImage("./assets/environments/maps/swamp.png")
-  temple = loadImage("./assets/environments/maps/temple.png")
-  village = loadImage("./assets/environments/maps/vilage.png")
-  
+  arenaImage = loadImage("./assets/environments/game_background_1.png")
 
   // Kitsune Animations
   kitsuneIdle = loadImage("./assets/characters/Kitsune/Idle.png");
@@ -236,8 +212,6 @@ function setup() {
 
   // init charselect
   charSelectSetup(charSelect);
-  //init arenaSelect
-  arenaSelectSetup();
 }
 
 
@@ -251,8 +225,6 @@ function draw() {
       titleScreen();
     } else if (mode === 2) {
       menu();
-    } else if (mode === 3) {
-      arenaSelectSetup();
     } else if (mode === 3) {
       arenaSetup();
     } else if (mode === 4) { 
@@ -547,7 +519,7 @@ function finished(){
 
 function arena() {
   imageMode(CENTER);
-  image(haunted, width, height, width * 2, height * 2);
+  image(arenaImage, width, height, width * 2, height * 2);
   fill(128);
   stroke(51);
   rect(10, 30, (width * 3 / 7), 25);
