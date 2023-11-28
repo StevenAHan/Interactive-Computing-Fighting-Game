@@ -126,22 +126,6 @@ class CharSelect {
 
 }
 
-class ArenaSelect {
-    constructor(img, x, y, w, h) {
-        // Arena properties
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.img = img;
-    }
-
-    display() {
-        // Display the static image at its (x, y) position
-        image(this.img, this.x, this.y, this.w, this.h);
-    }
-}
-
 // Taken from Interactive Computing Day 10 and Adjusted for our use
 class Sequence {
     constructor(images, x, y, delay, h, w) {
