@@ -223,6 +223,8 @@ function setup() {
   // init charselect
   charSelectSetup(charSelect);
   
+  //set up platform
+  map1 = new Map(platform, 35);
 }
 
 
