@@ -19,6 +19,13 @@ let backgroundMusic, versus, chooseCharMusic, woodsMusic, winMusic;
 let instruction = false;
 let newFont, blood, playArena, playWin;
 
+let arenaSelect = {
+  arenas: [],
+  currentSelection: 0,
+  names: ['battleground', 'desert', 'forest', 'haunted', 'path', 'ruin', 'swamp', 'temple', 'village'],
+};
+let selectedArenaName;
+let selectedArenaImage;
 
 // Game Vars to Keep Track of Game State
 let projectiles = [];
@@ -83,7 +90,10 @@ function preload() {
   // Load the background images
   backgroundImage = loadImage("./assets/environments/char_background.png");
   foregroundImage = loadImage("./assets/environments/foreground.png");
-  arenaImage = loadImage("./assets/environments/game_background_1.png")
+  arenaSelect.names.forEach((name) => {
+    let img = loadImage(`./assets/environments/maps/${name}.png`);
+    arenaSelect.arenas.push(img);
+  });
 
   // Kitsune Animations
   kitsuneIdle = loadImage("./assets/characters/Kitsune/Idle.png");
@@ -507,6 +517,10 @@ function arenaSetup() {
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
 
+  const randomIndex = Math.floor(Math.random() * arenaSelect.arenas.length);
+  selectedArenaImage = arenaSelect.arenas[randomIndex];
+  selectedArenaName = arenaSelect.names[randomIndex];
+
   // if(frameCount %400 == 0){
   //   mode++;
   // }
@@ -519,7 +533,7 @@ function finished(){
 
 function arena() {
   imageMode(CENTER);
-  image(arenaImage, width, height, width * 2, height * 2);
+  image(selectedArenaImage, width / 2, height / 2, width, height);
   fill(128);
   stroke(51);
   rect(10, 30, (width * 3 / 7), 25);
