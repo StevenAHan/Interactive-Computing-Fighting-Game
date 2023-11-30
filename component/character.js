@@ -48,6 +48,7 @@ class Character {
         this.basicSound = false;
         this.heavySound = false;
         this.specialSound = false;
+        this.spriteHurt = this.spriteAnimations.hurt;
     }
 
     // Sets up the character, should only run once in the beginning
@@ -286,6 +287,7 @@ class Character {
         if(this.blocking) {
             this.health -= amount / 2;
         } else {
+            this.spriteAnimations.hurt = new Sprite(this.spriteHurt, this.x, this.y, this.spriteWidth, this.spriteHeight, 1.5 * ((amount- (amount % 2)) / 2), this.offset);
             this.health -= amount;
             this.getHurt = true;
         }
@@ -314,6 +316,9 @@ class Character {
             this.state = false;
             this.getHurt = false;
             this.spriteAnimations[this.currAnimation].resetFrames();
+            if(this.immune != false) {
+                this.immune = 40;
+            }
         }
     }
 
@@ -455,7 +460,7 @@ class Raven extends Character{
         this.strike = false;
         this.health = 150;
         this.special = false;
-        this.hitboxes = new HitBoxes(this, 10, 70, 0, 30, 40, 90, -10, 45, 80, 220, -60, 60, 10, 20, 30);
+        this.hitboxes = new HitBoxes(this, 10, 70, 0, 30, 40, 90, -10, 45, 80, 220, -60, 60, 10, 20, 40);
     }
     
     basicAttack() {
@@ -508,7 +513,7 @@ class Raven extends Character{
         }
         if(this.special == false && this.spriteAnimations[this.currAnimation].currentFrame == 4) {
             
-            tprojectiles.push(new TempProjectile(this.x + 100 * this.dirMultiplier(), this.y, this.spriteAnimations["ravenSpecial"], this.direction, 10, 5, this.opponent, 300, 200));
+            tprojectiles.push(new TempProjectile(this.x + 100 * this.dirMultiplier(), this.y, this.spriteAnimations["ravenSpecial"], this.direction, 35, 5, this.opponent, 300, 200));
             this.special = true;
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
@@ -707,10 +712,10 @@ class Raider extends Character {
             "die": raiderDeath,
             "thumbnail": raiderIdle,
             "block": raiderIdle,
-            "heavyProj": samuraiArrow,
-            "specialProj": samuraiArrow,
+            "heavyProj": raiderHeavyBullet,
+            "specialProj": raiderSpecialBullet,
         };
-        super(name, 5, 10, x, y, animations, 128, 128, playerNumber, opponent);
+        super(name, 5, 15, x, y, animations, 128, 128, playerNumber, opponent);
         this.basicAttackSpeed = 6;
         this.heavyAttackSpeed = 5;
         this.specialAttackSpeed = 20;
@@ -739,7 +744,7 @@ class Raider extends Character {
         this.currAnimation = "heavyAttack";
         this.hitboxes.attack('heavy');
         if(this.heavyProj == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
-            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 25, this.spriteAnimations["heavyProj"], this.direction, 64, 64, 10, 15, this.opponent));
+            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 25, this.spriteAnimations["heavyProj"], this.direction, 64, 64, 5, 15, this.opponent));
             this.heavyProj = true;
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {   
@@ -753,7 +758,7 @@ class Raider extends Character {
     specialAttack() {
         this.currAnimation = "specialAttack";
         if(this.specialProj == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
-            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["specialProj"], this.direction, 64, 64, 20, 15, this.opponent));
+            projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["specialProj"], this.direction, 64, 64, 20, 15, this.opponent, 12));
             this.specialProj = true;
         }
         if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
@@ -804,7 +809,7 @@ class TempProjectile {
 */
 
 class Projectile {
-    constructor(x,y, animation, direction, width, height, damage, speed, opponent) {
+    constructor(x,y, animation, direction, width, height, damage, speed, opponent, rad=8) {
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -812,7 +817,7 @@ class Projectile {
         this.direction = direction;
         this.damage = damage;
         this.opponent = opponent;
-        this.hitrad = 8;
+        this.hitrad = rad;
     }
 
     move() {
