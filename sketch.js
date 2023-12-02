@@ -268,9 +268,38 @@ function keyPressed() {
     chooseCharMusic.setVolume(0.5);
     chooseCharMusic.loop();
     isPlaying = false; // Reset isPlaying
-  } else if (mode === 2 && keyCode === ENTER) {
-    chooseCharMusic.stop()
-    mode = 3;
+
+  } else if (mode === 2) {
+    if(keyCode === ENTER) {
+      chooseCharMusic.stop()
+      mode = 3;
+    }
+    if(keyCode == 68) { // d
+      charSelect.selectors.p1++;
+      if(charSelect.selectors.p1 > 5) {
+        charSelect.selectors.p1 = 1;
+      }
+    }
+    if(keyCode == 65) { // a
+      charSelect.selectors.p1--;
+      if(charSelect.selectors.p1 < 1) {
+        charSelect.selectors.p1 = 1;
+      }
+    }
+  
+
+    if(keyCode == 74) { // j
+      charSelect.selectors.p2--;
+      if(charSelect.selectors.p2 < 1) {
+        charSelect.selectors.p2 = 1;
+      }
+    }
+    if(keyCode == 76) { // l
+      charSelect.selectors.p2++;
+      if(charSelect.selectors.p2 > 5) {
+        charSelect.selectors.p2 = 1;
+      }
+    }
   } else if(mode > 3 && keyCode === ENTER && end == true) {
     winMusic.stop()
     mode = 2;
@@ -382,101 +411,36 @@ function menu() {
   // char boxes
   textSize(50);
   fill(250);
-  text("Player One", 300, 180);
-  text("Player Two", width/2+300, 180);
-
   stroke(10, 0, 120);
   strokeWeight(10);
   //noFill();
+
   // P1
   fill(0);
-  rect(100, 200, 400, 400);
+  rect(100, 200, 1000, 400);
   charSelect.chars.kitsune.display(120, 160, 0); 
   charSelect.chars.raven.display(300, 160, 0); 
-  charSelect.chars.char3.display(120, 350, 0); 
-  charSelect.chars.char4.display(300, 350, 0); 
-
-  
-  // P2 
-  rect(width/2+100, 200, 400, 400);
-  charSelect.chars.kitsune.display(width/2+120, 160, 0); 
-  charSelect.chars.raven.display(width/2+300, 160, 0); 
-  charSelect.chars.char3.display(width/2+120, 350, 0);
-  charSelect.chars.char4.display(width/2+300, 350, 0); 
+  charSelect.chars.char3.display(480, 160, 0); 
+  charSelect.chars.char4.display(660, 160, 0);
+  charSelect.chars.char5.display(840, 160, 0);
   
   stroke(175);
   fill(170, 170,170, 50);
   strokeWeight(3);
+  textSize(15);
   
   // P1
+  fill(0, 0,170, 50);
   rect(charSelect.spots[charSelect.selectors.p1].x, charSelect.spots[charSelect.selectors.p1].y+60, 160, 160);
-  if(keyIsDown(68)) { // d
-    if ( charSelect.selectors.p1 == 1 ) {
-      charSelect.selectors.p1 = 2;
-    }
-    else if ( charSelect.selectors.p1 == 3 ) {
-      charSelect.selectors.p1 = 4;
-    }
-  }
-  if(keyIsDown(65)) { // a
-    if ( charSelect.selectors.p1 == 2 ) {
-      charSelect.selectors.p1 = 1;
-    }
-    else if ( charSelect.selectors.p1 == 4 ) {
-      charSelect.selectors.p1 = 3;
-    }
-  }
-  if(keyIsDown(83)) { // s
-    if ( charSelect.selectors.p1 == 1 ) {
-      charSelect.selectors.p1 = 3;
-    }
-    else if ( charSelect.selectors.p1 == 2 ) {
-      charSelect.selectors.p1 = 4;
-    }
-  }
-  if(keyIsDown(87)) { // w
-    if ( charSelect.selectors.p1 == 3 ) {
-      charSelect.selectors.p1 = 1;
-    }
-    else if ( charSelect.selectors.p1 == 4 ) {
-      charSelect.selectors.p1 = 2;
-    }
-  }
-
+  
   // P2
-  rect(width/2+charSelect.spots[charSelect.selectors.p2].x, charSelect.spots[charSelect.selectors.p2].y+60, 160, 160);
-  if(keyIsDown(76)) { // l
-    if ( charSelect.selectors.p2 == 1 ) {
-      charSelect.selectors.p2 = 2;
-    }
-    else if ( charSelect.selectors.p2 == 3 ) {
-      charSelect.selectors.p2 = 4;
-    }
-  }
-  if(keyIsDown(74)) { // j
-    if ( charSelect.selectors.p2 == 2 ) {
-      charSelect.selectors.p2 = 1;
-    }
-    else if ( charSelect.selectors.p2 == 4 ) {
-      charSelect.selectors.p2 = 3;
-    }
-  }
-  if(keyIsDown(75)) { // k
-    if ( charSelect.selectors.p2 == 1 ) {
-      charSelect.selectors.p2 = 3;
-    }
-    else if ( charSelect.selectors.p2 == 2 ) {
-      charSelect.selectors.p2 = 4;
-    }
-  }
-  if(keyIsDown(73)) { // i
-    if ( charSelect.selectors.p2 == 3 ) {
-      charSelect.selectors.p2 = 1;
-    }
-    else if ( charSelect.selectors.p2 == 4 ) {
-      charSelect.selectors.p2 = 2;
-    }
-  }
+  fill(170, 0,0, 50);
+  rect(charSelect.spots[charSelect.selectors.p2].x, charSelect.spots[charSelect.selectors.p2].y+60, 160, 160);
+
+  fill(0, 0, 255);
+  text("Player 1", charSelect.spots[charSelect.selectors.p1].x + 40, charSelect.spots[charSelect.selectors.p1].y+80);
+  fill(255, 0, 0);
+  text("Player 2", charSelect.spots[charSelect.selectors.p2].x + 120, charSelect.spots[charSelect.selectors.p2].y+80);
 
   // list selected character
   noStroke();
@@ -485,6 +449,8 @@ function menu() {
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
 
   fill(255);
+
+  textSize(80);
 
   // then user presses enter to move to game, and these chars are used
   text("Press Enter to continue", 600, 740);
@@ -507,7 +473,6 @@ function arenaSetup() {
   }
   versus.onended(finished);
 
-  //arenaState.p1.displayAndMove().specialAttack()
   background(0);
   text(charSelect.spots[charSelect.selectors.p1].name, 300, 660);
   fill(255,0,0)
@@ -525,11 +490,8 @@ function arenaSetup() {
   const randomIndex = Math.floor(Math.random() * arenaSelect.arenas.length);
   selectedArenaImage = arenaSelect.arenas[randomIndex];
   selectedArenaName = arenaSelect.names[randomIndex];
-
-  // if(frameCount %400 == 0){
-  //   mode++;
-  // }
 }
+
 function finished(){
   mode++;
   playArena = true;
@@ -555,6 +517,7 @@ function arena() {
   text(arenaState.p1.name + " health", width/2-350, 87)
   text(arenaState.p2.name + " health", width/2+330, 87);
   stroke(1);
+
   //timer
   stroke(20)
   fill(255)
@@ -666,7 +629,8 @@ function charSelectSetup(charSelect) {
     kitsune: new CharSelect(kitsuneHeavyAttack, 0, 0, 128, 128, 20),
     raven: new CharSelect(ravenSpecialAttack, 0, 0, 128, 128, 20), 
     char3: new CharSelect(samuraiSpecialAttack, 0, 0, 128, 128, 20),
-    char4: new CharSelect(raiderSpecialAttack, 0, 0, 128, 128, 20)
+    char4: new CharSelect(raiderSpecialAttack, 0, 0, 128, 128, 20),
+    char5: new CharSelect(fighterSpecialAttack, 0, 0, 128, 128, 20)
   };
   charSelect.selectors = {
     p1: 1,
@@ -680,14 +644,18 @@ function charSelectSetup(charSelect) {
       x: 300, y: 160, name: "Raven", factory: Raven
     },
     3: {
-      x: 120, y: 350, name: "Samurai", factory: Samurai
+      x: 480, y: 160, name: "Samurai", factory: Samurai
     },
     4: {
-      x: 300, y:350, name: "Raider", factory: Raider
+      x: 660, y: 160, name: "Raider", factory: Raider
+    },
+    5: {
+      x: 840, y: 160, name: "Fighter", factory: Fighter
     }
   };
 }
 
+// Unused
 function endGame(){
   background(0)
   blood.resize(1200, 600);
