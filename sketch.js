@@ -445,12 +445,14 @@ function menu() {
   // list selected character
   noStroke();
   fill(153, 204, 255);
+  fill(0, 0, 255);
+  textSize(50);
   text(charSelect.spots[charSelect.selectors.p1].name, 300, 660);
+  fill(255, 0, 0);
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
 
   fill(255);
 
-  textSize(80);
 
   // then user presses enter to move to game, and these chars are used
   text("Press Enter to continue", 600, 740);
