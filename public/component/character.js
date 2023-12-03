@@ -90,8 +90,10 @@ class Character {
             this.spriteAnimations[this.currAnimation].display(this.x, this.y, this.direction);
         }
         // Player 1 Controls
-        if(this.playerNumber == 0) {
-            let xPrev = this.x
+        // if(this.playerNumber == 0) {
+        if(player === 1) {
+
+            let xPrev = this.x;
             // can only move if you aren't attacking
             if(!this.state) {
                 // a - move left
@@ -104,7 +106,7 @@ class Character {
                     this.currAnimation = "run";
                     this.x += this.speed;
                 }
-
+                
                 // based on velocity, change animation and direction
                 if(xPrev == this.x) {
                     this.currAnimation = "idle";
@@ -113,7 +115,7 @@ class Character {
                 } else {
                     this.direction = 0;
                 }
-
+                
                 // w - jump
                 if(keyIsDown(87)) {
                     if(!this.jumping) {
@@ -124,24 +126,23 @@ class Character {
                 if(keyIsDown(69)) {
                     this.state = "basicAttack";
                 }
-
+                
                 // q - heavy attack
                 if(keyIsDown(81)) {
                     this.state = "heavyAttack";
                 }
-
+                
                 // r - special attack
                 if(keyIsDown(82)) {
                     this.state = "specialAttack";
                 }
             }
-
-            
         }
 
         // Player 2 controls
-        if(this.playerNumber == 1) {
-            let xPrev = this.x
+        // if(this.playerNumber == 1) {
+        else if (player === 2) {
+            let xPrev = this.x;
             // can only move if you aren't attacking
             if(!this.state) {
                 // j - move left

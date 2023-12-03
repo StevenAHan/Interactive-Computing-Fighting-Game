@@ -2,6 +2,15 @@
 // debug var to see hitboxes and some logging
 let debug = true;
 
+// socket.io
+let socket;
+let roomCode;
+let games = {};
+let inGame = false;
+let waitingForOther = true;
+let player = 0; // p1 or p2
+
+
 // Home Screen Vars
 let backgroundImage;
 let backgroundOffset = 0;
@@ -13,7 +22,7 @@ let arenaImage;
 let titleVideo;
 let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
-let mode = 0; // FOR TESTING
+let mode = 0;
 let isPlaying = false; // Initialize isPlaying
 let backgroundMusic, versus, chooseCharMusic, woodsMusic, winMusic;
 let instruction = false;
@@ -222,6 +231,11 @@ function setup() {
   health1 = new Health_L (10, 30)
   health2 = new Health_R (670, 30, (width * 3 / 7))
 
+  socket = io();
+  socket.on("update_games", update_games);
+  socket.on("user_input", on_user_input);
+  // TODO: add 'ready' message after arena setup?
+
   // init charselect
   charSelectSetup(charSelect);
   
@@ -239,13 +253,16 @@ function draw() {
       menuTime++;
       titleScreen();
     } else if (mode === 2) {
-      menu();
+      gameSelect();
     } else if (mode === 3) {
-      arenaSetup();
+      menu();
     } else if (mode === 4) { 
-      arena();
+      arenaSetup();
     }
     else if (mode === 5) { 
+      arena();
+    }
+    else {
       endGame();
     }
 
@@ -274,30 +291,32 @@ function keyPressed() {
       chooseCharMusic.stop()
       mode = 3;
     }
-    if(keyCode == 68) { // d
-      charSelect.selectors.p1++;
-      if(charSelect.selectors.p1 > 5) {
-        charSelect.selectors.p1 = 1;
+    if ( player === 1) {
+      if(keyCode == 68) { // d
+        charSelect.selectors.p1++;
+        if(charSelect.selectors.p1 > 5) {
+          charSelect.selectors.p1 = 1;
+        }
+      }
+      if(keyCode == 65) { // a
+        charSelect.selectors.p1--;
+        if(charSelect.selectors.p1 < 1) {
+          charSelect.selectors.p1 = 1;
+        }
       }
     }
-    if(keyCode == 65) { // a
-      charSelect.selectors.p1--;
-      if(charSelect.selectors.p1 < 1) {
-        charSelect.selectors.p1 = 1;
+    else {
+      if(keyCode == 74) { // j
+        charSelect.selectors.p2--;
+        if(charSelect.selectors.p2 < 1) {
+          charSelect.selectors.p2 = 1;
+        }
       }
-    }
-  
-
-    if(keyCode == 74) { // j
-      charSelect.selectors.p2--;
-      if(charSelect.selectors.p2 < 1) {
-        charSelect.selectors.p2 = 1;
-      }
-    }
-    if(keyCode == 76) { // l
-      charSelect.selectors.p2++;
-      if(charSelect.selectors.p2 > 5) {
-        charSelect.selectors.p2 = 1;
+      if(keyCode == 76) { // l
+        charSelect.selectors.p2++;
+        if(charSelect.selectors.p2 > 5) {
+          charSelect.selectors.p2 = 1;
+        }
       }
     }
   } else if(mode > 3 && keyCode === ENTER && end == true) {
@@ -309,6 +328,16 @@ function keyPressed() {
     chooseCharMusic.loop();
   }
 }
+
+function gameSelect() {
+  if (! inGame ) {
+    text("enter a join code below to join a game, or pres the button to create a new game", 100, 100);
+  }
+  else {
+    text("waiting for other player", 100, 100);
+  }
+}
+
 
 // Following are functions for different screens
 function titleScreen() {

@@ -132,6 +132,18 @@
   <p class="center">Two player local Fighting Game for Interactive Computing class. Created by Steven, Joe, Peter, Sam</p>
   <body style="background-color:rgb(12, 9, 99)">
 
+    <div id="center">
+      <div>
+        Enter a Join Code: <input type="text" id="join_code">
+        <button id="join_room" onclick="joinRoom();">Join Room</button>
+      </div>
+      <div>
+        Enter a Room Code: <input type="text" id="game_create_code">
+        <button onclick="createRoom();">Create room</button>
+      </div>
+      <!-- <div id="join_failed" class="alert hidden">Room does not exist</div> -->
+    </div>
+
     <div id="center"></div>
     <div id = "scroll_box">
       <h3 style="text-align:center">Characters</h3>
