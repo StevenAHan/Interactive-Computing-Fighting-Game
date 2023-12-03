@@ -6,6 +6,9 @@
 
     <!-- load in the p5 sound library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.js"></script>
+    
+    <!-- socket.io client library -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
     <!-- your custom sketch code -->
     <script src="sketch.js"></script>
@@ -132,7 +135,7 @@
   <p class="center">Two player local Fighting Game for Interactive Computing class. Created by Steven, Joe, Peter, Sam</p>
   <body style="background-color:rgb(12, 9, 99)">
 
-    <div id="center">
+    <div >
       <div>
         Enter a Join Code: <input type="text" id="join_code">
         <button id="join_room" onclick="joinRoom();">Join Room</button>

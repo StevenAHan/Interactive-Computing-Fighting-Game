@@ -9,7 +9,9 @@ let games = {};
 let inGame = false;
 let waitingForOther = true;
 let player = 0; // p1 or p2
-
+let waitingForOpponent = false; // to wait for char selection;
+let ready = false;
+let waitingForNewGame = true;
 
 // Home Screen Vars
 let backgroundImage;
@@ -286,19 +288,25 @@ function keyPressed() {
     chooseCharMusic.loop();
     isPlaying = false; // Reset isPlaying
 
-  } else if (mode === 2) {
+  } else if (mode === 3) {
     if(keyCode === ENTER) {
+      socket.emit('user_output', {keyCode: keyCode});
       chooseCharMusic.stop()
-      mode = 3;
+      ready = true;
+      if (!waitingForOpponent)
+        mode = 4;
     }
     if ( player === 1) {
       if(keyCode == 68) { // d
+        console.log('emitting d');
+        socket.emit('user_output', {keyCode: keyCode});
         charSelect.selectors.p1++;
         if(charSelect.selectors.p1 > 5) {
           charSelect.selectors.p1 = 1;
         }
       }
       if(keyCode == 65) { // a
+        socket.emit('user_output', {keyCode: keyCode});
         charSelect.selectors.p1--;
         if(charSelect.selectors.p1 < 1) {
           charSelect.selectors.p1 = 1;
@@ -307,36 +315,231 @@ function keyPressed() {
     }
     else {
       if(keyCode == 74) { // j
+        socket.emit('user_output', {keyCode: keyCode});
         charSelect.selectors.p2--;
         if(charSelect.selectors.p2 < 1) {
           charSelect.selectors.p2 = 1;
         }
       }
       if(keyCode == 76) { // l
+        socket.emit('user_output', {keyCode: keyCode});
         charSelect.selectors.p2++;
         if(charSelect.selectors.p2 > 5) {
           charSelect.selectors.p2 = 1;
         }
       }
     }
-  } else if(mode > 3 && keyCode === ENTER && end == true) {
+  } else if(mode > 4 && keyCode === ENTER && end == true) {
     winMusic.stop()
     mode = 2;
     timer = starting_time;
     end = false;
     chooseCharMusic.setVolume(0.5);
     chooseCharMusic.loop();
+
+    socket.emit('user_output', {keyCode: ENTER});
+
   }
 }
 
 function gameSelect() {
+  // TODO: all this game selection stuff
+
+  fill('white');
+
   if (! inGame ) {
     text("enter a join code below to join a game, or pres the button to create a new game", 100, 100);
   }
   else {
     text("waiting for other player", 100, 100);
+    if ( !waitingForNewGame ) {
+      waitingForOpponent = true;
+      mode++;
+    }
   }
 }
+
+//socket code
+
+function on_user_input(data) {
+  // TODO
+  console.log(`received input: ${data}`);
+  if ( (mode === 5 && end == true) || (mode === 2) ) {
+    if ( data.keyCode == ENTER )
+      waitingForNewGame = false;
+  }
+  if ( mode === 3 ) { // menu
+    if ( data.keyCode == ENTER ) {
+      waitingForOpponent = false;
+      if ( ready ) 
+        mode = 4;
+    }
+      if (player === 1) {
+        if(data.keyCode == 74) { // j
+          console.log('input of j');
+          charSelect.selectors.p2--;
+          if(charSelect.selectors.p2 < 1) {
+            charSelect.selectors.p2 = 1;
+          }
+        }
+        if(data.keyCode == 76) { // l
+          charSelect.selectors.p2++;
+          if(charSelect.selectors.p2 > 5) {
+            charSelect.selectors.p2 = 1;
+          }
+        }
+      }
+      else {
+        if(data.keyCode == 68) { // d
+          charSelect.selectors.p1++;
+          if(charSelect.selectors.p1 > 5) {
+            charSelect.selectors.p1 = 1;
+          }
+        }
+        if(data.keyCode == 65) { // a
+          charSelect.selectors.p1--;
+          if(charSelect.selectors.p1 < 1) {
+            charSelect.selectors.p1 = 1;
+          }
+        }
+      }
+    }
+    else if ( mode === 5 ) { // in game
+      if (player === 1) {
+        let p2 = arenaState.p2
+        let xPrev = p2.x;
+        // can only move if you aren't attacking
+        if(!p2.state) {
+            // j - move left
+            if(data.keyDown == 74) {
+                p2.currAnimation = "run";
+                p2.x -= p2.speed;
+            }
+
+            // l - move right
+            if (data.keyDown == 76) {
+                p2.currAnimation = "run";
+                p2.x += p2.speed;
+            }
+
+            // based on velocity, change animation and direction
+            if(xPrev == p2.x) {
+                p2.currAnimation = "idle";
+            } else if(xPrev > p2.x) {
+                p2.direction = 1;
+            } else {
+                p2.direction = 0;
+            }
+
+            // i - jump
+            if(data.keyDown == 73) {
+                if(!p2.jumping) {
+                    p2.jumping = true;
+                }
+            }
+            // u - basic attack
+            if(data.keyDown == 85) {
+                p2.state = "basicAttack";
+            }
+
+            // o - heavy attack
+            if(data.keyDown == 79) {
+                p2.state = "heavyAttack";
+            }
+
+            // y - special attack
+            if(data.keyDown == 89) {
+                p2.state = "specialAttack";
+            }
+        }
+      }
+      else {
+        let p1 = arenaState.p1;
+
+        let xPrev = p1.x;
+        // can only move if you aren't attacking
+        if(!p1.state) {
+            // a - move left
+            if(data.keyDown == 65) {
+                p1.currAnimation = "run";
+                p1.x -= p1.speed;
+            }
+            // d - move right
+            if (data.keyDown == 68) {
+                p1.currAnimation = "run";
+                p1.x += p1.speed;
+            }
+            
+            // based on velocity, change animation and direction
+            if(xPrev == p1.x) {
+                p1.currAnimation = "idle";
+            } else if(xPrev > p1.x) {
+                p1.direction = 1;
+            } else {
+                p1.direction = 0;
+            }
+            
+            // w - jump
+            if(data.keyDown == 87) {
+                if(!p1.jumping) {
+                    p1.jumping = true;
+                }
+            }
+            // e - basic attack
+            if(data.keyDown == 69) {
+                p1.state = "basicAttack";
+            }
+            
+            // q - heavy attack
+            if(data.keyDown == 81) {
+                p1.state = "heavyAttack";
+            }
+            
+            // r - special attack
+            if(data.keyDown == 82) {
+                p1.state = "specialAttack";
+            }
+        }
+      }
+    }
+}
+
+function update_games(games_in) {
+  games = games_in;
+  console.log(games);
+
+  if ( inGame && waitingForOther ) {
+    if ( games[roomCode].user1 && games[roomCode].user2 ) {
+      waitingForOther = false;
+      waitingForOpponent = true;
+      mode++;
+    }
+  }
+}
+
+function joinRoom() {
+  roomCode = document.getElementById('join_code').value;
+  socket.emit('join_game', { code: roomCode });
+  inGame = true;
+  waitingForOther = true;
+  if ( games[roomCode].user1 ) {
+    player = 2;
+    waitingForOther = false;
+    waitingForOpponent = true;
+    mode++;
+  }
+  else player = 1;
+}
+
+function createRoom() {
+  roomCode = document.getElementById('game_create_code').value;
+  console.log(`roomCode: ${ JSON.stringify(roomCode)}`);
+  socket.emit('create_game', { code: roomCode });
+  inGame = true;
+  waitingForOther = true;
+  player = 1;
+}
+
 
 
 // Following are functions for different screens
@@ -486,6 +689,7 @@ function menu() {
   // then user presses enter to move to game, and these chars are used
   text("Press Enter to continue", 600, 740);
   instruction = true;
+
 }
 
 // sets up game state before playing
@@ -521,6 +725,8 @@ function arenaSetup() {
   const randomIndex = Math.floor(Math.random() * arenaSelect.arenas.length);
   selectedArenaImage = arenaSelect.arenas[randomIndex];
   selectedArenaName = arenaSelect.names[randomIndex];
+
+  // while(waitingForOpponent);
 }
 
 function finished(){
@@ -612,24 +818,24 @@ function arena() {
 
   fill(255, 0, 0);
   textSize(60);
-  if(arenaState.p1.dying || (timer == 0 & arenaState.p1.health < arenaState.p2.health)) {
-    fill(0, 150);
-    rect(width/2-320, height/2-100, 650, 230)
-    fill(128, 2, 19);
-    text("Player 2 Wins!", 600, 400);
-    textSize(30);
-    text("Press Enter to Go Back to Character Selection", 600, 450);
-    end = true;
-    woodsMusic.stop()
-    if(playWin){
-      winMusic.play()
-      playWin = false
+
+  if (arenaState.p1.dying || arenaState.p2.dying || timer == 0 ) {
+    if(arenaState.p1.dying || (arenaState.p1.health < arenaState.p2.health)) {
+      fill(0, 150);
+      rect(width/2-320, height/2-100, 650, 230)
+      fill(128, 2, 19);
+      text("Player 2 Wins!", 600, 400);
+    } 
+    else if (arenaState.p2.dying || (arenaState.p2.health < arenaState.p1.health)) {
+      fill(0, 150);
+      rect(width/2-320, height/2-100, 650, 230)
+      fill(128, 2, 19);
+      text("Player 1 Wins!", 600, 400);
     }
-  } else if (arenaState.p2.dying || (timer == 0 & arenaState.p2.health < arenaState.p1.health)) {
-    fill(0, 150);
-    rect(width/2-320, height/2-100, 650, 230)
-    fill(128, 2, 19);
-    text("Player 1 Wins!", 600, 400);
+    else if(arenaState.p2.health == arenaState.p1.health && timer == 0) {
+      text("Draw", 600, 400);
+    }
+
     textSize(25);
     text("Press Enter to Go Back to Character Selection", 600, 450);
     end = true;
@@ -638,18 +844,10 @@ function arena() {
       winMusic.play()
       playWin = false
     }
+
+    waitingForNewGame = true;
+
   }
-  else if(arenaState.p2.health == arenaState.p1.health & timer == 0) {
-    text("Draw", 600, 400);
-    textSize(25);
-    text("Press Enter to Go Back to Character Selection", 600, 450);
-    end = true;
-    woodsMusic.stop()
-    if(playWin){
-      winMusic.play()
-      playWin = false
-    }
-}
 }
 function woodsend(){
   playArena = true;

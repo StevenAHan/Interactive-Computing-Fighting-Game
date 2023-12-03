@@ -90,101 +90,115 @@ class Character {
             this.spriteAnimations[this.currAnimation].display(this.x, this.y, this.direction);
         }
         // Player 1 Controls
-        // if(this.playerNumber == 0) {
-        if(player === 1) {
+        if(this.playerNumber == 0) {
+            
+            let xPrev = this.x;            
+            // based on velocity, change animation and direction
+            if(xPrev == this.x) {
+                this.currAnimation = "idle";
+            } else if(xPrev > this.x) {
+                this.direction = 1;
+            } else {
+                this.direction = 0;
+            }
 
-            let xPrev = this.x;
-            // can only move if you aren't attacking
-            if(!this.state) {
-                // a - move left
-                if(keyIsDown(65)) {
-                    this.currAnimation = "run";
-                    this.x -= this.speed;
-                }
-                // d - move right
-                if (keyIsDown(68)) {
-                    this.currAnimation = "run";
-                    this.x += this.speed;
-                }
-                
-                // based on velocity, change animation and direction
-                if(xPrev == this.x) {
-                    this.currAnimation = "idle";
-                } else if(xPrev > this.x) {
-                    this.direction = 1;
-                } else {
-                    this.direction = 0;
-                }
-                
-                // w - jump
-                if(keyIsDown(87)) {
-                    if(!this.jumping) {
-                        this.jumping = true;
+            if(player === 1) {
+                // can only move if you aren't attacking
+                if(!this.state) {
+                    // a - move left
+                    if(keyIsDown(65)) {
+                        socket.emit('user_output', {keyDown: 65});
+                        this.currAnimation = "run";
+                        this.x -= this.speed;
                     }
-                }
-                // e - basic attack
-                if(keyIsDown(69)) {
-                    this.state = "basicAttack";
-                }
-                
-                // q - heavy attack
-                if(keyIsDown(81)) {
-                    this.state = "heavyAttack";
-                }
-                
-                // r - special attack
-                if(keyIsDown(82)) {
-                    this.state = "specialAttack";
+                    // d - move right
+                    if (keyIsDown(68)) {
+                        socket.emit('user_output', {keyDown: 68});
+                        this.currAnimation = "run";
+                        this.x += this.speed;
+                    }
+                    
+                    // w - jump
+                    if(keyIsDown(87)) {
+                        socket.emit('user_output', {keyDown: 87});
+                        if(!this.jumping) {
+                            this.jumping = true;
+                        }
+                    }
+                    // e - basic attack
+                    if(keyIsDown(69)) {
+                        socket.emit('user_output', {keyDown: 69});
+                        this.state = "basicAttack";
+                    }
+                    
+                    // q - heavy attack
+                    if(keyIsDown(81)) {
+                        socket.emit('user_output', {keyDown: 81});
+                        this.state = "heavyAttack";
+                    }
+                    
+                    // r - special attack
+                    if(keyIsDown(82)) {
+                        socket.emit('user_output', {keyDown: 82});
+                        this.state = "specialAttack";
+                    }
                 }
             }
         }
 
         // Player 2 controls
-        // if(this.playerNumber == 1) {
-        else if (player === 2) {
+        if(this.playerNumber == 1) {
             let xPrev = this.x;
-            // can only move if you aren't attacking
-            if(!this.state) {
-                // j - move left
-                if(keyIsDown(74)) {
-                    this.currAnimation = "run";
-                    this.x -= this.speed;
-                }
-
-                // l - move right
-                if (keyIsDown(76)) {
-                    this.currAnimation = "run";
-                    this.x += this.speed;
-                }
-
-                // based on velocity, change animation and direction
-                if(xPrev == this.x) {
-                    this.currAnimation = "idle";
-                } else if(xPrev > this.x) {
-                    this.direction = 1;
-                } else {
-                    this.direction = 0;
-                }
-
-                // i - jump
-                if(keyIsDown(73)) {
-                    if(!this.jumping) {
-                        this.jumping = true;
+            // based on velocity, change animation and direction
+            if(xPrev == this.x) {
+                this.currAnimation = "idle";
+            } else if(xPrev > this.x) {
+                this.direction = 1;
+            } else {
+                this.direction = 0;
+            }
+            if (player === 2) {
+                // can only move if you aren't attacking
+                if(!this.state) {
+                    // j - move left
+                    if(keyIsDown(74)) {
+                        socket.emit('user_output', {keyDown: 74});
+                        this.currAnimation = "run";
+                        this.x -= this.speed;
                     }
-                }
-                // u - basic attack
-                if(keyIsDown(85)) {
-                    this.state = "basicAttack";
-                }
 
-                // o - heavy attack
-                if(keyIsDown(79)) {
-                    this.state = "heavyAttack";
-                }
+                    // l - move right
+                    if (keyIsDown(76)) {
+                        socket.emit('user_output', {keyDown: 76});
+                        this.currAnimation = "run";
+                        this.x += this.speed;
+                    }
 
-                // y - special attack
-                if(keyIsDown(89)) {
-                    this.state = "specialAttack";
+
+                    // i - jump
+                    if(keyIsDown(73)) {
+                        socket.emit('user_output', {keyDown: 73});
+                        if(!this.jumping) {
+                            this.jumping = true;
+                        }
+                    }
+                    // u - basic attack
+                    if(keyIsDown(85)) {
+                        socket.emit('user_output', {keyDown: 85});
+                        this.state = "basicAttack";
+                    }
+
+                    // o - heavy attack
+                    if(keyIsDown(79)) {
+                        socket.emit('user_output', {keyDown: 79});
+                        this.state = "heavyAttack";
+                    }
+
+                    // y - special attack
+                    if(keyIsDown(89)) {
+                        socket.emit('user_output', {keyDown: 89});
+                        this.state = "specialAttack";
+                    }
                 }
             }
         }

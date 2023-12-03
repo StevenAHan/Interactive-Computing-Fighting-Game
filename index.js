@@ -48,47 +48,45 @@ let lobby = "lobby"; // room for those not in a game
 
 // whenever a client connects to the server
 io.on('connection', function(socket) {
-    console.log('a user connected');
+    let thisId = userId++;
 
-    users[socket] = {
-        "id": userId++, 
-        "socket": socket
-    };
+    console.log(`user ${thisId} connected`);
     socket.join(lobby);
 
     socket.on('create_game', function(game) {
         console.log("creating game: ", game);
 
-        let gameCode = gameId++;
-        games[gameCode] = {code: gameCode, user1: socket};
-        users[socket].gameCode = gameCode;
+        let gameCode = game.code;
+        games[gameCode] = {code: gameCode, user1: thisId};
+        users[thisId] = gameCode;
         socket.leave(lobby);
         socket.join(gameCode);
-
+        console.log(games);
         socket.to(lobby).emit('update_games', games);
     });
 
     socket.on('join_game', function(game) {
         console.log("joining game: ", game);
 
-        games[game.code].user2 = socket;
-        users[socket].gameCode = game.code;
+        games[game.code].user2 = thisId;
+        users[thisId] = game.code;
         socket.leave(lobby);
         socket.join(game.code);
 
-        socket.to(lobby).emit('update_games', games);
+        socket.to(lobby).to(game.code).emit('update_games', games);
     });
 
     socket.on('user_output', function(data) {
-        console.log(`user ${users[socket].id} sent to game ${users[socket].gameCode}: ${data}`);
-
-        socket.emit("user_input", data);
+        console.log(`user ${thisId} sent to game ${JSON.stringify(users[thisId])}: ${data}`);
+        console.log('users: ' + users);
+        socket.to(users[thisId]).emit("user_input", data);
     });
 
     socket.on('leave_room', function(data) {
-        console.log(`user ${users[socket].id} is leaving a game: ${data}`);
+        console.log(`user ${thisId} is leaving a game: ${data}`);
 
         socket.leave(data.gameCode);
+        delete users[thisId];
 
         // logic assumes 2 player game
         if (games[data.gameCode].user1 === socket) {
