@@ -1,5 +1,5 @@
 // define the port that this project should listen on
-const port = 60000;
+const port = process.env.PORT || 60000;
 
 // set up express
 const express = require('express');
