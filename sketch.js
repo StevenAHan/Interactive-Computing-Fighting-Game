@@ -283,7 +283,7 @@ function keyPressed() {
     if(keyCode == 65) { // a
       charSelect.selectors.p1--;
       if(charSelect.selectors.p1 < 1) {
-        charSelect.selectors.p1 = 1;
+        charSelect.selectors.p1 = 5;
       }
     }
   
@@ -291,7 +291,7 @@ function keyPressed() {
     if(keyCode == 74) { // j
       charSelect.selectors.p2--;
       if(charSelect.selectors.p2 < 1) {
-        charSelect.selectors.p2 = 1;
+        charSelect.selectors.p2 = 5;
       }
     }
     if(keyCode == 76) { // l
