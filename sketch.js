@@ -18,6 +18,7 @@ let isPlaying = false; // Initialize isPlaying
 let backgroundMusic, versus, chooseCharMusic, woodsMusic, winMusic;
 let instruction = false;
 let newFont, blood, playArena, playWin;
+let tiles;
 
 let arenaSelect = {
   arenas: [],
@@ -125,6 +126,7 @@ function preload() {
   //font
   newFont = loadFont("./assets/norwester.otf")
   blood = loadImage("./assets/environments/blood.png")
+  tiles = loadImage("./assets/environments/tiles.jpg") //tiles 
   
 
   // Raven Animations
@@ -226,7 +228,7 @@ function setup() {
   charSelectSetup(charSelect);
   
   //set up platform
-  map1 = new Map(platform, 35);
+  map1 = new Map(platform, 30);
 }
 
 
@@ -461,6 +463,7 @@ function menu() {
 
 // sets up game state before playing
 function arenaSetup() {
+
   // grabs the class for the character to construct an instance
   arenaState.p1 = new charSelect.spots[charSelect.selectors.p1].factory(charSelect.spots[charSelect.selectors.p1].name, 250, ground, 0, null);
   arenaState.p1.setup();
@@ -503,6 +506,8 @@ function finished(){
 function arena() {
   imageMode(CENTER);
   image(selectedArenaImage, width / 2, height / 2, width, height);
+  //draws the platform
+  map1.draw();
   fill(128);
   stroke(51);
   rect(10, 30, (width * 3 / 7), 25);
@@ -534,6 +539,10 @@ function arena() {
   
   if (frameCount % 60 == 0 && timer > 0) {
     timer --;
+  }
+
+  for(let i=0; i<height;i+=100){
+    text(i, 30, i)
   }
   
   if(playArena){
