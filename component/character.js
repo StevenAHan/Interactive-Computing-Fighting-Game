@@ -54,6 +54,7 @@ class Character {
         this.bottom=0;
         this.top=0
         this.onplat = false;
+        this.velocity = 0;
     }
 
     // Sets up the character, should only run once in the beginning
@@ -192,7 +193,7 @@ class Character {
                 }
             }
         }
-
+        //for platforms--this.ground updates to be platform as floor
         if(this.y > this.ground) {
             this.y = this.ground;
             this.jumping = false;
@@ -206,19 +207,30 @@ class Character {
             this.jump();
             this.currAnimation = "jump";
             var check= this.onSolid();
-            console.log(this.onSolid())
+            //console.log(this.onSolid())
             if(check[0] == "top"){
                 this.ground=check[1]
                 this.onplat = true;
+                this.velocity = 0;
             }
         }
-
-        if(this.onplat && this.onSolid()[0] == "none" && this.y<ground){
-            this.y+=this.gravity
-            this.ground=600;
+    
+        if(this.onplat && this.onSolid()[0] == "none" && this.y<ground && !this.jumping){
+            this.velocity+=this.gravity;
+            this.y += this.velocity;
+            this.ground=ground;
+            var check= this.onSolid();
+            //console.log(this.onSolid())
+            if(check[0] == "top"){
+                this.ground=check[1]
+                this.onplat = true;
+                this.velocity = 0;
+            }
         }
-        if(this.y > 600){
+        //for actual ground
+        if(this.y > ground){
             this.onplat = false;
+            this.velocity = 0;
         }
 
 
@@ -348,23 +360,23 @@ class Character {
         // this.left = [this.x, this.y + 35 / 2];
         // this.right = [this.x + 35, this.y + 35 / 2];
         this.top = [this.x + 30 / 2, this.y];
-        console.log(this.y)
+        //console.log(this.y)
         this.bottom = [this.x + 30 / 2, this.y+50 + 30];
       }
     
-  onSolid() {
-    let tilerc = map1.getLoc(this.bottom[0], this.bottom[1]); //get tile under
-    console.log(tilerc) //(7,18)
-    var row = int(tilerc[1])
-    var col = int(tilerc[0])
-    if(map1.get(row, col)){
-        console.log("char:" + this.y)
-        var locy = int((row-2) * 30)
-        console.log("loc:"+locy)
-        return ["top",locy];
-    }
-    console.log("char:" + this.y)
-    return ["none", locy];
+    onSolid() {
+        let tilerc = map1.getLoc(this.bottom[0], this.bottom[1]); //get tile under
+        //console.log(tilerc) 
+        var row = int(tilerc[1])
+        var col = int(tilerc[0])
+        if(map1.get(row, col)){
+            //console.log("char:" + this.y)
+            var locy = int((row-2) * 30)
+            //console.log("loc:"+locy)
+            return ["top",locy];
+        }
+        //console.log("char:" + this.y)
+        return ["none", locy];
   }
 
 

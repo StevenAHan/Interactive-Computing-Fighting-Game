@@ -226,9 +226,6 @@ function setup() {
 
   // init charselect
   charSelectSetup(charSelect);
-  
-  //set up platform
-  map1 = new Map(platform, 30);
 }
 
 
@@ -495,6 +492,8 @@ function arenaSetup() {
   const randomIndex = Math.floor(Math.random() * arenaSelect.arenas.length);
   selectedArenaImage = arenaSelect.arenas[randomIndex];
   selectedArenaName = arenaSelect.names[randomIndex];
+  //set up platform-requires selectedArenaImage first
+  map1 = new Map(30);
 }
 
 function finished(){
@@ -540,10 +539,10 @@ function arena() {
   if (frameCount % 60 == 0 && timer > 0) {
     timer --;
   }
-
-  for(let i=0; i<height;i+=100){
-    text(i, 30, i)
-  }
+  //debug code for platforms
+  // for(let i=0; i<height;i+=100){
+  //   text(i, 30, i)
+  // }
   
   if(playArena){
     woodsMusic.setVolume(0.5)
