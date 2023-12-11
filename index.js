@@ -107,3 +107,37 @@ io.on('connection', function(socket) {
     
 
 });
+
+
+
+class Game {
+    constructor(gameId, socket) {
+        this.players = [];
+        this.gameId = gameId;
+        this.time = 100;
+        this.socket = socket;
+    }
+
+    addPlayer(player) {
+        this.players.push(player);
+    }
+
+    startGame() {
+        this.socket.emit("startGame", {game: this.gameId});
+    }
+
+    endGame(playerNum) {
+        this.socket.emit("endGame", {game: this.gameId, loser: playerNum});
+    }
+}
+
+
+class Player {
+    constructor(playerNum, health, character, x, y) {
+        this.playerNum = playerNum;
+        this.health = health;
+        this.character = character;
+        this.x = x;
+        this.y = y;
+    }
+}
