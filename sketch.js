@@ -13,20 +13,18 @@ let arenaImage;
 let titleVideo;
 let titleScreenOpacity = 0;
 let titleScreenOpacityDirection = 1;
-let mode = 0; // FOR TESTING
-let isPlaying = false; // Initialize isPlaying
+let mode = 0; 
+let isPlaying = false;
 let backgroundMusic, versus, chooseCharMusic, woodsMusic, winMusic;
 let instruction = false;
 let newFont, blood, playArena, playWin;
 let tiles;
 
-let arenaSelect = {
-  arenas: [],
-  currentSelection: 0,
-  names: ['battleground', 'desert', 'forest', 'haunted', 'path', 'ruin', 'swamp', 'temple', 'village'],
-};
-let selectedArenaName;
-let selectedArenaImage;
+let selectedArenaImage
+let arenaImages = [];
+let arenaNames = ['Battleground', 'Desert', 'Forest', 'Haunted', 'Path', 'Ruin', 'Swamp', 'Temple', 'Village'];
+let selectedArenaIndex = 0;
+let arenaSelected = false;
 
 // Game Vars to Keep Track of Game State
 let projectiles = [];
@@ -91,9 +89,9 @@ function preload() {
   // Load the background images
   backgroundImage = loadImage("./assets/environments/char_background.png");
   foregroundImage = loadImage("./assets/environments/foreground.png");
-  arenaSelect.names.forEach((name) => {
-    let img = loadImage(`./assets/environments/maps/${name}.png`);
-    arenaSelect.arenas.push(img);
+  
+  arenaNames.forEach((arena, index) => {
+    arenaImages[index] = loadImage(`./assets/environments/maps/${arena}.png`);
   });
 
   // Kitsune Animations
@@ -230,33 +228,37 @@ function setup() {
 
 
 function draw() {
-    imageMode(CENTER);
-    background(0);
-    if (mode === 0) {
-      warning();
-    } else if (mode === 1) {
-      menuTime++;
-      titleScreen();
-    } else if (mode === 2) {
-      menu();
-    } else if (mode === 3) {
-      arenaSetup();
-    } else if (mode === 4) { 
-      arena();
-    }
-    else if (mode === 5) { 
-      endGame();
-    }
-
+  imageMode(CENTER);
+  background(0);
+  if (mode === 0) {
+    warning();
+  } else if (mode === 1) {
+    console.log("menuTime:", menuTime);
+    menuTime++;
+    titleScreen();
+  } else if (mode === 2) {
+    menu();
+  } else if (mode === 3) {
+    arenaMenu();
+  } else if (mode === 4) {
+    arenaSetup();
+  } else if (mode === 5) {
+    arena();
+  } else if (mode === 6) {
+    endGame();
+  }
 }
 
 function keyPressed() {
   //Increment Mode on Enter
+  console.log("Key pressed: ", keyCode, " Mode: ", mode)
   if (mode === 0 && keyCode === ENTER) {
+    console.log("Entering mode 1 from mode 0");
     mode = 1;
     isPlaying = false; // Reset isPlaying
     instruction = true;
   } else if (mode === 1 && keyCode === ENTER && menuTime >= 120) {
+    console.log("Attempting to transition from mode 1 to mode 2");
     if (instruction) {
       instruction = false;
 
@@ -299,7 +301,16 @@ function keyPressed() {
         charSelect.selectors.p2 = 1;
       }
     }
-  } else if(mode > 3 && keyCode === ENTER && end == true) {
+  } else if  (mode === 3) {
+    if (key === 'd' || key === 'D') {
+      selectedArenaIndex = (selectedArenaIndex + 1) % arenaImages.length;
+    } else if (key === 'a' || key === 'A') {
+      selectedArenaIndex = (selectedArenaIndex - 1 + arenaImages.length) % arenaImages.length;
+    } else if (keyCode === ENTER) {
+      arenaSelected = true;
+      mode = 4; // Proceed to the next mode (arenaSetup) after selection
+    }
+  } else if (mode > 4 && keyCode === ENTER && end == true) {
     winMusic.stop()
     mode = 2;
     timer = starting_time;
@@ -458,9 +469,44 @@ function menu() {
   instruction = true;
 }
 
+function arenaMenu() {
+  clear(); // Clear the canvas
+  background(10);
+  imageMode(CENTER);
+  image(arenaImages[selectedArenaIndex], width / 2, height / 2, 500, 300);
+
+  fill(255)
+  textSize(30)
+  text("Stage Selection", width / 2, height / 2 - 160)
+  // Set text properties for the arena name
+  textStyle(NORMAL);
+  textFont('Arial');
+  textSize(16);
+  fill(255);
+  textAlign(CENTER, TOP); // Align text to the center and top
+
+  // Draw the arena name
+  text(arenaNames[selectedArenaIndex], width / 2, height / 2 + 160);
+
+  // Reset and set text properties for instructions
+  textSize(16);
+  textAlign(CENTER, BOTTOM);
+
+  // Draw instructions
+  text("Use A/D keys to change arena. Press ENTER to select.", width / 2, height - 30);
+
+  noFill();
+  stroke(0);
+  rect(width / 2 - 250, height / 2 - 150, 500, 300);
+
+  selectedArenaImage = arenaImages[selectedArenaIndex];
+}
+
+
 // sets up game state before playing
 function arenaSetup() {
 
+  
   // grabs the class for the character to construct an instance
   arenaState.p1 = new charSelect.spots[charSelect.selectors.p1].factory(charSelect.spots[charSelect.selectors.p1].name, 250, ground, 0, null);
   arenaState.p1.setup();
@@ -488,12 +534,6 @@ function arenaSetup() {
   text("VERSUS", 600, 450)
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
-
-  const randomIndex = Math.floor(Math.random() * arenaSelect.arenas.length);
-  selectedArenaImage = arenaSelect.arenas[randomIndex];
-  selectedArenaName = arenaSelect.names[randomIndex];
-  //set up platform-requires selectedArenaImage first
-  map1 = new Map(30);
 }
 
 function finished(){
@@ -506,7 +546,6 @@ function arena() {
   imageMode(CENTER);
   image(selectedArenaImage, width / 2, height / 2, width, height);
   //draws the platform
-  map1.draw();
   fill(128);
   stroke(51);
   rect(10, 30, (width * 3 / 7), 25);
