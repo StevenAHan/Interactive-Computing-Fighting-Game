@@ -810,14 +810,15 @@ function arena() {
     }
   }
 
-  // Temp while we design the end screen
-  // if(arenaState.p1.dying || arenaState.p2.dying){
-  //   mode++;
-  //   end = true;
-  // }
 
   fill(255, 0, 0);
   textSize(60);
+
+
+  let gameInfo;
+  socket.on("update_games", gameInfo);
+  console.log(gameInfo);
+
 
   if (arenaState.p1.dying || arenaState.p2.dying || timer == 0 ) {
     if(arenaState.p1.dying || (arenaState.p1.health < arenaState.p2.health)) {

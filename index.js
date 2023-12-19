@@ -127,7 +127,16 @@ class Game {
     }
 
     endGame(playerNum) {
-        this.socket.emit("endGame", {game: this.gameId, loser: playerNum});
+        this.socket.emit("endGame", {game: this.gameId, loser: this.players[playerNum]});
+    }
+
+    updatePlayers() {
+        this.socket.emit("updatePlayers", {game: this.gameId, players: this.players});
+        for(let i = 0; i < this.players.length; i++) {
+            if(this.players[i].health <= 0) {
+                this.endGame(i);
+            }
+        }
     }
 }
 
