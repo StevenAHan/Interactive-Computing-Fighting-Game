@@ -108,6 +108,7 @@ class Character {
                     // a - move left
                     if(keyIsDown(65)) {
                         socket.emit('user_output', {keyDown: 65});
+                        socket.emit('user_update', {});
                         this.currAnimation = "run";
                         this.x -= this.speed;
                     }

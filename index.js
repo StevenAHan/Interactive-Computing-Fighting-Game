@@ -82,6 +82,10 @@ io.on('connection', function(socket) {
         socket.to(users[thisId]).emit("user_input", data);
     });
 
+    socket.on("user_update", function(data) { 
+        updateGame(users[thisId], data.player, data.playerNum);
+    });
+
     socket.on('leave_room', function(data) {
         console.log(`user ${thisId} is leaving a game: ${data}`);
 
@@ -102,6 +106,12 @@ io.on('connection', function(socket) {
         }
 
         socket.to(lobby).emit('update_games', games);
+    });
+
+
+    socket.on("start_match", function(data) {
+        console.log("data: " + data);
+        updateGame(data.gameCode, data.p1, data.p2);
     });
 
     
@@ -142,11 +152,32 @@ class Game {
 
 
 class Player {
-    constructor(playerNum, health, character, x, y) {
+    constructor(playerNum, health, x, y) {
         this.playerNum = playerNum;
         this.health = health;
-        this.character = character;
         this.x = x;
         this.y = y;
     }
+}
+
+function updateGame(roomCode, player, playerNum) {
+    if(playerNum == 1) {
+        if(!game[roomCode].p1) {
+            game[roomCode].p1 = new Player(1, player.health, player.x, player.y);
+        } else {
+            game[roomCode].p1.health = player.health;
+            game[roomCode].p1.x = player.x;
+            game[roomCode].p1.y = player.y;
+        
+        }
+    } else {
+        if(!game[roomCode].p2) {
+            game[roomCode].p2 = new Player(2, player.health, player.x, player.y);
+        } else {
+            game[roomCode].p2.health = player.health;
+            game[roomCode].p2.x = player.x;
+            game[roomCode].p2.y = player.y;
+        }
+    }
+    socket.to(roomCode).emit("updatePlayers", {players: [game[roomCode].p1, game[roomCode].p2]})
 }

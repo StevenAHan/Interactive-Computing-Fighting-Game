@@ -725,7 +725,11 @@ function arenaSetup() {
   const randomIndex = Math.floor(Math.random() * arenaSelect.arenas.length);
   selectedArenaImage = arenaSelect.arenas[randomIndex];
   selectedArenaName = arenaSelect.names[randomIndex];
-
+  if(!gameInfoEmitted) {
+    let play1 = {"health": arenaState.p1.health, "x": arenaState.p1.x, "y": arenaState.p1.y};
+    let play2 = {"health": arenaState.p2.health, "x": arenaState.p2.x, "y": arenaState.p2.y};
+    socket.emit("start_match", {roomCode: roomCode, p1: play1, p2: play2});
+  }
   // while(waitingForOpponent);
 }
 
@@ -818,6 +822,15 @@ function arena() {
   let gameInfo;
   socket.on("update_games", gameInfo);
   console.log(gameInfo);
+  if(roomCode == gameInfo.roomCode) {
+    arenaState.p1.health = gameInfo.players.p1.health;
+    arenaState.p1.x = gameInfo.players.p1.x;
+    arenaState.p1.y = gameInfo.players.p1.y;
+
+    arenaState.p2.health = gameInfo.players.p2.health;
+    arenaState.p2.x = gameInfo.players.p2.x;
+    arenaState.p2.y = gameInfo.players.p2.y;
+  }
 
 
   if (arenaState.p1.dying || arenaState.p2.dying || timer == 0 ) {
