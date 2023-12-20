@@ -34,7 +34,7 @@ let tiles;
 
 let selectedArenaImage;
 let arenaImages = [];
-let arenaNames = ['Battleground', 'Desert', 'Forest', 'Haunted', 'Path', 'Ruin', 'Swamp', 'Temple', 'Village'];
+let arenaNames = ['battleground', 'desert', 'forest', 'haunted', 'path', 'ruin', 'swamp', 'temple', 'village'];
 let selectedArenaIndex = 0;
 let arenaSelected = false;
 
