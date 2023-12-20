@@ -83,7 +83,7 @@ io.on('connection', function(socket) {
     });
 
     socket.on("user_update", function(data) { 
-        updateGame(users[thisId], data.player, data.playerNum);
+        updateGame(socket, users[thisId], data.player, data.playerNum);
     });
 
     socket.on('leave_room', function(data) {
@@ -110,8 +110,9 @@ io.on('connection', function(socket) {
 
 
     socket.on("start_match", function(data) {
-        console.log("data: " + data);
-        updateGame(data.gameCode, data.p1, data.p2);
+        console.log("data: ");
+        console.log(data);
+        updateGame(socket, data.roomCode, data.p1, data.p2);
     });
 
     
@@ -160,24 +161,25 @@ class Player {
     }
 }
 
-function updateGame(roomCode, player, playerNum) {
-    if(playerNum == 1) {
-        if(!game[roomCode].p1) {
-            game[roomCode].p1 = new Player(1, player.health, player.x, player.y);
+function updateGame(socket, roomCode, player, playerNum) {
+    console.log(roomCode, games)
+    if(playerNum == 0) {
+        if(!games[roomCode].p1) {
+            games[roomCode].p1 = new Player(1, player.health, player.x, player.y);
         } else {
-            game[roomCode].p1.health = player.health;
-            game[roomCode].p1.x = player.x;
-            game[roomCode].p1.y = player.y;
+            games[roomCode].p1.health = player.health;
+            games[roomCode].p1.x = player.x;
+            games[roomCode].p1.y = player.y;
         
         }
     } else {
-        if(!game[roomCode].p2) {
-            game[roomCode].p2 = new Player(2, player.health, player.x, player.y);
+        if(!games[roomCode].p2) {
+            games[roomCode].p2 = new Player(2, player.health, player.x, player.y);
         } else {
-            game[roomCode].p2.health = player.health;
-            game[roomCode].p2.x = player.x;
-            game[roomCode].p2.y = player.y;
+            games[roomCode].p2.health = player.health;
+            games[roomCode].p2.x = player.x;
+            games[roomCode].p2.y = player.y;
         }
     }
-    socket.to(roomCode).emit("updatePlayers", {players: [game[roomCode].p1, game[roomCode].p2]})
+    socket.to(roomCode).emit("updatePlayers", {players: [games[roomCode].p1, games[roomCode].p2]})
 }

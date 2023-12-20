@@ -12,6 +12,7 @@ let player = 0; // p1 or p2
 let waitingForOpponent = false; // to wait for char selection;
 let ready = false;
 let waitingForNewGame = true;
+let gameInfoEmitted = false;
 
 // Home Screen Vars
 let backgroundImage;
@@ -348,7 +349,7 @@ function gameSelect() {
   fill('white');
 
   if (! inGame ) {
-    text("enter a join code below to join a game, or pres the button to create a new game", 100, 100);
+    text("enter a join code below to join a game, or pres the button to create a new game", 600, 100);
   }
   else {
     text("waiting for other player", 100, 100);
@@ -729,6 +730,7 @@ function arenaSetup() {
     let play1 = {"health": arenaState.p1.health, "x": arenaState.p1.x, "y": arenaState.p1.y};
     let play2 = {"health": arenaState.p2.health, "x": arenaState.p2.x, "y": arenaState.p2.y};
     socket.emit("start_match", {roomCode: roomCode, p1: play1, p2: play2});
+    gameInfoEmitted = true;
   }
   // while(waitingForOpponent);
 }
@@ -740,6 +742,26 @@ function finished(){
 }
 
 function arena() {
+
+  socket.on("update_games", function(gameInfo) {
+    console.log(gameInfo);
+    console.log(gameInfo.roomCode)
+    if(roomCode == gameInfo.roomCode) {
+      console.log(arenaState.p1.x )
+
+      arenaState.p1.health = gameInfo.players.p1.health;
+      arenaState.p1.x = gameInfo.players.p1.x;
+      arenaState.p1.y = gameInfo.players.p1.y;
+
+      console.log(arenaState.p1.x )
+
+
+      arenaState.p2.health = gameInfo.players.p2.health;
+      arenaState.p2.x = gameInfo.players.p2.x;
+      arenaState.p2.y = gameInfo.players.p2.y;
+    }
+  });
+
   imageMode(CENTER);
   image(selectedArenaImage, width / 2, height / 2, width, height);
   fill(128);
@@ -817,21 +839,6 @@ function arena() {
 
   fill(255, 0, 0);
   textSize(60);
-
-
-  let gameInfo;
-  socket.on("update_games", gameInfo);
-  console.log(gameInfo);
-  if(roomCode == gameInfo.roomCode) {
-    arenaState.p1.health = gameInfo.players.p1.health;
-    arenaState.p1.x = gameInfo.players.p1.x;
-    arenaState.p1.y = gameInfo.players.p1.y;
-
-    arenaState.p2.health = gameInfo.players.p2.health;
-    arenaState.p2.x = gameInfo.players.p2.x;
-    arenaState.p2.y = gameInfo.players.p2.y;
-  }
-
 
   if (arenaState.p1.dying || arenaState.p2.dying || timer == 0 ) {
     if(arenaState.p1.dying || (arenaState.p1.health < arenaState.p2.health)) {

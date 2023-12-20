@@ -108,13 +108,22 @@ class Character {
                     // a - move left
                     if(keyIsDown(65)) {
                         socket.emit('user_output', {keyDown: 65});
-                        socket.emit('user_update', {});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         this.currAnimation = "run";
                         this.x -= this.speed;
                     }
                     // d - move right
                     if (keyIsDown(68)) {
                         socket.emit('user_output', {keyDown: 68});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         this.currAnimation = "run";
                         this.x += this.speed;
                     }
@@ -122,6 +131,11 @@ class Character {
                     // w - jump
                     if(keyIsDown(87)) {
                         socket.emit('user_output', {keyDown: 87});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         if(!this.jumping) {
                             this.jumping = true;
                         }
@@ -129,18 +143,33 @@ class Character {
                     // e - basic attack
                     if(keyIsDown(69)) {
                         socket.emit('user_output', {keyDown: 69});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         this.state = "basicAttack";
                     }
                     
                     // q - heavy attack
                     if(keyIsDown(81)) {
                         socket.emit('user_output', {keyDown: 81});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         this.state = "heavyAttack";
                     }
                     
                     // r - special attack
                     if(keyIsDown(82)) {
                         socket.emit('user_output', {keyDown: 82});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         this.state = "specialAttack";
                     }
                 }
@@ -164,6 +193,11 @@ class Character {
                     // j - move left
                     if(keyIsDown(74)) {
                         socket.emit('user_output', {keyDown: 74});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         this.currAnimation = "run";
                         this.x -= this.speed;
                     }
@@ -171,6 +205,11 @@ class Character {
                     // l - move right
                     if (keyIsDown(76)) {
                         socket.emit('user_output', {keyDown: 76});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         this.currAnimation = "run";
                         this.x += this.speed;
                     }
@@ -179,6 +218,11 @@ class Character {
                     // i - jump
                     if(keyIsDown(73)) {
                         socket.emit('user_output', {keyDown: 73});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         if(!this.jumping) {
                             this.jumping = true;
                         }
@@ -186,18 +230,33 @@ class Character {
                     // u - basic attack
                     if(keyIsDown(85)) {
                         socket.emit('user_output', {keyDown: 85});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         this.state = "basicAttack";
                     }
 
                     // o - heavy attack
                     if(keyIsDown(79)) {
                         socket.emit('user_output', {keyDown: 79});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         this.state = "heavyAttack";
                     }
 
                     // y - special attack
                     if(keyIsDown(89)) {
                         socket.emit('user_output', {keyDown: 89});
+                        socket.emit('user_update', {player: {
+                            x: this.x,
+                            y: this.y,
+                            health: this.health
+                        }, playerNum: this.playerNumber});
                         this.state = "specialAttack";
                     }
                 }
