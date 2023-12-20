@@ -1,6 +1,6 @@
 
 // debug var to see hitboxes and some logging
-let debug = true;
+let debug = false;
 
 // Home Screen Vars
 let backgroundImage;
