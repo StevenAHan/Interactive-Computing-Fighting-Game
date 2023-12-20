@@ -788,6 +788,7 @@ class Raider extends Character {
         if(this.spriteAnimations[this.currAnimation].currentFrame > 1) {
             this.hitboxes.attack('light');
             this.opponent.hitboxes.checkHit(this, 'light');
+            raider_basic.play();
         }
 
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
@@ -803,6 +804,7 @@ class Raider extends Character {
         if(this.heavyProj == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
             projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 25, this.spriteAnimations["heavyProj"], this.direction, 64, 64, 5, 15, this.opponent));
             this.heavyProj = true;
+            raider_heavy.play();
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {   
             this.state = false;
@@ -817,6 +819,7 @@ class Raider extends Character {
         if(this.specialProj == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
             projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["specialProj"], this.direction, 64, 64, 20, 15, this.opponent, 12));
             this.specialProj = true;
+            raider_special.play();
         }
         if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.hitboxes.attack('special');
@@ -869,8 +872,3 @@ class Health_R {
         rect(this.x, this.y, currentWidth, 25);
     }
 }
-
-
-
-  
-

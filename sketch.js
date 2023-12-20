@@ -65,11 +65,13 @@ let raiderIdle, raiderRun, raiderJump,
   raiderBasicAttack, raiderHeavyAttack, raiderSpecialAttack,
   raiderHurt, raiderDeath, raiderHeavyBullet, raiderSpecialBullet;
 
+
 // attack sounds
 let kitsune_basic, kitsune_heavy, kitsune_special;
 let raven_basic, raven_heavy, raven_special;
 let samurai_basic, samurai_heavy, samurai_special;
 let fighter_basic, fighter_heavy, fighter_special;
+let raider_basic, raider_heavy, raider_special;
 
 let hurtSound;
 
@@ -213,6 +215,9 @@ function preload() {
   raiderDeath = loadImage("./assets/characters/Raider/Dead.png");
   raiderHeavyBullet = loadImage("./assets/characters/Raider/Bullet_1.png");
   raiderSpecialBullet = loadImage("./assets/characters/Raider/Bullet_2.png");
+  raider_basic = loadSound("./assets/sounds/kitsune_basic.wav");
+  raider_heavy = loadSound("./assets/sounds/lasergunsound.mp3");
+  raider_special = loadSound("./assets/sounds/lasergunsound.mp3");
 
 }
 
