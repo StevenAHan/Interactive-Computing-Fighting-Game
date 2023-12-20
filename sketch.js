@@ -84,6 +84,7 @@ let timer = 99
 const starting_time = 99;
 
 let menuTime = 0;
+let map1;
 
 function preload() {
   // Load the background images
@@ -480,7 +481,6 @@ function arenaMenu() {
   text("Stage Selection", width / 2, height / 2 - 160)
   // Set text properties for the arena name
   textStyle(NORMAL);
-  textFont('Arial');
   textSize(16);
   fill(255);
   textAlign(CENTER, TOP); // Align text to the center and top
@@ -534,6 +534,9 @@ function arenaSetup() {
   text("VERSUS", 600, 450)
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
+
+  //set up platform-requires selectedArenaImage first
+  map1 = new Map(30);
 }
 
 function finished(){
@@ -546,6 +549,7 @@ function arena() {
   imageMode(CENTER);
   image(selectedArenaImage, width / 2, height / 2, width, height);
   //draws the platform
+  map1.draw()
   fill(128);
   stroke(51);
   rect(10, 30, (width * 3 / 7), 25);

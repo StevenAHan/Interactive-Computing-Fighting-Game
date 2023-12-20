@@ -78,19 +78,20 @@ class Solid {
       for (var row = 0; row < this.map.length; row++) {
         for (var col = 0; col < this.map[row].length; col++) {
           if (this.map[row][col] == 1) {
-            if(selectedArenaName == 'forest' || selectedArenaName == "ruin" || selectedArenaName == 'haunted' ){
+            console.log(arenaImages[selectedArenaIndex])
+            if(selectedArenaIndex == 2 || selectedArenaIndex == 5 || selectedArenaIndex == 3 ){
               this.map[row][col] = new Solid(col * this.bsize, row * this.bsize, [0.22, 0.2]);
             }
-            if(selectedArenaName == 'path' || selectedArenaName == "swamp"){
+            if(selectedArenaIndex == 4 || selectedArenaIndex == 6){
               this.map[row][col] = new Solid(col * this.bsize, row * this.bsize, [6.7, 0.2]);
             }
-            if(selectedArenaName == "desert"){
+            if(selectedArenaIndex == 1){
               this.map[row][col] = new Solid(col * this.bsize, row * this.bsize, [5.66, 3.45]);
             }
-            if(selectedArenaName == "battleground"){
+            if(selectedArenaIndex == 0){
               this.map[row][col] = new Solid(col * this.bsize, row * this.bsize, [8.9, 2.35]);
             }
-            if(selectedArenaName == 'village' || selectedArenaName == 'temple'){
+            if(selectedArenaIndex == 8 || selectedArenaIndex == 7){
               this.map[row][col] = new Solid(col * this.bsize, row * this.bsize, [2.4, 2.4]);
             }
           }
@@ -115,8 +116,8 @@ class Solid {
       for (var row = 0; row < this.map.length; row++) {
         for (var col = 0; col < this.map[row].length; col++) {
           if (this.map[row][col] != 0) {
+            console.log(this.map[row][col])
             this.map[row][col].draw(this.offset, 0);
-  
           }
         }
   
