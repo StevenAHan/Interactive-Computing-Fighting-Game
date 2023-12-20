@@ -71,7 +71,8 @@ class Solid {
 class Map {
   constructor(size) {
 
-    this.map = random(platforms);
+    // this.map = random(platforms);
+    this.map = 0;
     this.offset = 0;
     this.bsize = size
 
