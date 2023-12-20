@@ -743,22 +743,31 @@ function finished(){
 
 function arena() {
 
-  socket.on("update_games", function(gameInfo) {
+  socket.on("update_players", function(gameInfo) {
     console.log(gameInfo);
     console.log(gameInfo.roomCode)
     if(roomCode == gameInfo.roomCode) {
-      console.log(arenaState.p1.x )
-
       arenaState.p1.health = gameInfo.players.p1.health;
       arenaState.p1.x = gameInfo.players.p1.x;
       arenaState.p1.y = gameInfo.players.p1.y;
 
-      console.log(arenaState.p1.x )
-
-
       arenaState.p2.health = gameInfo.players.p2.health;
       arenaState.p2.x = gameInfo.players.p2.x;
       arenaState.p2.y = gameInfo.players.p2.y;
+    }
+
+    if(frameCount % 10 == 0) {
+      socket.emit('user_update', {player: {
+        x: arenaState.p1.x,
+        y: arenaState.p1.y,
+        health: arenaState.p1.health
+      }, playerNum: 0});
+
+      socket.emit('user_update', {player: {
+        x: arenaState.p2.x,
+        y: arenaState.p2.y,
+        health: arenaState.p2.health
+      }, playerNum: 1});
     }
   });
 
