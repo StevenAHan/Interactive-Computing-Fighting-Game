@@ -1,6 +1,6 @@
 
 // debug var to see hitboxes and some logging
-let debug = true;
+let debug = false;
 
 // socket.io
 let socket;
@@ -30,14 +30,13 @@ let isPlaying = false; // Initialize isPlaying
 let backgroundMusic, versus, chooseCharMusic, woodsMusic, winMusic;
 let instruction = false;
 let newFont, blood, playArena, playWin;
+let tiles;
 
-let arenaSelect = {
-  arenas: [],
-  currentSelection: 0,
-  names: ['battleground', 'desert', 'forest', 'haunted', 'path', 'ruin', 'swamp', 'temple', 'village'],
-};
-let selectedArenaName;
 let selectedArenaImage;
+let arenaImages = [];
+let arenaNames = ['Battleground', 'Desert', 'Forest', 'Haunted', 'Path', 'Ruin', 'Swamp', 'Temple', 'Village'];
+let selectedArenaIndex = 0;
+let arenaSelected = false;
 
 // Game Vars to Keep Track of Game State
 let projectiles = [];
@@ -83,6 +82,8 @@ let kitsune_basic, kitsune_heavy, kitsune_special;
 let raven_basic, raven_heavy, raven_special;
 let samurai_basic, samurai_heavy, samurai_special;
 let fighter_basic, fighter_heavy, fighter_special;
+let raider_basic, raider_heavy, raider_special;
+
 
 let hurtSound;
 
@@ -97,15 +98,18 @@ let timer = 99
 const starting_time = 99;
 
 let menuTime = 0;
+let map1;
+
 
 function preload() {
   // Load the background images
   backgroundImage = loadImage("./assets/environments/char_background.png");
   foregroundImage = loadImage("./assets/environments/foreground.png");
-  arenaSelect.names.forEach((name) => {
-    let img = loadImage(`./assets/environments/maps/${name}.png`);
-    arenaSelect.arenas.push(img);
+  
+  arenaNames.forEach((arena, index) => {
+    arenaImages[index] = loadImage(`./assets/environments/maps/${arena}.png`);
   });
+
 
   // Kitsune Animations
   kitsuneIdle = loadImage("./assets/characters/Kitsune/Idle.png");
@@ -137,6 +141,7 @@ function preload() {
   //font
   newFont = loadFont("./assets/norwester.otf")
   blood = loadImage("./assets/environments/blood.png")
+  tiles = loadImage("./assets/environments/tiles.jpg") //tiles 
   
 
   // Raven Animations
@@ -224,6 +229,9 @@ function preload() {
   raiderDeath = loadImage("./assets/characters/Raider/Dead.png");
   raiderHeavyBullet = loadImage("./assets/characters/Raider/Bullet_1.png");
   raiderSpecialBullet = loadImage("./assets/characters/Raider/Bullet_2.png");
+  raider_basic = loadSound("./assets/sounds/kitsune_basic.wav");
+  raider_heavy = loadSound("./assets/sounds/lasergunsound.mp3");
+  raider_special = loadSound("./assets/sounds/lasergunsound.mp3");
 
 }
 
@@ -242,8 +250,6 @@ function setup() {
   // init charselect
   charSelectSetup(charSelect);
   
-  //set up platform
-  map1 = new Map(platform, 35);
 }
 
 
@@ -259,10 +265,12 @@ function draw() {
       gameSelect();
     } else if (mode === 3) {
       menu();
-    } else if (mode === 4) { 
+    } else if (mode === 4) {
+      arenaMenu();
+    } else if (mode === 5) { 
       arenaSetup();
     }
-    else if (mode === 5) { 
+    else if (mode === 6) { 
       arena();
     }
     else {
@@ -295,7 +303,7 @@ function keyPressed() {
       chooseCharMusic.stop()
       ready = true;
       if (!waitingForOpponent)
-        mode = 4;
+        mode++;
     }
     if ( player === 1) {
       if(keyCode == 68) { // d
@@ -330,7 +338,19 @@ function keyPressed() {
         }
       }
     }
-  } else if(mode > 4 && keyCode === ENTER && end == true) {
+  } else if (mode == 4) {
+    if (key === 'd' || key === 'D') {
+      socket.emit('user_output', {keyCode: keyCode});
+      selectedArenaIndex = (selectedArenaIndex + 1) % arenaImages.length;
+    } else if (key === 'a' || key === 'A') {
+      socket.emit('user_output', {keyCode: keyCode});
+      selectedArenaIndex = (selectedArenaIndex - 1 + arenaImages.length) % arenaImages.length;
+    } else if (keyCode === ENTER) {
+      socket.emit('user_output', {keyCode: keyCode});
+      arenaSelected = true;
+      mode++; // Proceed to the next mode (arenaSetup) after selection
+    }
+  } else if(mode > 5 && keyCode === ENTER && end == true) {
     winMusic.stop()
     mode = 2;
     timer = starting_time;
@@ -365,7 +385,7 @@ function gameSelect() {
 function on_user_input(data) {
   // TODO
   console.log(`received input: ${data}`);
-  if ( (mode === 5 && end == true) || (mode === 2) ) {
+  if ( (mode === 6 && end == true) || (mode === 2) ) {
     if ( data.keyCode == ENTER )
       waitingForNewGame = false;
   }
@@ -404,8 +424,19 @@ function on_user_input(data) {
           }
         }
       }
+    } else if(mode === 4) {
+      if ( data.keyCode == ENTER ) {
+        waitingForOpponent = false; 
+        mode = 5;
+      }
+      if ( data.keyCode == 68 ) {
+        selectedArenaIndex = (selectedArenaIndex + 1) % arenaImages.length;
+      }
+      else if ( data.keyCode == 65 ) {
+        selectedArenaIndex = (selectedArenaIndex - 1 + arenaImages.length) % arenaImages.length;
+      }
     }
-    else if ( mode === 5 ) { // in game
+    else if ( mode === 6 ) { // in game
       if (player === 1) {
         let p2 = arenaState.p2
         let xPrev = p2.x;
@@ -693,6 +724,38 @@ function menu() {
 
 }
 
+function arenaMenu() {
+  clear(); // Clear the canvas
+  background(10);
+  imageMode(CENTER);
+  image(arenaImages[selectedArenaIndex], width / 2, height / 2, 500, 300);
+
+  fill(255)
+  textSize(30)
+  text("Stage Selection", width / 2, height / 2 - 160)
+  // Set text properties for the arena name
+  textStyle(NORMAL);
+  textSize(16);
+  fill(255);
+  textAlign(CENTER, TOP); // Align text to the center and top
+
+  // Draw the arena name
+  text(arenaNames[selectedArenaIndex], width / 2, height / 2 + 160);
+
+  // Reset and set text properties for instructions
+  textSize(16);
+  textAlign(CENTER, BOTTOM);
+
+  // Draw instructions
+  text("Use A/D keys to change arena. Press ENTER to select.", width / 2, height - 30);
+
+  noFill();
+  stroke(0);
+  rect(width / 2 - 250, height / 2 - 150, 500, 300);
+
+  selectedArenaImage = arenaImages[selectedArenaIndex];
+}
+
 // sets up game state before playing
 function arenaSetup() {
   // grabs the class for the character to construct an instance
@@ -723,15 +786,8 @@ function arenaSetup() {
   fill(255)
   text(charSelect.spots[charSelect.selectors.p2].name, width/2+300, 660);
 
-  const randomIndex = Math.floor(Math.random() * arenaSelect.arenas.length);
-  selectedArenaImage = arenaSelect.arenas[randomIndex];
-  selectedArenaName = arenaSelect.names[randomIndex];
-  if(!gameInfoEmitted) {
-    let play1 = {"health": arenaState.p1.health, "x": arenaState.p1.x, "y": arenaState.p1.y};
-    let play2 = {"health": arenaState.p2.health, "x": arenaState.p2.x, "y": arenaState.p2.y};
-    socket.emit("start_match", {roomCode: roomCode, p1: play1, p2: play2});
-    gameInfoEmitted = true;
-  }
+  //set up platform-requires selectedArenaImage first
+  map1 = new Map(30);
   // while(waitingForOpponent);
 }
 
@@ -773,6 +829,7 @@ function arena() {
 
   imageMode(CENTER);
   image(selectedArenaImage, width / 2, height / 2, width, height);
+  map1.draw();
   fill(128);
   stroke(51);
   rect(10, 30, (width * 3 / 7), 25);

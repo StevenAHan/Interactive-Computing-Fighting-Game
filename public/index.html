@@ -6,9 +6,9 @@
 
     <!-- load in the p5 sound library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.js"></script>
-    
-    <!-- socket.io client library -->
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+
 
     <!-- your custom sketch code -->
     <script src="sketch.js"></script>
@@ -129,13 +129,19 @@
   border: 5px solid rgba(119, 119, 119, 0.89);
   width: 33%;
 }
+.joinButtons input{
+  color: black;
+}
+.joinButtons button{
+  color: black;
+
+}
 
   </style>
   <h1 id="header">Shaded Showdown</h1>
   <p class="center">Two player local Fighting Game for Interactive Computing class. Created by Steven, Joe, Peter, Sam</p>
   <body style="background-color:rgb(12, 9, 99)">
-
-    <div >
+    <div class="joinButtons">
       <div>
         Enter a Join Code: <input type="text" id="join_code">
         <button id="join_room" onclick="joinRoom();">Join Room</button>
@@ -146,7 +152,6 @@
       </div>
       <!-- <div id="join_failed" class="alert hidden">Room does not exist</div> -->
     </div>
-
     <div id="center"></div>
     <div id = "scroll_box">
       <h3 style="text-align:center">Characters</h3>
@@ -216,6 +221,23 @@
         <div id="attackcontainer">
           <p class="leftContent">Special Attack</p>
           <p class="rightContent">Kick that also shoots a fireball</p>
+        </div>
+      </div>
+
+      <h4>Raider</h4>
+      <p class="inliner">Versatile character with close range shots and long distance attacks</p>
+      <div id="charcontainer">
+        <div id="attackcontainer">
+          <p class="leftContent">Basic Attack</p>
+          <p class="rightContent">Gun Hit</p>
+        </div>
+        <div id="attackcontainer">
+          <p class="leftContent">Heavy Attack</p>
+          <p class="rightContent">Quickly fired gun shot</p>
+        </div>
+        <div id="attackcontainer">
+          <p class="leftContent">Special Attack</p>
+          <p class="rightContent">Strong shotgun attack</p>
         </div>
       </div>
     </div>

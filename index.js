@@ -78,6 +78,7 @@ io.on('connection', function(socket) {
 
     socket.on('user_output', function(data) {
         console.log(`user ${thisId} sent to game ${JSON.stringify(users[thisId])}: ${data}`);
+        console.log(data)
         console.log('users: ' + users);
         socket.to(users[thisId]).emit("user_input", data);
     });
@@ -118,38 +119,6 @@ io.on('connection', function(socket) {
     
 
 });
-
-
-
-class Game {
-    constructor(gameId, socket) {
-        this.players = [];
-        this.gameId = gameId;
-        this.time = 100;
-        this.socket = socket;
-    }
-
-    addPlayer(player) {
-        this.players.push(player);
-    }
-
-    startGame() {
-        this.socket.emit("startGame", {game: this.gameId});
-    }
-
-    endGame(playerNum) {
-        this.socket.emit("endGame", {game: this.gameId, loser: this.players[playerNum]});
-    }
-
-    updatePlayers() {
-        this.socket.emit("updatePlayers", {game: this.gameId, players: this.players});
-        for(let i = 0; i < this.players.length; i++) {
-            if(this.players[i].health <= 0) {
-                this.endGame(i);
-            }
-        }
-    }
-}
 
 
 class Player {

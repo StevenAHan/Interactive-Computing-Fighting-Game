@@ -49,6 +49,12 @@ class Character {
         this.heavySound = false;
         this.specialSound = false;
         this.spriteHurt = this.spriteAnimations.hurt;
+
+        //platformer
+        this.bottom=0;
+        this.top=0
+        this.onplat = false;
+        this.velocity = 0;
     }
 
     // Sets up the character, should only run once in the beginning
@@ -262,19 +268,46 @@ class Character {
                 }
             }
         }
-
-
-        // Jump once triggered
-        if(this.jumping) {
-            this.jump();
-            this.currAnimation = "jump";
-        }
+        //for platforms--this.ground updates to be platform as floor
         if(this.y > this.ground) {
             this.y = this.ground;
             this.jumping = false;
             this.currJumpSpeed = this.jumpSpeed;
             this.spriteAnimations[this.currAnimation].resetFrames();
         }
+
+        // Jump once triggered-PLATFORMER CODE
+        this.refreshSensors(); //for movement and collision detection
+        if(this.jumping) {
+            this.jump();
+            this.currAnimation = "jump";
+            var check= this.onSolid();
+            //console.log(this.onSolid())
+            if(check[0] == "top"){
+                this.ground=check[1]
+                this.onplat = true;
+                this.velocity = 0;
+            }
+        }
+    
+        if(this.onplat && this.onSolid()[0] == "none" && this.y<ground && !this.jumping){
+            this.velocity+=this.gravity;
+            this.y += this.velocity;
+            this.ground=ground;
+            var check= this.onSolid();
+            //console.log(this.onSolid())
+            if(check[0] == "top"){
+                this.ground=check[1]
+                this.onplat = true;
+                this.velocity = 0;
+            }
+        }
+        //for actual ground
+        if(this.y > ground){
+            this.onplat = false;
+            this.velocity = 0;
+        }
+
 
         // check states
         if(!this.dying || !this.dead) {
@@ -396,6 +429,30 @@ class Character {
             }
         }
     }
+    
+    //PLATFORMER CODE
+    refreshSensors() {
+        // this.left = [this.x, this.y + 35 / 2];
+        // this.right = [this.x + 35, this.y + 35 / 2];
+        this.top = [this.x + 30 / 2, this.y];
+        //console.log(this.y)
+        this.bottom = [this.x + 30 / 2, this.y+50 + 30];
+      }
+    
+    onSolid() {
+        let tilerc = map1.getLoc(this.bottom[0], this.bottom[1]); //get tile under
+        //console.log(tilerc) 
+        var row = int(tilerc[1])
+        var col = int(tilerc[0])
+        if(map1.get(row, col)){
+            //console.log("char:" + this.y)
+            var locy = int((row-2) * 30)
+            //console.log("loc:"+locy)
+            return ["top",locy];
+        }
+        //console.log("char:" + this.y)
+        return ["none", locy];
+  }
 
 
     dirMultiplier() {
@@ -806,6 +863,7 @@ class Raider extends Character {
         if(this.spriteAnimations[this.currAnimation].currentFrame > 1) {
             this.hitboxes.attack('light');
             this.opponent.hitboxes.checkHit(this, 'light');
+            raider_basic.play();
         }
 
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {
@@ -821,6 +879,7 @@ class Raider extends Character {
         if(this.heavyProj == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
             projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 25, this.spriteAnimations["heavyProj"], this.direction, 64, 64, 5, 15, this.opponent));
             this.heavyProj = true;
+            raider_heavy.play();
         }
         if(this.spriteAnimations[this.currAnimation].actionEnd()) {   
             this.state = false;
@@ -835,6 +894,7 @@ class Raider extends Character {
         if(this.specialProj == false && this.spriteAnimations[this.currAnimation].currentFrame == 2) {
             projectiles.push(new Projectile(this.x + 50 * this.dirMultiplier(), this.y + 13, this.spriteAnimations["specialProj"], this.direction, 64, 64, 20, 15, this.opponent, 12));
             this.specialProj = true;
+            raider_special.play();
         }
         if(!this.spriteAnimations[this.currAnimation].actionEnd()) {
             this.hitboxes.attack('special');
@@ -887,8 +947,3 @@ class Health_R {
         rect(this.x, this.y, currentWidth, 25);
     }
 }
-
-
-
-  
-
